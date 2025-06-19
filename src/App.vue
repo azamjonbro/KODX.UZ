@@ -1,7 +1,13 @@
 <template>
-  <router-view ></router-view>
+  <Header />
+  <router-view></router-view>
 </template>
 
-<script setup lang="ts">
-import { RouterView } from 'vue-router'
+<script setup>
+import Header from './components/Header/HeaderPage.vue'
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  document.body.setAttribute('data-theme', 'dark')
+})
 </script>

@@ -1,6 +1,5 @@
 <template>
  <section>
-   Assalomu alaykum
  </section>
 </template>
 <script>
