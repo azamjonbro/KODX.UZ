@@ -1,6 +1,7 @@
-# Vue 3 + TypeScript + Vite
+# Ushbu saytni yaratishdan asosiy maqsad:
+  1. Hamma har xil holda malumotlarni qabul qiladi va eslab qoladi. Men shuni noodatiy malumotlar bilan yozib chiqmoqchiman.
+  2. Bor bilimimni takrorlab bilmaganlarimni birin ketinlik bilan qaytadan o'rganib chiqmoqchiman.
+  3.G'irt o'zbek tilda dasturlash haqida gaplashish. :)
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
-# KODX..UZ
+  
