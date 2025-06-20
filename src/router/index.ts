@@ -7,7 +7,6 @@ const routes: Array<RouteRecordRaw> = [
   name: 'Home',
   component: () => import('../views/Home.vue'),
  },
- // Qo'shimcha routelar shu yerga qo'shiladi
 ];
 
 const router = createRouter({
