@@ -91,6 +91,10 @@ a {
 a:hover {
   color: var(--color-link-hover);
 }
+button{
+  outline: none;
+}
+
 
 pre, code {
   background-color: var(--color-code-bg);

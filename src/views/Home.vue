@@ -1,7 +1,7 @@
 <template>
   <section class="dashboard">
     <div class="intro">
-      <h1>👋 Assalomu alaykum, dasturchi!</h1>
+      <h1 class="home-title">KODX.uz</h1>
       <p>
         KODX.uz — bu HTML, CSS, JavaScript, Vue va React kabi texnologiyalarni
         <strong>o‘zbek tilida</strong> o‘rganish uchun ochiq platforma.
@@ -35,6 +35,16 @@
   max-width: 900px;
   margin: auto;
 }
+
+.intro{
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
 
 .intro h1 {
   font-size: 2.2rem;
