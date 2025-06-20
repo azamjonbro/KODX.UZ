@@ -1,11 +1,7 @@
 <template>
   <header class="header">
     <div class="logo">
-      <RouterLink to="/"
-        ><span class="logo-text"
-          >KODX<span class="dot">.uz</span></span
-        ></RouterLink
-      >
+      <router-link to="/" class="logo-text">KODX<span class="dot">.uz</span></router-link>
     </div>
     <nav class="nav">
       <RouterLink to="/" class="nav-link">Bosh sahifa</RouterLink>
@@ -14,16 +10,18 @@
       >
       <RouterLink to="/guide/" class="nav-link">Bo‘limlar</RouterLink>
       <button @click="toggleTheme" class="theme-toggle">
-        {{ isDark ? "☀️" : "🌙" }}
+        <Icons :name="isDark?'sun':'moon'"/>
       </button>
     </nav>
   </header>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import Icons from '../Template/Icons.vue'
+import { ref, onMounted } from 'vue'
 
-const isDark = ref(false);
+const isDark = ref(true)
+const icons = ref(Icons)
 
 onMounted(() => {
   isDark.value = document.body.getAttribute("data-theme") === "dark";
@@ -82,5 +80,9 @@ function toggleTheme() {
   font-size: 1.2rem;
   cursor: pointer;
   color: var(--color-subtle);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); 
+}
+.dark .theme-toggle {
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); 
 }
 </style>
