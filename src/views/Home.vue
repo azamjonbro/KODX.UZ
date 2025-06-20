@@ -1,7 +1,7 @@
 <template>
   <section class="dashboard">
     <div class="intro">
-      <h1 class="home-title">KODX.uz</h1>
+      <h1 class="home-title">O‘rgan, Yarat, Yoz — KODX.uz uslubida!</h1>
       <p>
         KODX.uz — bu HTML, CSS, JavaScript, Vue va React kabi texnologiyalarni
         <strong>o‘zbek tilida</strong> o‘rganish uchun ochiq platforma.
