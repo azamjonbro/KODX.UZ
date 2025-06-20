@@ -1,32 +1,38 @@
 <template>
   <header class="header">
     <div class="logo">
-      <span class="logo-text">KODX<span class="dot">.uz</span></span>
+      <RouterLink to="/"
+        ><span class="logo-text"
+          >KODX<span class="dot">.uz</span></span
+        ></RouterLink
+      >
     </div>
     <nav class="nav">
-      <a href="/" class="nav-link">Bosh sahifa</a>
-      <a href="/guide/introduction" class="nav-link">Boshlash</a>
-      <a href="/guide/" class="nav-link">Bo‘limlar</a>
+      <RouterLink to="/" class="nav-link">Bosh sahifa</RouterLink>
+      <RouterLink to="/guide/introduction" class="nav-link"
+        >Boshlash</RouterLink
+      >
+      <RouterLink to="/guide/" class="nav-link">Bo‘limlar</RouterLink>
       <button @click="toggleTheme" class="theme-toggle">
-        {{ isDark ? '☀️' : '🌙' }}
+        {{ isDark ? "☀️" : "🌙" }}
       </button>
     </nav>
   </header>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from "vue";
 
-const isDark = ref(false)
+const isDark = ref(false);
 
 onMounted(() => {
-  isDark.value = document.body.getAttribute('data-theme') === 'dark'
-})
+  isDark.value = document.body.getAttribute("data-theme") === "dark";
+});
 
 function toggleTheme() {
-  isDark.value = !isDark.value
-  document.body.setAttribute('data-theme', isDark.value ? 'dark' : 'light')
-  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+  isDark.value = !isDark.value;
+  document.body.setAttribute("data-theme", isDark.value ? "dark" : "light");
+  localStorage.setItem("theme", isDark.value ? "dark" : "light");
 }
 </script>
 
