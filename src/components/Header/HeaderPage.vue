@@ -4,11 +4,9 @@
       <router-link to="/" class="logo-text">KODX<span class="dot">.uz</span></router-link>
     </div>
     <nav class="nav">
-      <RouterLink to="/" class="nav-link">Bosh sahifa</RouterLink>
-      <RouterLink to="/guide/introduction" class="nav-link"
-        >Boshlash</RouterLink
-      >
-      <RouterLink to="/guide/" class="nav-link">Bo‘limlar</RouterLink>
+      <a href="/" class="nav-link">Bosh sahifa</a>
+      <a href="/guide/introduction" class="nav-link">Boshlash</a>
+      <a href="/guide/" class="nav-link">Bo‘limlar</a>
       <button @click="toggleTheme" class="theme-toggle">
         <Icons :name="isDark?'sun':'moon'"/>
       </button>
@@ -20,17 +18,17 @@
 import Icons from '../Template/Icons.vue'
 import { ref, onMounted } from 'vue'
 
-const isDark = ref(true)
+const isDark = ref(false)
 const icons = ref(Icons)
 
 onMounted(() => {
-  isDark.value = document.body.getAttribute("data-theme") === "dark";
-});
+  isDark.value = document.body.getAttribute('data-theme') === 'dark'
+})
 
 function toggleTheme() {
-  isDark.value = !isDark.value;
-  document.body.setAttribute("data-theme", isDark.value ? "dark" : "light");
-  localStorage.setItem("theme", isDark.value ? "dark" : "light");
+  isDark.value = !isDark.value
+  document.body.setAttribute('data-theme', isDark.value ? 'dark' : 'light')
+  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
 }
 </script>
 
