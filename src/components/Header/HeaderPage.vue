@@ -7,28 +7,34 @@
       <a href="/" class="nav-link">Bosh sahifa</a>
       <a href="/guide/introduction" class="nav-link">Boshlash</a>
       <a href="/guide/" class="nav-link">Bo‘limlar</a>
-      <button @click="toggleTheme" class="theme-toggle">
-        <Icons :name="isDark?'sun':'moon'"/>
-      </button>
     </nav>
+      <button @click="toggleTheme" class="theme-toggle">
+        <Icons :name="isDark ? 'sun' : 'moon'" />
+      </button>
   </header>
 </template>
 
 <script setup>
-import Icons from '../Template/Icons.vue'
 import { ref, onMounted } from 'vue'
+import Icons from '../Template/Icons.vue'
 
-const isDark = ref(false)
-const icons = ref(Icons)
+const isDark = ref(true)
+
 
 onMounted(() => {
-  isDark.value = document.body.getAttribute('data-theme') === 'dark'
+  const hour = new Date().getHours()
+  if (hour >= 18 || hour < 6) {
+    isDark.value = true
+    document.body.setAttribute('data-theme', 'dark')
+  } else {
+    isDark.value = false
+    document.body.setAttribute('data-theme', 'light')
+  }
 })
 
 function toggleTheme() {
   isDark.value = !isDark.value
   document.body.setAttribute('data-theme', isDark.value ? 'dark' : 'light')
-  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
 }
 </script>
 
@@ -78,9 +84,15 @@ function toggleTheme() {
   font-size: 1.2rem;
   cursor: pointer;
   color: var(--color-subtle);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); 
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
+
 .dark .theme-toggle {
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); 
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+@media (max-width:580px){
+  .nav{
+    display: none;
+  }
 }
 </style>
