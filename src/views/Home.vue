@@ -1,7 +1,14 @@
 <template>
   <section class="dashboard">
     <div class="intro">
-      <h1 class="home-title">O‘rgan, Yarat, Yoz — KODX.uz uslubida!</h1>
+       <div class="center-intro-icon">
+    <div class="bracket">{</div>
+    <div style="display: flex;">
+      <div class="typing">KODX<span class="dotuz">.uz</span></div>
+    </div>
+    <div class="bracket">}</div>
+  </div>
+      <h2 class="">O‘rgan, Yarat, Yoz — KODX.uz uslubida!</h2>
       <p>
         KODX.uz — bu HTML, CSS, JavaScript, Vue va React kabi texnologiyalarni
         <strong>o‘zbek tilida</strong> o‘rganish uchun ochiq platforma.
@@ -38,15 +45,15 @@
 
 .intro{
   width: 100%;
-  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 10px;
 }
 
 
 
-.intro h1 {
+.intro h2 {
   font-size: 2.2rem;
   font-weight: bold;
   color: var(--color-heading);
@@ -122,4 +129,60 @@
   transform: translateY(-2px);
   background-color: var(--color-border);
 }
+
+.center-intro-icon{
+  display: flex;
+  align-items: center;
+  font-size: 64px;
+  /* font-family: Arial, Helvetica, sans-serif; */
+  gap: 10px;
+}
+.home-title{
+  font-size: 64px;
+  line-height: 0;
+  margin: 0;
+
+  color: aquamarine;
+}
+
+ .center-intro-icon {
+      display: flex;
+      align-items: center;
+      font-size: 2.5rem;
+    }
+
+    .bracket {
+  color: #D4D4D4;
+  animation: bounce 1s ease-in-out infinite alternate;
+}
+
+.typing {
+  color: var(--color-link);
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--color-text);
+  width: 0ch;
+  animation: typing 3s steps(10) 1s infinite alternate, blink 0.7s step-end infinite;
+}
+
+.dotuz {
+  color: var(--color-link);
+  font-weight: bold;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+@keyframes typing {
+  0% { width: 0ch; }
+  100% { width: 10ch; } /* "KODX.uz" */
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
 </style>
