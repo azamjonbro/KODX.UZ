@@ -4,7 +4,7 @@
        <div class="center-intro-icon">
     <div class="bracket">{</div>
     <div style="display: flex;">
-      <div class="typing">KODX<span class="dotuz">.UZ</span></div>
+      <div class="typing">KODX.UZ</div>
     </div>
     <div class="bracket">}</div>
   </div>
