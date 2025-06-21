@@ -1,11 +1,8 @@
 <template>
   <Header />
-  <main @mousemove="handleMouseMove">
+  <main>
     <router-view />
   </main>
-
-  <div v-if="showCircle" :style="circleStyle" class="mouse-circle">
-  </div>
 </template>
 
 <script setup lang="ts">
