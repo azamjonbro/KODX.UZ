@@ -8,22 +8,21 @@
       <a href="/guide/introduction" class="nav-link">Boshlash</a>
       <a href="/guide/" class="nav-link">Bo‘limlar</a>
     </nav>
-      <button @click="toggleTheme" class="theme-toggle">
-        <Icons :name="isDark ? 'sun' : 'moon'" />
-      </button>
+    <button @click="toggleTheme" class="theme-toggle">
+      <Icons :name="isDark ? 'sun' : 'moon'" />
+    </button>
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import Icons from '../Template/Icons.vue'
 
-const isDark = ref(true)
-
+const isDark = ref(false)
 
 onMounted(() => {
-  const hour = new Date().getHours()
-  if (hour >= 18 || hour < 6) {
+  const savedTheme = localStorage.getItem("theme")
+  if (savedTheme === 'dark') {
     isDark.value = true
     document.body.setAttribute('data-theme', 'dark')
   } else {
@@ -34,7 +33,9 @@ onMounted(() => {
 
 function toggleTheme() {
   isDark.value = !isDark.value
-  document.body.setAttribute('data-theme', isDark.value ? 'dark' : 'light')
+  const newTheme = isDark.value ? 'dark' : 'light'
+  localStorage.setItem("theme", newTheme)
+  document.body.setAttribute('data-theme', newTheme)
 }
 </script>
 
@@ -90,9 +91,11 @@ function toggleTheme() {
 .dark .theme-toggle {
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);
 }
-@media (max-width:580px){
-  .nav{
+
+@media (max-width: 580px) {
+  .nav {
     display: none;
   }
+  
 }
 </style>
