@@ -233,4 +233,21 @@ onMounted(() => {
   background: radial-gradient(circle, #3cf7fdb6 0%, var(--color-bg) 50%, var(--color-bg) 100%);
   /* transition: left 0.1s ease, top 0.1s ease; */
 }
+@media (max-width:500px){
+  .mouseBgColor {
+    display: none;
+  }
+  .actions>a{
+    width: 100%;
+    text-align: center;
+  }
+  .cards{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .card{
+    width: 100%;
+    flex: 1 1 200px;
+  }
+}
 </style>
