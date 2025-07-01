@@ -1,13 +1,13 @@
 <template>
   <section class="dashboard">
     <div class="intro">
-       <div class="center-intro-icon">
-    <div class="bracket">{</div>
-    <div style="display: flex;">
-      <div class="typing">KODX.UZ</div>
-    </div>
-    <div class="bracket">}</div>
-  </div>
+      <div class="center-intro-icon">
+        <div class="bracket">{</div>
+        <div style="display: flex">
+          <div class="typing">KODX.UZ</div>
+        </div>
+        <div class="bracket">}</div>
+      </div>
       <h2 class="">O‘rgan, Yarat, Yoz — KODX.uz uslubida!</h2>
       <p>
         KODX.uz — bu HTML, CSS, JavaScript, Vue va React kabi texnologiyalarni
@@ -22,18 +22,47 @@
     <div class="sections">
       <h2>📚 Mavzular</h2>
       <div class="cards">
-        <RouterLink to="/html/" class="card">📄 HTML</RouterLink>
+        <RouterLink to="/html/" class="card">🌐 HTML</RouterLink>
         <RouterLink to="/css/" class="card">🎨 CSS</RouterLink>
+        <RouterLink to="/libraries/" class="card">💖 SASS</RouterLink>
+        <RouterLink to="/scss/" class="card">💎 SCSS</RouterLink>
+        <RouterLink to="/tailwind/" class="card">🌬️ Tailwind</RouterLink>
         <RouterLink to="/js/" class="card">⚙️ JavaScript</RouterLink>
-        <RouterLink to="/vue/" class="card">🧩 Vue.js</RouterLink>
+        <RouterLink to="/typescript/" class="card">🔷 TypeScript</RouterLink>
+        <RouterLink to="/vue/" class="card">🟢 Vue.js</RouterLink>
         <RouterLink to="/react/" class="card">⚛️ React</RouterLink>
+        <RouterLink to="/electron/" class="card">🧪 Electron</RouterLink>
+        <RouterLink to="/telegram-bot/" class="card">🤖 Telegram Bot</RouterLink>
+        <RouterLink to="/nginx/" class="card">🛰️ Nginx</RouterLink>
+        <RouterLink to="/devops/" class="card">🛠️ DevOps</RouterLink>
+        <RouterLink to="/react-native/" class="card">📲 React Native</RouterLink>
+        <!-- <RouterLink to="/server/" class="card">-></RouterLink> -->
       </div>
     </div>
+    <div class="mouseBgColor"></div>
   </section>
 </template>
 
-<script setup>
-// Bu sahifani oddiy `Dashboard.vue` sifatida saqlang
+<script lang="ts" setup>
+import { onMounted } from 'vue';
+// data ochish uchun reactive yoki ref ishlatiladi
+import { ref } from 'vue';
+
+
+
+onMounted(() => {
+  const mouseBg = document.querySelector(".mouseBgColor") as HTMLElement;
+
+  document.addEventListener("mousemove", (event) => {
+    const x = event.clientX;
+    const y = event.clientY;
+
+    if (mouseBg) {
+      mouseBg.style.left = `${x - 200}px`; // -200 = markazga moslashtirish
+      mouseBg.style.top = `${y - 200}px`;
+    }
+  });
+});
 </script>
 
 <style scoped>
@@ -43,15 +72,13 @@
   margin: auto;
 }
 
-.intro{
+.intro {
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 10px;
 }
-
-
 
 .intro h2 {
   font-size: 2.2rem;
@@ -130,14 +157,14 @@
   background-color: var(--color-border);
 }
 
-.center-intro-icon{
+.center-intro-icon {
   display: flex;
   align-items: center;
   font-size: 64px;
   /* font-family: Arial, Helvetica, sans-serif; */
   gap: 10px;
 }
-.home-title{
+.home-title {
   font-size: 64px;
   line-height: 0;
   margin: 0;
@@ -145,14 +172,14 @@
   color: aquamarine;
 }
 
- .center-intro-icon {
-      display: flex;
-      align-items: center;
-      font-size: 2.5rem;
-    }
+.center-intro-icon {
+  display: flex;
+  align-items: center;
+  font-size: 2.5rem;
+}
 
-    .bracket {
-  color: #D4D4D4;
+.bracket {
+  color: #d4d4d4;
   animation: bounce 1s ease-in-out infinite alternate;
 }
 
@@ -172,17 +199,38 @@
 }
 
 @keyframes bounce {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-8px); }
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes typing {
-  0% { width: 0ch; }
-  100% { width: 10ch; } /* "KODX.uz" */
+  0% {
+    width: 0ch;
+  }
+  100% {
+    width: 10ch;
+  } /* "KODX.uz" */
 }
 
 @keyframes blink {
-  50% { border-color: transparent; }
+  50% {
+    border-color: transparent;
+  }
 }
-
+.mouseBgColor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none; /* element kliklarni ushlamasin */
+  background: radial-gradient(circle, #3cf7fdb6 0%, var(--color-bg) 50%, var(--color-bg) 100%);
+  /* transition: left 0.1s ease, top 0.1s ease; */
+}
 </style>

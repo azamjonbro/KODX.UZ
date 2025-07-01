@@ -48,7 +48,7 @@ function toggleTheme() {
   border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 1;
 }
 
 .logo-text {
