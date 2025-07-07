@@ -1,0 +1,120 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('../fonts/FiraCode-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fira Code';
+  src: url('../fonts/FiraCode-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fira Code';
+  src: url('../fonts/FiraCode-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fira Code';
+  src: url('../fonts/FiraCode-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fira Code';
+  src: url('../fonts/FiraCode-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+
+
+:root {
+  --color-bg: #ffffff;
+  --color-text: #1f2937;
+  --color-subtle: #6b7280;
+  --color-link: #2563eb;
+ --color-link-hover: #1e40af;
+
+  --color-code-bg: #f3f4f6;
+  --color-code-text: #111827;
+  --color-border: #e5e7eb;
+
+  --color-heading: #111827;
+  --color-accent: #2563eb;
+  --mini-bg:#018ad4cc;
+  --color-text-mini:#fff;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --radius: 6px;
+}
+
+[data-theme="dark"] {
+   --color-bg: #1e1e1e;
+  --color-text: #d1d5db;
+  --color-subtle: #9ca3af;
+  --color-link: #60a5fa;
+  --color-text-mini:#fff;
+  --color-link-hover: #3b82f6;
+
+  --color-code-bg: #2a2a2a;
+  --color-code-text: #f3f4f6;
+  --color-border: #374151;
+  --mini-bg:#ffffff3c;
+  --color-heading: #f3f4f6;
+  --color-accent: #60a5fa;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Fira Code";
+}
+
+h1, h2, h3, h4 {
+  color: var(--color-heading);
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-link-hover);
+}
+button{
+  outline: none;
+}
+
+
+pre, code {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  font-family: var(--font-code);
+  border-radius: var(--radius);
+  padding: 0.5em 1em;
+}
+
+.card {
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.container{
+  width: 1240px;
+  margin: 0 auto;
+}
