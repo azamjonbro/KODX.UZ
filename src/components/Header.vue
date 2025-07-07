@@ -24,27 +24,27 @@ export default {
  name: 'HeaderPage',
  components: { Icons },
  data() {
-  return {
-   isDark: false
-  }
+ return {
+  isDark: true // Default dark
+ }
  },
  mounted() {
-  const savedTheme = localStorage.getItem("theme")
-  if (savedTheme === 'dark') {
-   this.isDark = true
-   document.body.setAttribute('data-theme', 'dark')
-  } else {
-   this.isDark = false
-   document.body.setAttribute('data-theme', 'light')
-  }
+ const savedTheme = localStorage.getItem("theme")
+ if (savedTheme === 'light') {
+  this.isDark = false
+  document.body.setAttribute('data-theme', 'light')
+ } else {
+  this.isDark = true
+  document.body.setAttribute('data-theme', 'dark')
+ }
  },
  methods: {
-  toggleTheme() {
-   this.isDark = !this.isDark
-   const newTheme = this.isDark ? 'dark' : 'light'
-   localStorage.setItem("theme", newTheme)
-   document.body.setAttribute('data-theme', newTheme)
-  }
+ toggleTheme() {
+  this.isDark = !this.isDark
+  const newTheme = this.isDark ? 'dark' : 'light'
+  localStorage.setItem("theme", newTheme)
+  document.body.setAttribute('data-theme', newTheme)
+ }
  }
 }
 </script>
