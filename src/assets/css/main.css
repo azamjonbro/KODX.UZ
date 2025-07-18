@@ -80,7 +80,8 @@
 body {
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: "Fira Code";
+  font-family: "Fira Code", sans-serif;
+  
 }
 
 h1, h2, h3, h4 {
