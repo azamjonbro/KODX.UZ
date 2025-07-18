@@ -3,7 +3,7 @@
     <div class="logo">
       <router-link to="/" class="logo-text">
        <img src="./logo.svg" alt="">
-        <span class="dot">.uz</span>
+        <span class="dot">KODX.uz</span>
       </router-link>
     </div>
     <nav class="nav">
