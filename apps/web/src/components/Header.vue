@@ -38,6 +38,14 @@
           >
             JavaScript
           </router-link>
+          <router-link
+            to="/explorer"
+            class="px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-brand-400 hover:text-brand-300 hover:bg-brand-500/10 flex items-center gap-1.5"
+            active-class="!text-white !bg-brand-500/20 font-bold"
+          >
+            <span>📖</span>
+            <span>HTML Ensiklopediya</span>
+          </router-link>
         </nav>
       </div>
 

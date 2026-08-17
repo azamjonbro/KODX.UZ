@@ -11,6 +11,11 @@ const routes: RouteRecordRaw[] = [
     component: Home,
   },
   {
+    path: '/explorer',
+    name: 'knowledge-explorer',
+    component: () => import('../pages/KnowledgeExplorer.vue'),
+  },
+  {
     path: '/html',
     component: HtmlLayout,
     children: [

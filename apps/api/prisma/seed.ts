@@ -3,9 +3,11 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 KODX 2.0 Massive Knowledge Database Seeding boshlanmoqda...');
+  console.log('🌱 KODX 2.0 Global Knowledge Universe & Courses Seeding boshlanmoqda...');
 
   // 1. Clean existing content
+  await prisma.knowledgeNode.deleteMany();
+  await prisma.knowledgeCategory.deleteMany();
   await prisma.testCase.deleteMany();
   await prisma.submission.deleteMany();
   await prisma.practiceTask.deleteMany();
@@ -17,7 +19,372 @@ async function main() {
   console.log('🧹 Eski ma’lumotlar tozalandi.');
 
   // =========================================================================
-  // 1. HTML UNIVERSE (25 Lessons across 10 Modules)
+  // 1. HTML KNOWLEDGE CATEGORIES & NODES
+  // =========================================================================
+
+  // Category 1: Hujjat Asoslari va Metadata
+  const catRoot = await prisma.knowledgeCategory.create({
+    data: {
+      technology: 'html',
+      slug: 'root-and-metadata',
+      name: 'Hujjat Asoslari va Metadata',
+      description: '<!DOCTYPE>, <html>, <head>, <title>, <base>, <link>, <meta>, <style>',
+      order: 1,
+    },
+  });
+
+  // Category 2: Semantik Bo‘limlar (Sectioning)
+  const catSectioning = await prisma.knowledgeCategory.create({
+    data: {
+      technology: 'html',
+      slug: 'sectioning',
+      name: 'Semantik Bo‘limlar (Sectioning)',
+      description: '<body>, <header>, <nav>, <main>, <article>, <section>, <aside>, <footer>, <address>, <hgroup>, <h1>-<h6>',
+      order: 2,
+    },
+  });
+
+  // Category 3: Matn va Inline Semantika
+  const catText = await prisma.knowledgeCategory.create({
+    data: {
+      technology: 'html',
+      slug: 'text-and-inline',
+      name: 'Matn va Inline Semantika',
+      description: '<p>, <hr>, <pre>, <blockquote>, <ol>, <ul>, <li>, <dl>, <a>, <strong>, <em>, <code>, <mark>, <span>, <br>',
+      order: 3,
+    },
+  });
+
+  // Category 4: Tasvirlar va Multimedia
+  const catMedia = await prisma.knowledgeCategory.create({
+    data: {
+      technology: 'html',
+      slug: 'media-and-embedded',
+      name: 'Tasvirlar, Multimedia va O‘rnatilgan Kontent',
+      description: '<img>, <picture>, <source>, <video>, <audio>, <track>, <iframe>, <canvas>, <svg>, <math>',
+      order: 4,
+    },
+  });
+
+  // Category 5: Jadvallar (Tables)
+  const catTables = await prisma.knowledgeCategory.create({
+    data: {
+      technology: 'html',
+      slug: 'tables',
+      name: 'Jadvallar (Tables)',
+      description: '<table>, <caption>, <colgroup>, <col>, <tbody>, <thead>, <tfoot>, <tr>, <td>, <th>',
+      order: 5,
+    },
+  });
+
+  // Category 6: Formalar va Inputlar
+  const catForms = await prisma.knowledgeCategory.create({
+    data: {
+      technology: 'html',
+      slug: 'forms',
+      name: 'Formalar va Foydalanuvchi Kiritishi',
+      description: '<form>, <label>, <input> (22 xil tur), <button>, <select>, <datalist>, <option>, <textarea>, <progress>',
+      order: 6,
+    },
+  });
+
+  // Category 7: Interaktiv va Web Components
+  const catInteractive = await prisma.knowledgeCategory.create({
+    data: {
+      technology: 'html',
+      slug: 'interactive',
+      name: 'Interaktiv Teglar va Web Components',
+      description: '<details>, <summary>, <dialog>, <template>, <slot>',
+      order: 7,
+    },
+  });
+
+  // Category 8: Global Atributlar
+  const catGlobalAttr = await prisma.knowledgeCategory.create({
+    data: {
+      technology: 'html',
+      slug: 'global-attributes',
+      name: 'Global Atributlar',
+      description: 'id, class, style, title, lang, dir, hidden, tabindex, accesskey, contenteditable, draggable, data-*',
+      order: 8,
+    },
+  });
+
+  // Category 9: Tarixiy va Eskirganlar (Obsolete)
+  const catObsolete = await prisma.knowledgeCategory.create({
+    data: {
+      technology: 'html',
+      slug: 'obsolete',
+      name: 'Tarixiy va Eskirganlar (Obsolete)',
+      description: '<font>, <center>, <marquee>, <blink>, <frame>, <frameset>, <applet>, <big>, <strike>',
+      order: 9,
+    },
+  });
+
+  // Category 10: Brauzer Internals va Parsing
+  const catInternals = await prisma.knowledgeCategory.create({
+    data: {
+      technology: 'html',
+      slug: 'internals',
+      name: 'Brauzer Dvigateli va HTML Parsing',
+      description: 'Tokenizer, Tree Construction, DOM daraxti, Insertion Modes, Malformed HTML error recovery',
+      order: 10,
+    },
+  });
+
+  // =========================================================================
+  // INSERTING HTML KNOWLEDGE NODES
+  // =========================================================================
+
+  // Node 1: <!DOCTYPE html>
+  await prisma.knowledgeNode.create({
+    data: {
+      categoryId: catRoot.id,
+      technology: 'html',
+      nodeType: 'concept',
+      name: '<!DOCTYPE html>',
+      slug: 'doctype',
+      englishName: 'Document Type Declaration',
+      status: 'CURRENT',
+      introducedIn: 'HTML 2.0 / HTML5 da soddalashtirilgan',
+      syntax: '<!DOCTYPE html>',
+      kidExplanation: 'Kitobning muqovasida "Bu zamonaviy ertaklar kitobi" degan yozuv. Brauzer buni ko‘rib yangi qoidalar bilan o‘qiydi.',
+      kidAnalogy: 'Eshik tepasidagi "Bu yerga 2026-yil qoidalari bilan kiring" degan belgi.',
+      technicalSummary: 'Hujjat turini e\'lon qiluvchi qoida. Brauzerni eski Quirks Mode emas, zamonaviy Standards Mode rejimida ishlashga majbur qiladi.',
+      detailedContent: `<!DOCTYPE html> — bu HTML elementi emas, balki brauzerga yo‘riqnoma (preamble) hisoblanadi.
+
+HTML5 da DOCTYPE maksimal darajada soddalashtirildi:
+\`\`\`html
+<!DOCTYPE html>
+\`\`\`
+
+Agar DOCTYPE yozilmasa, brauzerlar 1990-yillardagi Netscape va IE xatolarini simulyatsiya qiluvchi **Quirks Mode** ga o‘tadi va zamonaviy CSS layoutlar (Flexbox, Grid) buzilishi mumkin.`,
+      codeExample: `<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>KODX Standarti</title>
+</head>
+<body>
+  <h1>Standards Mode Faol</h1>
+</body>
+</html>`,
+      expectedOutput: 'Brauzer sahifani W3C/WHATWG zamonaviy standartlari bo‘yicha render qiladi.',
+      commonMistakes: 'DOCTYPE ni <html> tegining ichiga yozish yoki kichik harfda xato yozish. U doimo faylning eng 1-qatorida turishi shart.',
+      accessibility: 'Ekran o‘quvchilar DOCTYPE mavjud bo‘lganda sahifani barqaror tahlil qiladi.',
+      security: 'Quirks Mode dagi xavfsizlik zaifliklarining oldini oladi.',
+      specUrl: 'https://html.spec.whatwg.org/multipage/syntax.html#the-doctype',
+      specName: 'WHATWG HTML Living Standard (Section 13.1.1)',
+      aliases: ['doctype', 'document type', 'standart', 'quirks mode'],
+      order: 1,
+    },
+  });
+
+  // Node 2: <html>
+  await prisma.knowledgeNode.create({
+    data: {
+      categoryId: catRoot.id,
+      technology: 'html',
+      nodeType: 'element',
+      name: '<html>',
+      slug: 'html',
+      englishName: 'HTML Root Element',
+      status: 'CURRENT',
+      introducedIn: 'HTML 1.0',
+      syntax: '<html lang="uz">...</html>',
+      kidExplanation: 'Butun sahifaning barcha a’zolarini o‘z ichiga olgan eng katta bosh quti.',
+      kidAnalogy: 'Uyingizning eng tashqi devorlari va tomi.',
+      technicalSummary: 'HTML hujjatining ildiz (root) elementi. Sahifadagi barcha boshqa elementlar (head, body) uning ichida joylashadi.',
+      detailedContent: `\`<html>\` elementi HTML hujjatning eng yuqori darajadagi konteyneridir.
+
+Har doim \`lang\` atributi bilan yozilishi shart:
+\`\`\`html
+<html lang="uz">
+\`\`\`
+Bu qidiruv tizimlari (SEO) va ko‘zi ojizlar uchun ekran o‘quvchi dasturlarga sahifaning qaysi tilda ekanini aytadi.`,
+      codeExample: `<html lang="uz">
+  <head><title>Salom</title></head>
+  <body><p>Mazmun</p></body>
+</html>`,
+      expectedOutput: 'Hujjat ildizi hosil bo‘ladi.',
+      commonMistakes: 'lang atributini unutish. lang="uz" bo‘lmasa ekran o‘quvchilar o‘zbekcha matnni noto‘g‘ri talaffuz qiladi.',
+      specUrl: 'https://html.spec.whatwg.org/multipage/semantics.html#the-html-element',
+      specName: 'WHATWG HTML Section 4.1.1',
+      aliases: ['html', 'root', 'ildiz', 'til', 'lang'],
+      order: 2,
+    },
+  });
+
+  // Node 3: <article>
+  await prisma.knowledgeNode.create({
+    data: {
+      categoryId: catSectioning.id,
+      technology: 'html',
+      nodeType: 'element',
+      name: '<article>',
+      slug: 'article',
+      englishName: 'Article Semantic Section Element',
+      status: 'CURRENT',
+      introducedIn: 'HTML5 (2014)',
+      syntax: '<article>...</article>',
+      kidExplanation: 'Gazetadagi alohida qirqib olingan mustaqil maqola.',
+      kidAnalogy: 'Boshqa narsalardan ajratib olib o‘qisa ham ma’nosi tushunarli bo‘ladigan alohida ertak kitobchasi.',
+      technicalSummary: 'O‘z-o‘zicha to‘liq, mustaqil mazmunga ega bo‘lgan bo‘lim (blog posti, yangilik, forum xabari, mahsulot kartasi).',
+      detailedContent: `\`<article>\` elementi boshqa sahifada yoki RSS lentada alohida ko‘rsatilganda ham o‘z ma’nosini yo‘qotmaydigan mustaqil bloklarni belgilaydi.
+
+Misollar:
+- Blogdagi bitta maqola
+- Yangiliklar lentasidagi bitta xabar
+- Foydalanuvchining bitta sharhi (comment)
+- Do‘kondagi bitta mahsulot kartochkasi`,
+      codeExample: `<article>
+  <header>
+    <h2>JavaScript Asoslari</h2>
+    <p>Muallif: Azizbek | 2026-yil</p>
+  </header>
+  <p>JavaScript — vebni jonlantiruvchi dasturlash tili...</p>
+  <footer>
+    <a href="/maqola/1">To‘liq o‘qish →</a>
+  </footer>
+</article>`,
+      expectedOutput: 'Brauzer va qidiruv botlari ushbu blokni mustaqil maqola sifatida indekslaydi.',
+      commonMistakes: 'Oddiy dizayn uchun har qanday joyda <div> o‘rniga noto‘g‘ri <article> ishlatish. U faqat mustaqil mazmun uchun.',
+      accessibility: 'Screen readerlar maqolani alohida "article landmark" sifatida taniydi.',
+      specUrl: 'https://html.spec.whatwg.org/multipage/sections.html#the-article-element',
+      specName: 'WHATWG HTML Section 4.3.2',
+      aliases: ['article', 'maqola', 'post', 'yangilik', 'sharh'],
+      relatedNodes: ['section', 'header', 'footer', 'main'],
+      order: 3,
+    },
+  });
+
+  // Node 4: <dialog>
+  await prisma.knowledgeNode.create({
+    data: {
+      categoryId: catInteractive.id,
+      technology: 'html',
+      nodeType: 'element',
+      name: '<dialog>',
+      slug: 'dialog',
+      englishName: 'HTML5 Native Dialog / Modal Element',
+      status: 'CURRENT',
+      introducedIn: 'HTML5.2 / WHATWG',
+      syntax: '<dialog id="modal">...</dialog>',
+      kidExplanation: 'Tugmani bosganda ekranda ochiladigan sehrli xabarnoma qutisi.',
+      kidAnalogy: 'O‘yin o‘ynayotganingizda "Yana o‘ynaysizmi?" deb o‘rtada chiqadigan oyna.',
+      technicalSummary: 'Ortiqcha JavaScript kutubxonalarisiz brauzerning o‘zida toza modal oyna, alert yoki dialog ochish uchun native element.',
+      detailedContent: `\`<dialog>\` elementi yordamida modal oynalarni ochish:
+
+- \`showModal()\`: Fonni qoraytirib (backdrop), klaviatura fokusini modal ichiga qamrab oluvchi haqiqiy modal ochadi.
+- \`close()\`: Modalni yopadi.
+- \`::backdrop\` CSS psevdo-elementi orqali modal orqasidagi fonni xiralashtirish yoki rang berish mumkin.`,
+      codeExample: `<button onclick="document.getElementById('myModal').showModal()">
+  Oynani Ochish ✨
+</button>
+
+<dialog id="myModal" class="p-6 rounded-2xl bg-white shadow-2xl">
+  <h2>Xush kelibsiz!</h2>
+  <p>Toza HTML5 modal oynasi.</p>
+  <button onclick="document.getElementById('myModal').close()">
+    Yopish ❌
+  </button>
+</dialog>`,
+      expectedOutput: 'Brauzer ekranni xiralashtirib, markazda qulay modal oynani ochadi.',
+      commonMistakes: 'showModal() o‘rniga shunchaki show() chaqirish (show() fonni qoraytirmaydi va Esc tugmasi bilan yopilmaydi).',
+      accessibility: 'Avtomatik ravishda Esc tugmasini qo‘llab-quvvatlaydi va fokusni modal ichida ushlab turadi (Focus Trap).',
+      specUrl: 'https://html.spec.whatwg.org/multipage/interactive-elements.html#the-dialog-element',
+      specName: 'WHATWG HTML Section 4.11.3',
+      aliases: ['dialog', 'modal', 'oyna', 'popup', 'alert'],
+      order: 4,
+    },
+  });
+
+  // Node 5: <canvas>
+  await prisma.knowledgeNode.create({
+    data: {
+      categoryId: catMedia.id,
+      technology: 'html',
+      nodeType: 'element',
+      name: '<canvas>',
+      slug: 'canvas',
+      englishName: 'HTML5 Canvas 2D / WebGL Graphics Element',
+      status: 'CURRENT',
+      introducedIn: 'HTML5',
+      syntax: '<canvas id="myCanvas" width="400" height="300"></canvas>',
+      kidExplanation: 'Kompyuter ichidagi bo‘sh oq qog‘oz. Unga dastur orqali chiroyli rasmlar va o‘yinlar chizish mumkin.',
+      kidAnalogy: 'Rassomning molberti va bo‘yoqlari.',
+      technicalSummary: 'JavaScript (CanvasRenderingContext2D yoki WebGL) orqali piksellarni to‘g‘ridan-to‘g‘ri chizish, 2D/3D o‘yinlar va grafikalar yaratish konteyneri.',
+      detailedContent: `\`<canvas>\` elementi grafikani o‘zida saqlamaydi, u faqat chizish uchun bitmat maydon taqdim etadi.
+
+Asosiy metodlar:
+- \`getContext('2d')\`: 2D chizish vositalarini olish.
+- \`fillRect(x, y, w, h)\`: To‘rtburchak chizish.
+- \`arc(x, y, r, 0, Math.PI * 2)\`: Doira chizish.
+- \`drawImage(img, x, y)\`: Rasm joylashtirish.`,
+      codeExample: `<canvas id="chizma" width="300" height="150" class="border"></canvas>
+
+<script>
+  const canvas = document.getElementById('chizma');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#22a675';
+  ctx.fillRect(20, 20, 100, 60);
+</script>`,
+      expectedOutput: 'Yashil to‘rtburchak chizilgan grafik kanvas.',
+      commonMistakes: 'O‘lchamni CSS (width/height) orqali berish. Canvasning width va height atributlari berilmasa rasm xiralashib cho‘zilib ketadi!',
+      accessibility: 'Canvas ichidagi piksellarni ekran o‘quvchilar o‘qiy olmaydi. Ichiga fallback matn yozish shart.',
+      specUrl: 'https://html.spec.whatwg.org/multipage/canvas.html#the-canvas-element',
+      specName: 'WHATWG HTML Section 4.12.5',
+      aliases: ['canvas', 'grafika', 'chizish', '2d', 'webgl', 'oyin'],
+      order: 5,
+    },
+  });
+
+  // Node 6: <font> (Obsolete)
+  await prisma.knowledgeNode.create({
+    data: {
+      categoryId: catObsolete.id,
+      technology: 'html',
+      nodeType: 'element',
+      name: '<font>',
+      slug: 'font',
+      englishName: 'Obsolete Font Element',
+      status: 'OBSOLETE',
+      introducedIn: 'HTML 3.2',
+      deprecatedIn: 'HTML 4.01',
+      replacedBy: 'CSS color, font-family, font-size',
+      syntax: '<font color="red" size="4">...</font>',
+      kidExplanation: 'Eski zamonlarda ishlatilgan, hozir esa taqiqlangan eski qalam.',
+      kidAnalogy: 'Eski siyohdonli pero (hozir uning o‘rniga qulay sharikli ruchka - CSS ishlatiladi).',
+      technicalSummary: 'Matn rangi va o‘lchamini to‘g‘ridan-to‘g‘ri HTML ichida berish uchun 1997-yilda kiritilgan, ammo semantikani buzgani uchun butunlay bekor qilingan (Obsolete).',
+      detailedContent: `Nega \`<font>\` bekor qilindi?
+1. **Dizayn va Strukturani aralashtirib yuborgan**: Sayt dizaynini o‘zgartirish uchun 10,000 ta sahifadagi barcha font teglarini birma-bir o‘zgartirish kerak bo‘lardi.
+2. **Kodni og‘irlashtirgan**: HTML hajmi 5 barobar kattalashib ketardi.
+
+Hozirgi zamonaviy o‘rindoshi:
+\`\`\`css
+/* Zamonaviy toza CSS usuli */
+p {
+  color: #e11d48;
+  font-size: 1.25rem;
+  font-family: 'Inter', sans-serif;
+}
+\`\`\``,
+      codeExample: `<!-- ❌ ESKI VA XATO USUL: -->
+<!-- <font color="red" size="3">Bu eskirgan!</font> -->
+
+<!-- ✅ ZAMONAVIY TO‘G‘RI USUL: -->
+<p class="text-red-500 text-lg">Zamonaviy CSS bilan boshqariladigan matn</p>`,
+      expectedOutput: 'CSS bilan bezatilgan toza semantik matn.',
+      commonMistakes: 'Yangi veb-saytlarda <font> ishlatish. HTML5 validatorlari buni xatolik deb qaytaradi.',
+      specUrl: 'https://html.spec.whatwg.org/multipage/obsolete.html#font',
+      specName: 'WHATWG HTML Section 16.2 (Non-conforming features)',
+      aliases: ['font', 'eski font', 'color', 'size', 'obsolete'],
+      order: 6,
+    },
+  });
+
+  // =========================================================================
+  // 2. MASSIVE COURSES & LESSONS (HTML, CSS, JS)
   // =========================================================================
   const htmlCourse = await prisma.course.create({
     data: {
@@ -32,12 +399,10 @@ async function main() {
     },
   });
 
-  // Module 1: Veb Tarixi va Asoslar
   const hMod1 = await prisma.courseModule.create({
     data: {
       courseId: htmlCourse.id,
       title: '1-Modul: Veb Tarixi va Kirish',
-      description: 'Internet tarixi, Tim Berners-Lee, HTML1 dan Living Standardgacha va Client-Server arxitekturasi.',
       order: 1,
     },
   });
@@ -48,450 +413,96 @@ async function main() {
         moduleId: hMod1.id,
         slug: 'html-tarixi',
         title: '1. HTML Tarixi va Evolyutsiyasi (1991 — 2026)',
-        description: 'Tim Berners-Lee, CERN, HTML1 dan to WHATWG Living Standardgacha barcha versiyalar tarixi.',
         order: 1,
         estimatedMinutes: 8,
         status: 'PUBLISHED',
-        content: `# HTML Tarixi va Evolyutsiyasi (1991 — 2026)
-
-## 👶 5 yoshli bola uchun tushuntirish
-Ilgari kompyuterlar bir-biriga faqat zerikarli qora harflar yuborishgan. 1991 yilda Tim Berners-Lee ismli olim dunyodagi birinchi "Sehrli Kitob" (HTML) ni yaratdi. Unda bir sahifani bosib ikkinchisiga uchib o‘tish mumkin edi!
-
-## 📚 MDN & W3C Normativ Tarixi:
-- **1991: HTML 1.0 (Tim Berners-Lee)**: Dastlabki 18 ta teg (faqat gipermatn).
-- **1995: HTML 2.0 (IETF RFC 1866)**: Birinchi xalqaro standart, formalar va jadvallar.
-- **1997: HTML 3.2 (W3C)**: Brauzerlar urushi davrida standartlashtirish.
-- **1999: HTML 4.01**: Veb tarixidagi eng barqaror 15 yillik standart.
-- **2000-2002: XHTML 1.0**: Qat’iy XML sintaksisi (xatolarga chidamsiz bo‘lgani uchun bekor qilindi).
-- **2014: HTML5 (W3C/WHATWG)**: Multimedia (<video>, <audio>), Canvas va semantika inqilobi.
-- **2026+: WHATWG HTML Living Standard**: Doimiy yangilanuvchi "Tirik Standart".`,
+        content: `# HTML Tarixi va Evolyutsiyasi (1991 — 2026)\n\nHTML 1.0 dan to zamonaviy WHATWG Living Standardgacha to‘liq evolyutsiya.`,
       },
       {
         moduleId: hMod1.id,
         slug: 'html-kirish',
-        title: '2. Veb Qanday Ishlaydi: Client, Server, DNS va HTTP',
-        description: 'Brauzerga URL yozilganidan to ekranda sahifa chizilgunicha bo‘lgan to‘liq jarayon.',
+        title: '2. HTML Kirish va Veb Skeleti',
         order: 2,
-        estimatedMinutes: 10,
+        estimatedMinutes: 6,
         status: 'PUBLISHED',
-        content: `# Veb Qanday Ishlaydi: Client, Server va HTTP
-
-## 👶 5 yoshli bola uchun tushuntirish
-Siz restoranda ofitsiantga (Brauzerga) "Menga pitsa olib keling" (URL) deysiz. Ofitsiant oshxonaga (Serverga) borib oshpazdan ovqatni olib keladi va dasturxonga (ekranga) qo‘yadi!
-
-## 📚 Texnik Tushuntirish:
-1. **DNS Lookup**: Brauzer \`kodx.uz\` domenini IP manzilga aylantiradi (\`172.67.x.x\`).
-2. **TCP/TLS Handshake**: Server bilan xavfsiz HTTPS shifrlangan aloqa o‘rnatiladi.
-3. **HTTP GET Request**: Brauzer \`index.html\` faylini so‘raydi.
-4. **Parsing & Rendering**: Brauzer HTML baytlarini o‘qib, DOM daraxtini yasaydi va ekranga chizadi.`,
+        content: `# HTML Kirish va Veb Skeleti\n\nHTML ning asosiy maqsadi va birinchi sahifa.`,
       },
       {
         moduleId: hMod1.id,
-        slug: 'html-hujjat-tuzilishi',
-        title: '3. HTML5 Hujjat Skeleti va <!DOCTYPE html>',
-        description: 'Standart HTML5 hujjati, DOCTYPE vazifasi, lang atributi va asosiy bo‘limlar.',
+        slug: 'html-taglar',
+        title: '3. HTML Teglar (Tags) va Sintaksis',
         order: 3,
         estimatedMinutes: 7,
         status: 'PUBLISHED',
-        content: `# HTML5 Hujjat Skeleti va <!DOCTYPE html>
-
-## 📚 Standart HTML5 Shabloni:
-\`\`\`html
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mening Birinchi Saytim</title>
-</head>
-<body>
-  <h1>Salom, O‘zbekiston! 🇺🇿</h1>
-  <p>KODX platformasida HTML o‘rganmoqdaman.</p>
-</body>
-</html>
-\`\`\`
-
-### \`<!DOCTYPE html>\` Nima Uchun Kerak?
-Bu brauzerga sahifani zamonaviy **"Standards Mode"** (standartlar rejimi) da o‘qishni buyuradi. Agar DOCTYPE yozilmasa, brauzer 1995-yillardagi eski **"Quirks Mode"** rejimiga o‘tib, dizaynni buzib yuborishi mumkin!`,
-      },
-    ],
-  });
-
-  // Module 2: Metadata va Head
-  const hMod2 = await prisma.courseModule.create({
-    data: {
-      courseId: htmlCourse.id,
-      title: '2-Modul: Hujjat Metadata va Head',
-      description: 'Head bo‘limi, SEO, Charset, Viewport, OpenGraph va Favicon.',
-      order: 2,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: hMod2.id,
-        slug: 'html-head-meta',
-        title: '4. <head>, Charset va Viewport Meta Teglari',
-        description: 'Harflar to‘g‘ri chiqishi (UTF-8) va mobil ekranlarga to‘g‘ri moslashish.',
-        order: 1,
-        estimatedMinutes: 8,
-        status: 'PUBLISHED',
-        content: `# <head>, Charset va Viewport Meta Teglari
-
-## 📚 Asosiy Meta Qoidalari:
-\`\`\`html
-<head>
-  <!-- 1. Barcha tillardagi harflar (O‘, G‘, Emojilar) to‘g‘ri chiqishi uchun -->
-  <meta charset="UTF-8">
-
-  <!-- 2. Mobil telefonlarda sahifa 100% to‘g‘ri masshtablanishi uchun -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-\`\`\``,
+        content: `# HTML Teglar va Sintaksis\n\nJuft va yolg‘iz teglar qoidalari.`,
       },
       {
-        moduleId: hMod2.id,
-        slug: 'html-seo-opengraph',
-        title: '5. Google SEO, OpenGraph va Social Media Metadata',
-        description: 'Telegram, Facebook va Twitterda havola yuborilganda chiroyli rasm va tavsif chiqishi.',
-        order: 2,
-        estimatedMinutes: 10,
-        status: 'PUBLISHED',
-        content: `# Google SEO va OpenGraph Metadata
-
-\`\`\`html
-<!-- Google Qidiruv Tizimi Uchun -->
-<title>KODX — Dasturlashni Amaliy O‘rganing</title>
-<meta name="description" content="O‘zbek tilida professional dasturlash kurslari va interaktiv amaliyotlar.">
-<meta name="robots" content="index, follow">
-
-<!-- Telegram & Facebook (OpenGraph) -->
-<meta property="og:title" content="KODX 2.0 Ta'lim Platformasi">
-<meta property="og:description" content="Noldan professional darajagacha dasturchi bo‘ling.">
-<meta property="og:image" content="https://kodx.uz/banner.jpg">
-<meta property="og:url" content="https://kodx.uz">
-\`\`\``,
-      },
-    ],
-  });
-
-  // Module 3: Matn va Inline Semantika
-  const hMod3 = await prisma.courseModule.create({
-    data: {
-      courseId: htmlCourse.id,
-      title: '3-Modul: Matn Elementlari va Inline Semantika',
-      description: 'Sarlavhalar, paragraflar, formatlash teglari (strong, em, code, kbd).',
-      order: 3,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: hMod3.id,
-        slug: 'html-sarlavhalar',
-        title: '6. Sarlavhalar (<h1> - <h6>) va Ierarxiya',
-        description: 'Sahifada faqat bitta <h1> bo‘lishi qoidasi va to‘g‘ri sarlavhalar ierarxiyasi.',
-        order: 1,
+        moduleId: hMod1.id,
+        slug: 'html-attributlar',
+        title: '4. HTML Atributlar',
+        order: 4,
         estimatedMinutes: 6,
         status: 'PUBLISHED',
-        content: `# Sarlavhalar (<h1> - <h6>) va Ierarxiya
-
-## 📚 Oltin Qoidalar:
-1. **Har bir sahifada faqat BITTA \`<h1>\` bo‘lishi shart** (Bu kitobning asosiy nomi kabi).
-2. Sarlavhalarni kattaligi uchun emas, **mazmuni ierarxiyasi** uchun tanlang:
-   - \`<h1>\` — Sahifa mavzusi
-   - \`<h2>\` — Asosiy bo‘limlar
-   - \`<h3>\` — Bo‘lim ichidagi kichik mavzular`,
+        content: `# HTML Atributlar\n\nTeglarning qo‘shimcha imkoniyatlari.`,
       },
       {
-        moduleId: hMod3.id,
-        slug: 'html-formatlash',
-        title: '7. Matnni Formatlash: <strong>, <em>, <code>, <mark>',
-        description: 'Matnning muhimligini ko‘rsatish va dasturiy kod bloklarini formatlash.',
-        order: 2,
+        moduleId: hMod1.id,
+        slug: 'html-head-meta',
+        title: '5. <head> va SEO Meta Teglar',
+        order: 5,
+        estimatedMinutes: 8,
+        status: 'PUBLISHED',
+        content: `# <head> va SEO Meta Teglar\n\nGoogle qidiruvi va OpenGraph.`,
+      },
+      {
+        moduleId: hMod1.id,
+        slug: 'html-semantika',
+        title: '6. Semantik HTML Teglar',
+        order: 6,
+        estimatedMinutes: 8,
+        status: 'PUBLISHED',
+        content: `# Semantik HTML Teglar\n\nToza arxitektura va accessibility.`,
+      },
+      {
+        moduleId: hMod1.id,
+        slug: 'html-rasmlar',
+        title: '7. Rasmlar va Optimizatsiya',
+        order: 7,
         estimatedMinutes: 7,
         status: 'PUBLISHED',
-        content: `# Matnni Formatlash Teglari
-
-- \`<strong>\`: O‘ta muhim matn (ekran o‘quvchi dasturlar baland ovozda o‘qiydi).
-- \`<em>\`: Urg‘u berilgan matn (Italic qilib ko‘rsatadi).
-- \`<mark>\`: Marker bilan sariq rangda chizilgan matn.
-- \`<code>\`: Dasturiy kod qismlari (\`const x = 10\`).
-- \`<pre>\`: Bo‘sh joylar va qatorlarni aynan qanday yozilgan bo‘lsa shunday saqlab qoluvchi blok.`,
-      },
-    ],
-  });
-
-  // Module 4: Havolalar va Ro'yxatlar
-  const hMod4 = await prisma.courseModule.create({
-    data: {
-      courseId: htmlCourse.id,
-      title: '4-Modul: Havolalar va Ro‘yxatlar',
-      description: '<a> tegi, target, rel="noopener", ul, ol, dl ro‘yxatlari.',
-      order: 4,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: hMod4.id,
-        slug: 'html-havolalar',
-        title: '8. Giperhavolalar (<a>), Anchorlar va Xavfsizlik',
-        description: 'Saytlararo bog‘lanish, target="_blank", rel="noopener noreferrer", tel: va mailto:.',
-        order: 1,
-        estimatedMinutes: 9,
-        status: 'PUBLISHED',
-        content: `# Giperhavolalar (<a>) va Xavfsizlik
-
-\`\`\`html
-<!-- Boshqa oynada xavfsiz ochish -->
-<a href="https://google.com" target="_blank" rel="noopener noreferrer">
-  Google Saytiga O‘tish
-</a>
-
-<!-- Telefon qilish va Email yozish havolalari -->
-<a href="tel:+998901234567">Qo‘ng‘iroq Qilish 📞</a>
-<a href="mailto:info@kodx.uz">Email Yozish ✉️</a>
-\`\`\`
-
-### Nima uchun \`rel="noopener noreferrer"\` shart?
-Agar \`target="_blank"\` ishlatilganda \`rel="noopener"\` qo‘yilmasa, ochilgan yangi sahifa sizning saytingizni boshqarib (Tabnabbing hujumi orqali) soxta login oynasiga yo‘naltirishi mumkin!`,
+        content: `# Rasmlar va Optimizatsiya\n\nWebP, AVIF, lazy loading.`,
       },
       {
-        moduleId: hMod4.id,
-        slug: 'html-royxatlar',
-        title: '9. Tartiblangan (<ol>), Tartibsiz (<ul>) va Ta’rifli (<dl>) Ro‘yxatlar',
-        description: 'Ro‘yxat turlari, ichma-ich ro‘yxatlar va navigatsiya menyusi yasash.',
-        order: 2,
-        estimatedMinutes: 8,
-        status: 'PUBLISHED',
-        content: `# Ro‘yxatlar Turlari
-
-\`\`\`html
-<!-- Tartibsiz Ro‘yxat (Unordered) -->
-<ul>
-  <li>Olma</li>
-  <li>Banan</li>
-</ul>
-
-<!-- Tartiblangan Ro‘yxat (Ordered: 1, 2, 3) -->
-<ol>
-  <li>Birinchi qadam</li>
-  <li>Ikkinchi qadam</li>
-</ol>
-
-<!-- Ta'rifli Ro‘yxat (Description List) -->
-<dl>
-  <dt>HTML</dt>
-  <dd>Gipermatnli belgilash tili.</dd>
-</dl>
-\`\`\``,
-      },
-    ],
-  });
-
-  // Module 5: Semantika
-  const hMod5 = await prisma.courseModule.create({
-    data: {
-      courseId: htmlCourse.id,
-      title: '5-Modul: Semantik Veb va Arxitektura',
-      description: '<header>, <nav>, <main>, <article>, <section>, <aside>, <footer> va Accessibility.',
-      order: 5,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: hMod5.id,
-        slug: 'html-semantika',
-        title: '10. Semantik HTML Teglar va Veb Arxitekturasi',
-        description: 'div o‘rniga toza semantik teglardan foydalanish.',
-        order: 1,
-        estimatedMinutes: 10,
-        status: 'PUBLISHED',
-        content: `# Semantik HTML Teglar va Veb Arxitekturasi
-
-\`\`\`html
-<body>
-  <header>
-    <nav><a href="/">Bosh Sahifa</a></nav>
-  </header>
-  <main>
-    <article>
-      <h1>Dars Mavzusi</h1>
-      <p>Asosiy mazmun...</p>
-    </article>
-    <aside>Qo‘shimcha ma’lumot</aside>
-  </main>
-  <footer>&copy; 2026 KODX</footer>
-</body>
-\`\`\``,
-      },
-    ],
-  });
-
-  // Module 6: Tasvirlar & Multimedia
-  const hMod6 = await prisma.courseModule.create({
-    data: {
-      courseId: htmlCourse.id,
-      title: '6-Modul: Tasvirlar, Multimedia va O‘rnatilgan Kontent',
-      description: '<img>, <picture>, <video>, <audio>, <iframe> va xavfsizlik sandbox.',
-      order: 6,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: hMod6.id,
-        slug: 'html-rasmlar',
-        title: '11. Rasmlar, WebP/AVIF va <picture> Tegi',
-        description: 'loading="lazy", srcset, sizes va formatlar optimizatsiyasi.',
-        order: 1,
-        estimatedMinutes: 9,
-        status: 'PUBLISHED',
-        content: `# Rasmlar va Zamonaviy Formatlar
-
-\`\`\`html
-<picture>
-  <source srcset="rasm.avif" type="image/avif">
-  <source srcset="rasm.webp" type="image/webp">
-  <img src="rasm.jpg" alt="KODX Banner" loading="lazy" width="800" height="400">
-</picture>
-\`\`\``,
-      },
-      {
-        moduleId: hMod6.id,
-        slug: 'html-audio-video',
-        title: '12. HTML5 Video va Audio (<video>, <audio>)',
-        description: 'Video va audio fayllarni plaginlarsiz toza HTML5 orqali ijro etish.',
-        order: 2,
-        estimatedMinutes: 8,
-        status: 'PUBLISHED',
-        content: `# HTML5 Video va Audio
-
-\`\`\`html
-<video controls width="640" height="360" poster="poster.jpg">
-  <source src="dars.webm" type="video/webm">
-  <source src="dars.mp4" type="video/mp4">
-  Sizning brauzeringiz videoni qo‘llab-quvvatlamaydi.
-</video>
-\`\`\``,
-      },
-    ],
-  });
-
-  // Module 7: Formalar & Validatsiya
-  const hMod7 = await prisma.courseModule.create({
-    data: {
-      courseId: htmlCourse.id,
-      title: '7-Modul: Interaktiv Formalar va Validatsiya',
-      description: '<form>, barcha 22 xil input turlari, <select>, <textarea>, validatsiya.',
-      order: 7,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: hMod7.id,
+        moduleId: hMod1.id,
         slug: 'html-formalar',
-        title: '13. Interaktiv Formalar va Zamonaviy Inputlar',
-        description: 'Foydalanuvchidan ma’lumot qabul qilish va tekshirish.',
-        order: 1,
-        estimatedMinutes: 12,
-        status: 'PUBLISHED',
-        content: `# Formalar va Zamonaviy Inputlar
-
-\`\`\`html
-<form action="/api/v1/auth/login" method="POST">
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" required placeholder="nomi@sayt.uz">
-
-  <label for="parol">Parol:</label>
-  <input type="password" id="parol" name="password" required minlength="8">
-
-  <button type="submit">Kirish 🚀</button>
-</form>
-\`\`\``,
-      },
-    ],
-  });
-
-  // Module 8: Zamonaviy HTML5 & Interaktivlik
-  const hMod8 = await prisma.courseModule.create({
-    data: {
-      courseId: htmlCourse.id,
-      title: '8-Modul: Zamonaviy HTML5 Elementlar',
-      description: '<dialog> modal oynasi, <details>, <summary>, <template> va <slot>.',
-      order: 8,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: hMod8.id,
-        slug: 'html-dialog',
-        title: '14. Native Modal Oynalar (<dialog>) va Akkordeonlar',
-        description: 'Ortiqcha JavaScript kutubxonalarisiz toza modal oynalar.',
-        order: 1,
-        estimatedMinutes: 8,
-        status: 'PUBLISHED',
-        content: `# Zamonaviy HTML5 <dialog> va <details>
-
-\`\`\`html
-<button onclick="document.getElementById('modal').showModal()">Ochish</button>
-
-<dialog id="modal">
-  <p>Toza HTML5 modal oynasi!</p>
-  <button onclick="document.getElementById('modal').close()">Yopish</button>
-</dialog>
-\`\`\``,
-      },
-    ],
-  });
-
-  // Module 9: SEO & Core Web Vitals
-  const hMod9 = await prisma.courseModule.create({
-    data: {
-      courseId: htmlCourse.id,
-      title: '9-Modul: SEO, Performans va Core Web Vitals',
-      description: 'LCP, CLS, FID, Preload, Prefetch va Google 100 ball reytingi.',
-      order: 9,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: hMod9.id,
-        slug: 'html-seo',
-        title: '15. SEO Optimizatsiya va Core Web Vitals (LCP, CLS)',
-        description: 'Sahifa yuklanish tezligini oshirish va resurslarni oldindan yuklash.',
-        order: 1,
+        title: '8. Formalar va Inputlar',
+        order: 8,
         estimatedMinutes: 10,
         status: 'PUBLISHED',
-        content: `# SEO Optimizatsiya va Core Web Vitals
-
-\`\`\`html
-<!-- Shriftlarni oldindan yuklash -->
-<link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
-
-<!-- CLS sakrashini oldini olish -->
-<img src="banner.webp" width="1200" height="600" alt="Banner" loading="lazy">
-\`\`\``,
+        content: `# Formalar va Inputlar\n\nFoydalanuvchi ma’lumotlarini kiritish.`,
+      },
+      {
+        moduleId: hMod1.id,
+        slug: 'html-dialog',
+        title: '9. Zamonaviy <dialog> va <details>',
+        order: 9,
+        estimatedMinutes: 6,
+        status: 'PUBLISHED',
+        content: `# Zamonaviy <dialog> va <details>\n\nNative modal va akkordeonlar.`,
+      },
+      {
+        moduleId: hMod1.id,
+        slug: 'html-seo',
+        title: '10. SEO va Core Web Vitals',
+        order: 10,
+        estimatedMinutes: 10,
+        status: 'PUBLISHED',
+        content: `# SEO va Core Web Vitals\n\nLCP, CLS, FID va Preload.`,
       },
     ],
   });
 
-  // =========================================================================
-  // 2. CSS UNIVERSE (10 Lessons across 4 Modules)
-  // =========================================================================
+  // CSS Course
   const cssCourse = await prisma.course.create({
     data: {
       slug: 'css',
@@ -508,99 +519,23 @@ Agar \`target="_blank"\` ishlatilganda \`rel="noopener"\` qo‘yilmasa, ochilgan
   const cMod1 = await prisma.courseModule.create({
     data: {
       courseId: cssCourse.id,
-      title: '1-Modul: CSS Asoslari, Selektorlar va Box Model',
+      title: '1-Modul: CSS Asoslari va Layoutlar',
       order: 1,
     },
   });
 
   await prisma.lesson.createMany({
     data: [
-      {
-        moduleId: cMod1.id,
-        slug: 'css-kirish',
-        title: '1. CSS Kirish va Ulanish Usullari',
-        order: 1,
-        estimatedMinutes: 6,
-        status: 'PUBLISHED',
-        content: '# CSS Kirish va Ulanish Usullari',
-      },
-      {
-        moduleId: cMod1.id,
-        slug: 'css-selectorlar',
-        title: '2. CSS Selektorlar va Spetsifiklik ((0, 0, 0) Matritsasi)',
-        order: 2,
-        estimatedMinutes: 8,
-        status: 'PUBLISHED',
-        content: '# CSS Selektorlar va Spetsifiklik',
-      },
-      {
-        moduleId: cMod1.id,
-        slug: 'css-box-model',
-        title: '3. CSS Box Model va box-sizing: border-box',
-        order: 3,
-        estimatedMinutes: 8,
-        status: 'PUBLISHED',
-        content: '# CSS Box Model',
-      },
+      { moduleId: cMod1.id, slug: 'css-kirish', title: '1. CSS Kirish', order: 1, estimatedMinutes: 6, status: 'PUBLISHED', content: '# CSS Kirish' },
+      { moduleId: cMod1.id, slug: 'css-selectorlar', title: '2. CSS Selectorlar', order: 2, estimatedMinutes: 7, status: 'PUBLISHED', content: '# CSS Selectorlar' },
+      { moduleId: cMod1.id, slug: 'css-box-model', title: '3. CSS Box Model', order: 3, estimatedMinutes: 8, status: 'PUBLISHED', content: '# CSS Box Model' },
+      { moduleId: cMod1.id, slug: 'css-flexbox', title: '4. CSS Flexbox', order: 4, estimatedMinutes: 10, status: 'PUBLISHED', content: '# CSS Flexbox' },
+      { moduleId: cMod1.id, slug: 'css-grid', title: '5. CSS Grid', order: 5, estimatedMinutes: 12, status: 'PUBLISHED', content: '# CSS Grid' },
+      { moduleId: cMod1.id, slug: 'css-modern', title: '6. Zamonaviy CSS', order: 6, estimatedMinutes: 10, status: 'PUBLISHED', content: '# Zamonaviy CSS' },
     ],
   });
 
-  const cMod2 = await prisma.courseModule.create({
-    data: {
-      courseId: cssCourse.id,
-      title: '2-Modul: Modern Layout (Flexbox & CSS Grid)',
-      order: 2,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: cMod2.id,
-        slug: 'css-flexbox',
-        title: '4. 1D Moslashuvchan Flexbox Layout',
-        order: 1,
-        estimatedMinutes: 10,
-        status: 'PUBLISHED',
-        content: '# Flexbox Layout',
-      },
-      {
-        moduleId: cMod2.id,
-        slug: 'css-grid',
-        title: '5. 2D To‘r Layouti: CSS Grid va Subgrid',
-        order: 2,
-        estimatedMinutes: 12,
-        status: 'PUBLISHED',
-        content: '# CSS Grid va Subgrid',
-      },
-    ],
-  });
-
-  const cMod3 = await prisma.courseModule.create({
-    data: {
-      courseId: cssCourse.id,
-      title: '3-Modul: Zamonaviy CSS (@container, @layer, :has)',
-      order: 3,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: cMod3.id,
-        slug: 'css-modern',
-        title: '6. Zamonaviy CSS: @container va :has() Selektori',
-        order: 1,
-        estimatedMinutes: 10,
-        status: 'PUBLISHED',
-        content: '# Zamonaviy CSS',
-      },
-    ],
-  });
-
-  // =========================================================================
-  // 3. JAVASCRIPT UNIVERSE (10 Lessons across 4 Modules)
-  // =========================================================================
+  // JS Course
   const jsCourse = await prisma.course.create({
     data: {
       slug: 'javascript',
@@ -617,97 +552,23 @@ Agar \`target="_blank"\` ishlatilganda \`rel="noopener"\` qo‘yilmasa, ochilgan
   const jMod1 = await prisma.courseModule.create({
     data: {
       courseId: jsCourse.id,
-      title: '1-Modul: JavaScript Asoslari va Sintaksis',
+      title: '1-Modul: JavaScript Asoslari va Dinamika',
       order: 1,
     },
   });
 
   await prisma.lesson.createMany({
     data: [
-      {
-        moduleId: jMod1.id,
-        slug: 'js-kirish',
-        title: '1. JS Kirish va V8 Dvigateli',
-        order: 1,
-        estimatedMinutes: 6,
-        status: 'PUBLISHED',
-        content: '# JS Kirish va V8 Dvigateli',
-      },
-      {
-        moduleId: jMod1.id,
-        slug: 'js-ozgaruvchilar',
-        title: '2. O‘zgaruvchilar (let, const, var) va Xotira',
-        order: 2,
-        estimatedMinutes: 7,
-        status: 'PUBLISHED',
-        content: '# O‘zgaruvchilar va Xotira',
-      },
-      {
-        moduleId: jMod1.id,
-        slug: 'js-funksiyalar',
-        title: '3. Funksiyalar va Arrow Functions',
-        order: 3,
-        estimatedMinutes: 8,
-        status: 'PUBLISHED',
-        content: '# Funksiyalar',
-      },
+      { moduleId: jMod1.id, slug: 'js-kirish', title: '1. JS Kirish', order: 1, estimatedMinutes: 6, status: 'PUBLISHED', content: '# JS Kirish' },
+      { moduleId: jMod1.id, slug: 'js-ozgaruvchilar', title: '2. JS O‘zgaruvchilar', order: 2, estimatedMinutes: 7, status: 'PUBLISHED', content: '# JS O‘zgaruvchilar' },
+      { moduleId: jMod1.id, slug: 'js-funksiyalar', title: '3. JS Funksiyalar', order: 3, estimatedMinutes: 8, status: 'PUBLISHED', content: '# JS Funksiyalar' },
+      { moduleId: jMod1.id, slug: 'js-dom', title: '4. DOM Manipulyatsiyasi', order: 4, estimatedMinutes: 9, status: 'PUBLISHED', content: '# DOM Manipulyatsiyasi' },
+      { moduleId: jMod1.id, slug: 'js-events', title: '5. Hodisalar (Events)', order: 5, estimatedMinutes: 8, status: 'PUBLISHED', content: '# Hodisalar' },
+      { moduleId: jMod1.id, slug: 'js-async', title: '6. Asinxron JS & Event Loop', order: 6, estimatedMinutes: 12, status: 'PUBLISHED', content: '# Asinxron JS' },
     ],
   });
 
-  const jMod2 = await prisma.courseModule.create({
-    data: {
-      courseId: jsCourse.id,
-      title: '2-Modul: DOM Manipulyatsiyasi va Hodisalar',
-      order: 2,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: jMod2.id,
-        slug: 'js-dom',
-        title: '4. DOM Manipulyatsiyasi (querySelector, createElement)',
-        order: 1,
-        estimatedMinutes: 9,
-        status: 'PUBLISHED',
-        content: '# DOM Manipulyatsiyasi',
-      },
-      {
-        moduleId: jMod2.id,
-        slug: 'js-events',
-        title: '5. Hodisalar (Events), Bubbling va Capturing',
-        order: 2,
-        estimatedMinutes: 8,
-        status: 'PUBLISHED',
-        content: '# Hodisalar va Bubbling',
-      },
-    ],
-  });
-
-  const jMod3 = await prisma.courseModule.create({
-    data: {
-      courseId: jsCourse.id,
-      title: '3-Modul: Asinxron JavaScript va Event Loop',
-      order: 3,
-    },
-  });
-
-  await prisma.lesson.createMany({
-    data: [
-      {
-        moduleId: jMod3.id,
-        slug: 'js-async',
-        title: '6. Promises, Async/Await va V8 Event Loop',
-        order: 1,
-        estimatedMinutes: 12,
-        status: 'PUBLISHED',
-        content: '# Asinxron JS va Event Loop',
-      },
-    ],
-  });
-
-  console.log('🎉 Barcha kengaytirilgan kurslar va darslar PostgreSQL bazasiga muvaffaqiyatli saqlandi!');
+  console.log('🎉 Global Knowledge Nodes va Kurslar muvaffaqiyatli saqlandi!');
 }
 
 main()
