@@ -38,17 +38,17 @@ export const coursesData: Record<string, CourseData> = {
         lessons: [
           {
             id: '1.1',
-            slug: 'tarix',
+            slug: 'tim-berners-lee',
             title: '1.1. Tim Berners-Lee va Web 1.0',
-            path: '/html/tarix',
+            path: '/html/tim-berners-lee',
             estimatedMinutes: 5,
             isCompleted: true,
           },
           {
             id: '1.2',
-            slug: 'standartlar',
+            slug: 'standartlar-whatwg',
             title: '1.2. HTML Standartlari va WHATWG',
-            path: '/html/standartlar',
+            path: '/html/standartlar-whatwg',
             estimatedMinutes: 6,
             isCompleted: true,
           },
@@ -70,9 +70,9 @@ export const coursesData: Record<string, CourseData> = {
         lessons: [
           {
             id: '2.1',
-            slug: 'kirish',
+            slug: 'client-server',
             title: '2.1. Client va Server nima?',
-            path: '/html/kirish',
+            path: '/html/client-server',
             estimatedMinutes: 5,
             isCompleted: false,
           },

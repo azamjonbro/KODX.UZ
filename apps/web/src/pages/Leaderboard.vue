@@ -102,14 +102,19 @@
 </template>
 
 <script setup lang="ts">
-const leaderboardList = [
+import { computed } from 'vue';
+import { useProgressStore } from '../stores/progress';
+
+const progressStore = useProgressStore();
+
+const leaderboardList = computed(() => [
   { rank: 1, name: 'Javohir X.', avatar: '👨‍💻', xp: 3820, level: 10, streak: 45, isCurrent: false },
   { rank: 2, name: 'Madina R.', avatar: '👩‍💻', xp: 2450, level: 8, streak: 28, isCurrent: false },
   { rank: 3, name: 'Bekzod U.', avatar: '🧑‍💻', xp: 1980, level: 7, streak: 19, isCurrent: false },
   { rank: 4, name: 'Sardorbek K.', avatar: '👨‍💻', xp: 1740, level: 7, streak: 15, isCurrent: false },
   { rank: 5, name: 'Nilufar M.', avatar: '👩‍💻', xp: 1520, level: 7, streak: 14, isCurrent: false },
   { rank: 6, name: 'Diyorbek O.', avatar: '🧑‍💻', xp: 1390, level: 7, streak: 12, isCurrent: false },
-  { rank: 7, name: 'Abdulloh (Siz)', avatar: '👨‍💻', xp: 1240, level: 7, streak: 12, isCurrent: true },
+  { rank: 7, name: 'Abdulloh (Siz)', avatar: '👨‍💻', xp: progressStore.xp, level: progressStore.level, streak: progressStore.streak, isCurrent: true },
   { rank: 8, name: 'Shahzod T.', avatar: '👨‍💻', xp: 1100, level: 6, streak: 9, isCurrent: false },
-];
+]);
 </script>
