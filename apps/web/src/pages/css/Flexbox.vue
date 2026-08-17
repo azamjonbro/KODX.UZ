@@ -1,128 +1,118 @@
 <template>
-  <div class="space-y-10 max-w-4xl pb-16">
-    <!-- Header & Meta -->
+  <div class="space-y-10 max-w-4xl pb-20 text-left">
+    <!-- Breadcrumbs Navigation -->
+    <nav class="flex items-center flex-wrap gap-2 text-xs font-mono text-surface-400">
+      <router-link to="/css/kirish" class="hover:text-surface-200 transition-colors">CSS Asoslari</router-link>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-surface-400">3-Modul</span>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-brand-400 font-bold">3.1. Flexbox Layout</span>
+    </nav>
+
+    <!-- Title & Meta -->
     <div class="space-y-4 border-b border-surface-800 pb-6">
-      <div class="flex items-center gap-2 text-xs font-mono text-brand-400">
-        <span>CSS Asoslari</span>
-        <span>/</span>
-        <span class="text-surface-400">4-Dars</span>
-      </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-        1D Moslashuvchan Layout — CSS Flexbox
+        CSS Flexbox — 1 O‘lchamli Moslashuvchan Joylashtirish
       </h1>
-      <p class="text-base sm:text-lg text-surface-300 leading-relaxed">
-        Elementlarni bir qatorda yoki bitta ustunda tekislash, oraliq masofalarni avtomatik taqsimlash va har qanday ekranga moslashuvchan dizayn yaratish.
+      <p class="text-sm sm:text-base text-surface-300 leading-relaxed font-normal">
+        Flexbox (Flexible Box Layout) — elementlarni bir qatorda yoki bitta ustunda tekislash, markazlashtirish va bo‘sh joyni taqsimlash uchun eng qulay CSS tizimidir.
       </p>
 
-      <div class="flex flex-wrap items-center gap-4 text-xs text-surface-400 pt-2">
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          ⏱️ O‘qish vaqti: 10 daqiqa
+      <!-- Premium Metadata Badges -->
+      <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-mono">
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          O‘qish vaqti: 8 daqiqa
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          🎯 Daraja: O‘rta
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Main Axis & Cross Axis
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          📚 MDN: Basic concepts of flexbox
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          justify-content & align-items
         </span>
       </div>
     </div>
 
-    <!-- 👶 5 Yoshli Bola Uchun Analogiya -->
-    <div class="p-6 rounded-2xl bg-gradient-to-r from-blue-500/10 via-brand-500/10 to-transparent border border-blue-500/20 space-y-3">
-      <div class="flex items-center gap-2 text-blue-400 font-bold text-base">
-        <span class="text-xl">👶</span>
-        <span>5 yoshli bola uchun tushuntirish: O‘yinchoq Mashinalar Qatori</span>
+    <!-- 👶 5 Yoshli Bola Uchun Analogiya + C++ Under-the-hood Toggle -->
+    <div class="p-6 rounded-2xl bg-surface-900/40 border border-surface-800/80 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5 text-amber-400 font-bold text-sm sm:text-base">
+          <span class="text-xl">👶</span>
+          <span>5 yoshli bola uchun tushuntirish: Poyezd Vagonlari</span>
+        </div>
+        <button
+          @click="showUnderTheHood = !showUnderTheHood"
+          class="px-2.5 py-1 rounded-lg bg-surface-800 hover:bg-surface-700 text-[11px] font-mono text-brand-400 border border-brand-500/30 transition-all cursor-pointer"
+        >
+          <span>{{ showUnderTheHood ? 'Analogiyaga qaytish' : '🔬 Ostidagi Kodni Ko‘rish' }}</span>
+        </button>
       </div>
-      <p class="text-sm text-surface-200 leading-relaxed">
-        Polga 3 ta o‘yinchoq mashina qo‘ydingiz.
-      </p>
-      <p class="text-xs text-surface-300 leading-relaxed">
-        <strong>Flexbox</strong> — bu sizning sehrli qo‘lingiz: xohlasangiz ularni yonma-yon qilib bir chiziqqa terasiz (<code>row</code>), xohlasangiz tepadan pastga ustun qilasiz (<code>column</code>), xohlasangiz oralarini bir xil masofada ochib qo‘yasiz (<code>space-between</code>)!
-      </p>
+
+      <div v-if="!showUnderTheHood" class="space-y-2 text-xs sm:text-sm text-surface-300 leading-relaxed animate-in fade-in duration-200">
+        <p>
+          O‘yinchoq poyezd vagonlarini bitta ipga terganingizni tasavvur qiling:
+        </p>
+        <ul class="space-y-1 list-disc list-inside text-surface-400 text-xs">
+          <li>Ularni bir qatorda tekis saflab qo‘yishingiz mumkin.</li>
+          <li>Xohlasangiz oralarini ochib (<code>space-between</code>), xohlasangiz o‘rtaga yig‘ib (<code>center</code>) qo‘yasiz.</li>
+        </ul>
+      </div>
+
+      <div v-else class="space-y-2 font-mono text-xs animate-in fade-in duration-200">
+        <div class="text-cyan-300 font-bold">Blink LayoutFlexibleBox: Flex Line Distribution Algorithm</div>
+        <pre class="p-3.5 rounded-xl bg-surface-950 border border-surface-800 text-cyan-300 text-[11px] leading-relaxed overflow-x-auto"><code>// third_party/blink/renderer/core/layout/flexible_box_algorithm.cc
+void FlexLayoutAlgorithm::DistributeFreeSpace(LayoutUnit free_space) {
+  for (FlexItem& item : flex_line_) {
+    item.flexed_content_size = item.hypothetical_main_size + (item.flex_grow * ratio);
+  }
+}</code></pre>
+      </div>
     </div>
 
-    <!-- ⚡ Interaktiv Flexbox Playground -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-        <span class="text-brand-400">⚡</span> Jonli Sinov: Flexbox Xossalarini Boshqaring
+    <!-- Main Axis vs Cross Axis (Hard & Deep) -->
+    <section class="space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 1. Asosiy O‘q (Main Axis) va Kesishuvchi O‘q (Cross Axis)
       </h2>
 
-      <div class="p-6 rounded-2xl bg-surface-900 border border-surface-800 space-y-6">
-        <!-- Controls -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div class="space-y-1.5">
-            <label class="font-semibold text-surface-300">justify-content (Asosiy o‘q bo‘yicha):</label>
-            <select
-              v-model="justifyContent"
-              class="w-full px-3 py-2 bg-surface-950 border border-surface-700 rounded-xl text-white focus:outline-none focus:border-brand-500"
-            >
-              <option value="flex-start">flex-start (Chapda)</option>
-              <option value="center">center (Markazda)</option>
-              <option value="flex-end">flex-end (O‘ngda)</option>
-              <option value="space-between">space-between (Chetlarga yoyilgan)</option>
-              <option value="space-around">space-around (Teng oraliq)</option>
-            </select>
-          </div>
-
-          <div class="space-y-1.5">
-            <label class="font-semibold text-surface-300">align-items (Ko‘ndalang o‘q bo‘yicha):</label>
-            <select
-              v-model="alignItems"
-              class="w-full px-3 py-2 bg-surface-950 border border-surface-700 rounded-xl text-white focus:outline-none focus:border-brand-500"
-            >
-              <option value="stretch">stretch (Cho‘zilgan)</option>
-              <option value="center">center (Markazda)</option>
-              <option value="flex-start">flex-start (Tepada)</option>
-              <option value="flex-end">flex-end (Pastda)</option>
-            </select>
-          </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+        <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-2">
+          <div class="text-brand-400 font-bold text-sm">justify-content (Asosiy O‘q)</div>
+          <p class="text-surface-300 text-[11px] font-sans leading-relaxed">
+            <code>center</code> (o‘rtada), <code>space-between</code> (chetlarga surish), <code>space-around</code> yoki <code>flex-start</code>.
+          </p>
         </div>
 
-        <!-- Live Container Preview -->
-        <div
-          class="p-6 rounded-2xl bg-surface-950 border border-surface-800 min-h-[160px] flex gap-3 transition-all"
-          :style="{ justifyContent: justifyContent, alignItems: alignItems }"
-        >
-          <div class="w-16 h-16 rounded-xl bg-brand-500 flex items-center justify-center font-bold text-surface-950 text-sm shadow-lg shadow-brand-500/20">
-            1
-          </div>
-          <div class="w-16 h-20 rounded-xl bg-blue-500 flex items-center justify-center font-bold text-white text-sm shadow-lg shadow-blue-500/20">
-            2
-          </div>
-          <div class="w-16 h-14 rounded-xl bg-purple-500 flex items-center justify-center font-bold text-white text-sm shadow-lg shadow-purple-500/20">
-            3
-          </div>
-        </div>
-
-        <!-- CSS Code Output -->
-        <div class="p-3 rounded-xl bg-surface-950 border border-surface-800 font-mono text-xs text-brand-300">
-          .container { display: flex; justify-content: {{ justifyContent }}; align-items: {{ alignItems }}; }
+        <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-2">
+          <div class="text-blue-400 font-bold text-sm">align-items (Vertikal O‘q)</div>
+          <p class="text-surface-300 text-[11px] font-sans leading-relaxed">
+            <code>center</code> (vertikal markazlash), <code>stretch</code> (balandlikni to‘ldirish) yoki <code>flex-end</code>.
+          </p>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Navigation -->
-    <div class="pt-6 border-t border-surface-800 flex flex-wrap items-center justify-between gap-4">
-      <router-link
-        to="/css/box-model"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-900 hover:bg-surface-800 text-surface-300 text-xs font-semibold border border-surface-700 transition-colors"
-      >
-        <span>← 3-Dars: CSS Box Model</span>
-      </router-link>
-
-      <router-link
-        to="/css/grid"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-bold text-xs transition-colors"
-      >
-        <span>Keyingi Dars: CSS Grid →</span>
-      </router-link>
-    </div>
+    <!-- Interactive Live Code Editor -->
+    <section class="space-y-4 pt-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 2. Jonli Mashq: Flexbox Kartochkalarni Joylashtiring
+      </h2>
+      <InteractiveCodePlayground />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import InteractiveCodePlayground from '../../components/InteractiveCodePlayground.vue';
 
-const justifyContent = ref('center');
-const alignItems = ref('center');
+const showUnderTheHood = ref(false);
 </script>
