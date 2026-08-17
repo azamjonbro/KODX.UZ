@@ -1,0 +1,28 @@
+{
+  "technology": "JavaScript",
+  "totalNodes": 175,
+  "verifiedNodes": 175,
+  "coveragePercentage": 100.0,
+  "lastAudit": "2026-08-18",
+  "keywordsAndApis": [
+    { "name": "var", "category": "types-and-primitives", "status": "LEGACY", "scope": "function-scoped" },
+    { "name": "let", "category": "types-and-primitives", "status": "CURRENT", "scope": "block-scoped", "introduced": "ES6" },
+    { "name": "const", "category": "types-and-primitives", "status": "CURRENT", "scope": "block-scoped", "introduced": "ES6" },
+    { "name": "function", "category": "functions-and-this", "status": "CURRENT" },
+    { "name": "arrow-functions", "category": "functions-and-this", "status": "CURRENT", "syntax": "() => {}", "introduced": "ES6" },
+    { "name": "this", "category": "functions-and-this", "status": "CURRENT" },
+    { "name": "class", "category": "objects-and-prototypes", "status": "CURRENT", "introduced": "ES6" },
+    { "name": "Promise", "category": "async-and-event-loop", "status": "CURRENT", "introduced": "ES6" },
+    { "name": "async/await", "category": "async-and-event-loop", "status": "CURRENT", "introduced": "ES2017" },
+    { "name": "EventLoop", "category": "engine-and-internals", "status": "CURRENT" },
+    { "name": "MicrotaskQueue", "category": "async-and-event-loop", "status": "CURRENT" },
+    { "name": "MacrotaskQueue", "category": "async-and-event-loop", "status": "CURRENT" },
+    { "name": "Closure", "category": "execution-context-and-scope", "status": "CURRENT" },
+    { "name": "PrototypeChain", "category": "objects-and-prototypes", "status": "CURRENT" },
+    { "name": "Destructuring", "category": "modern-es6-plus", "status": "CURRENT" },
+    { "name": "OptionalChaining", "category": "modern-es6-plus", "status": "CURRENT", "syntax": "?. ", "introduced": "ES2020" },
+    { "name": "NullishCoalescing", "category": "modern-es6-plus", "status": "CURRENT", "syntax": "??", "introduced": "ES2020" },
+    { "name": "FetchAPI", "category": "dom-and-browser-apis", "status": "CURRENT" },
+    { "name": "DOMManipulation", "category": "dom-and-browser-apis", "status": "CURRENT" }
+  ]
+}

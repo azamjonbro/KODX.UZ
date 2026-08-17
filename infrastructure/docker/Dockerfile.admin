@@ -1,0 +1,16 @@
+FROM node:22-alpine AS builder
+
+WORKDIR /app
+RUN npm install -g pnpm
+
+COPY pnpm-lock.yaml* pnpm-workspace.yaml package.json ./
+COPY packages/ ./packages/
+COPY apps/admin/ ./apps/admin/
+
+RUN pnpm install --frozen-lockfile || pnpm install
+RUN pnpm --filter @kodx/admin build
+
+FROM nginx:alpine AS runner
+COPY --from=builder /app/apps/admin/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

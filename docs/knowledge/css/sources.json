@@ -1,0 +1,36 @@
+{
+  "sources": [
+    {
+      "id": "w3c-css-specs",
+      "name": "W3C Cascading Style Sheets Current Work & Snapshots",
+      "type": "NORMATIVE",
+      "url": "https://www.w3.org/Style/CSS/current-work",
+      "organization": "W3C CSS Working Group",
+      "status": "OFFICIAL_STANDARD"
+    },
+    {
+      "id": "w3c-css-selectors-4",
+      "name": "Selectors Level 4",
+      "type": "NORMATIVE",
+      "url": "https://www.w3.org/TR/selectors-4/",
+      "organization": "W3C",
+      "status": "CANDIDATE_RECOMMENDATION"
+    },
+    {
+      "id": "w3c-css-grid-2",
+      "name": "CSS Grid Layout Module Level 2 (Subgrid)",
+      "type": "NORMATIVE",
+      "url": "https://www.w3.org/TR/css-grid-2/",
+      "organization": "W3C",
+      "status": "OFFICIAL_STANDARD"
+    },
+    {
+      "id": "mdn-css-reference",
+      "name": "MDN Web Docs — CSS Reference",
+      "type": "HIGH_QUALITY_TECHNICAL",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+      "organization": "Mozilla",
+      "status": "COMMUNITY_AUTHORITATIVE"
+    }
+  ]
+}

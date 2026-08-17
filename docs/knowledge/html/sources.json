@@ -1,0 +1,75 @@
+{
+  "sources": [
+    {
+      "id": "whatwg-html",
+      "name": "WHATWG HTML Living Standard",
+      "type": "NORMATIVE",
+      "url": "https://html.spec.whatwg.org/multipage/",
+      "organization": "Web Hypertext Application Technology Working Group",
+      "version": "Living Standard",
+      "status": "OFFICIAL_STANDARD"
+    },
+    {
+      "id": "w3c-dom4",
+      "name": "W3C DOM Level 4 / WHATWG DOM",
+      "type": "NORMATIVE",
+      "url": "https://dom.spec.whatwg.org/",
+      "organization": "WHATWG / W3C",
+      "version": "Living Standard",
+      "status": "OFFICIAL_STANDARD"
+    },
+    {
+      "id": "w3c-aria",
+      "name": "Accessible Rich Internet Applications (WAI-ARIA) 1.2",
+      "type": "NORMATIVE",
+      "url": "https://www.w3.org/TR/wai-aria-1.2/",
+      "organization": "World Wide Web Consortium (W3C)",
+      "version": "1.2",
+      "status": "OFFICIAL_STANDARD"
+    },
+    {
+      "id": "w3c-wcag22",
+      "name": "Web Content Accessibility Guidelines (WCAG) 2.2",
+      "type": "NORMATIVE",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "organization": "W3C",
+      "version": "2.2",
+      "status": "OFFICIAL_STANDARD"
+    },
+    {
+      "id": "ietf-rfc1866",
+      "name": "RFC 1866: Hypertext Markup Language - 2.0",
+      "type": "HISTORICAL_NORMATIVE",
+      "url": "https://datatracker.ietf.org/doc/html/rfc1866",
+      "organization": "IETF",
+      "publishedAt": "1995-11",
+      "status": "OBSOLETE"
+    },
+    {
+      "id": "w3c-html401",
+      "name": "HTML 4.01 Specification",
+      "type": "HISTORICAL_NORMATIVE",
+      "url": "https://www.w3.org/TR/html401/",
+      "organization": "W3C",
+      "publishedAt": "1999-12-24",
+      "status": "SUPERSEDED"
+    },
+    {
+      "id": "w3c-xhtml1",
+      "name": "XHTML 1.0 The Extensible HyperText Markup Language (Second Edition)",
+      "type": "HISTORICAL_NORMATIVE",
+      "url": "https://www.w3.org/TR/xhtml1/",
+      "organization": "W3C",
+      "publishedAt": "2002-08-01",
+      "status": "SUPERSEDED"
+    },
+    {
+      "id": "mdn-web-docs",
+      "name": "MDN Web Docs — HTML Reference",
+      "type": "HIGH_QUALITY_TECHNICAL",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+      "organization": "Mozilla",
+      "status": "COMMUNITY_AUTHORITATIVE"
+    }
+  ]
+}

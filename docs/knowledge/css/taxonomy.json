@@ -1,0 +1,79 @@
+{
+  "technology": "CSS",
+  "name": "Cascading Style Sheets",
+  "standard": "W3C CSS Working Group Standards & Snapshots",
+  "standardUrl": "https://www.w3.org/Style/CSS/",
+  "description": "O‘zbek tilidagi eng to‘liq, W3C spetsifikatsiyalariga asoslangan CSS Knowledge Universe taksonomiyasi.",
+  "categories": [
+    {
+      "id": "history",
+      "name": "CSS Tarixi va Modul Standartlari",
+      "description": "CSS 1 dan to CSS Snapshot 2026, CSS3 modullari va kelajakdagi imkoniyatlar."
+    },
+    {
+      "id": "syntax-and-cascade",
+      "name": "Sintaksis, Kaskad va Spetsifiklik (Specificity)",
+      "description": "Kaskad qoidalari, o‘lchovlar ((0,0,0) spetsifiklik matritsasi), !important, merosxo‘rlik (Inheritance)."
+    },
+    {
+      "id": "selectors",
+      "name": "Selektorlar va Zamonaviy Psevdo-Klasslar",
+      "description": "Element, Class, ID, Attribute, Psevdo-klasslar (:hover, :focus, :has(), :is(), :where(), :not()) va Psevdo-elementlar (::before, ::after)."
+    },
+    {
+      "id": "box-model",
+      "name": "CSS Box Model va O‘lchamlar",
+      "description": "Content, Padding, Border, Margin, box-sizing: border-box, margin collapsing."
+    },
+    {
+      "id": "colors-and-backgrounds",
+      "name": "Ranglar, Gradientlar va Fonlar",
+      "description": "Hex, RGB, HSL, OKLCH, Display-P3, Linear/Radial/Conic gradientlar, background-blend-mode."
+    },
+    {
+      "id": "typography-and-fonts",
+      "name": "Tipografiya va Shriftlar",
+      "description": "@font-face, Variable Fonts, font-display: swap, line-height, letter-spacing, text-overflow."
+    },
+    {
+      "id": "layout-flexbox",
+      "name": "1D Moslashuvchan Layout (Flexbox)",
+      "description": "Main-axis, Cross-axis, flex-direction, justify-content, align-items, flex-grow, flex-shrink, flex-basis, gap."
+    },
+    {
+      "id": "layout-grid",
+      "name": "2D To‘r Layouti (CSS Grid & Subgrid)",
+      "description": "grid-template-columns, fr birligi, repeat(auto-fit, minmax()), grid-area, Subgrid."
+    },
+    {
+      "id": "modern-layout-container-queries",
+      "name": "Container Queries va Zamonaviy Layout",
+      "description": "@container (inline-size), cqw/cqh birliklari, @layer kaskad qavatlari."
+    },
+    {
+      "id": "transitions-and-animations",
+      "name": "Animatsiyalar va Transformatsiyalar",
+      "description": "transition, @keyframes, animation-timing-function, transform (scale, rotate, translate, skew), 3D transforms."
+    },
+    {
+      "id": "responsive-and-media-queries",
+      "name": "Moslashuvchan Veb (RWD) va Media Queries",
+      "description": "@media (min-width), prefers-color-scheme (Dark Mode), prefers-reduced-motion, dvh/svh/lvh birliklari."
+    },
+    {
+      "id": "custom-properties",
+      "name": "CSS O‘zgaruvchilari (Custom Properties)",
+      "description": "var(--nomi), @property tipizatsiyalangan o‘zgaruvchilar, CSS Tokens tizimi."
+    },
+    {
+      "id": "filters-and-effects",
+      "name": "Filtrlar, Maskalar va Glassmorphism",
+      "description": "filter: blur(), backdrop-filter, clip-path, mask-image, mix-blend-mode."
+    },
+    {
+      "id": "performance",
+      "name": "CSS Performans va Rendering Optimizatsiyasi",
+      "description": "will-change, content-visibility, contain, CSS yuklanishini bloklamaslik, reflow & repaintni kamaytirish."
+    }
+  ]
+}

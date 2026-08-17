@@ -1,0 +1,19 @@
+{
+  "technology": "HTML",
+  "auditDate": "2026-08-18",
+  "metrics": {
+    "totalRelevantNodes": 162,
+    "verifiedNodes": 162,
+    "partiallyVerifiedNodes": 0,
+    "needsReviewNodes": 0,
+    "coveragePercentage": "100.0%"
+  },
+  "breakdown": {
+    "elements": { "total": 118, "verified": 118 },
+    "globalAttributes": { "total": 18, "verified": 18 },
+    "internalsAndParsing": { "total": 8, "verified": 8 },
+    "accessibilityAndA11y": { "total": 6, "verified": 6 },
+    "performanceAndSEO": { "total": 6, "verified": 6 },
+    "historicalVersions": { "total": 6, "verified": 6 }
+  }
+}
