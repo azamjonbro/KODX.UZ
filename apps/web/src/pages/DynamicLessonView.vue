@@ -167,6 +167,8 @@ const lessonSlug = computed(() => {
   return parts[parts.length - 1] || 'html-tarixi';
 });
 
+import { coursesData } from '../data/topics';
+
 function fetchLesson() {
   loading.value = true;
   error.value = null;
@@ -175,20 +177,34 @@ function fetchLesson() {
   if (found) {
     lesson.value = found;
   } else {
-    // Generate intelligent default
+    // Search coursesData
+    let foundTitle = lessonSlug.value.replace(/-/g, ' ').toUpperCase();
+    let foundModuleTitle = 'HTML Knowledge Universe';
+    let foundOrder = 1;
+
+    for (const mod of coursesData['html']?.modules || []) {
+      const match = mod.lessons.find(l => l.slug === lessonSlug.value || l.path.endsWith(lessonSlug.value));
+      if (match) {
+        foundTitle = match.title;
+        foundModuleTitle = mod.title;
+        foundOrder = mod.order;
+        break;
+      }
+    }
+
     lesson.value = {
       id: 'custom',
       slug: lessonSlug.value,
-      title: `${lessonSlug.value.replace(/-/g, ' ').toUpperCase()} Injiniring Darsi`,
-      moduleTitle: 'HTML Knowledge Universe',
-      moduleOrder: 1,
-      description: 'WHATWG va W3C xalqaro standartlari bo‘yicha chuqur muhandislik qo‘llanmasi.',
+      title: foundTitle,
+      moduleTitle: foundModuleTitle,
+      moduleOrder: foundOrder,
+      description: `WHATWG va W3C xalqaro Living Standard bo‘yicha ${foundTitle} texnik injiniringi va brauzer arxitekturasi.`,
       estimatedMinutes: 7,
       spec: 'WHATWG HTML Living Standard',
-      kidAnalogy: 'Har bir detalning o‘z o‘rni va qoidasi bor, xuddi qiziqarli o‘yindek!',
-      cppInternalCode: '// Blink DOM Parsing & Layout\nblink::HTMLDocumentParser::Parse();',
-      content: `## 🚀 Darsning Asosiy Nazariyasi\n\nUshbu mavzu zamonaviy veb standartlari va brauzer arxitekturasining ajralmas qismidir.\n\n### 🔬 Muhim Qoidalar\nHar doim xotira boshqaruvi, semantika va qulaylikni (A11y) hisobga oling.`,
-      codeExample: `<!DOCTYPE html>\n<html lang="uz">\n  <body>\n    <h1>KODX HTML Universe</h1>\n  </body>\n</html>`,
+      kidAnalogy: `Tasavvur qiling, ${foundTitle} — bu sizning o‘yinchoq shaharchangizdagi maxsus qoidadir. U sahifani chiroyli va tartibli bo‘lishiga yordam beradi!`,
+      cppInternalCode: `// third_party/blink/renderer/core/html\nclass HTMLCustomNode : public Element {\npublic:\n  void ProcessNode() {\n    // Node allocation & layout trigger\n  }\n};`,
+      content: `## 🚀 1. ${foundTitle} — Nazariya va Standartlar\n\nUshbu element yoki texnologiya WHATWG spetsifikatsiyasi bo‘yicha HTML hujjatining ajralmas qismidir.\n\n### 🔬 Brauzer Xotirasi va Arxitektura\nBrauzer ushbu qismni o‘qiganda C++ dvigateli (Blink / WebKit) maxsus DOM tugunini yaratadi va unga Accessibility (A11y) parametrlarini bog‘laydi.\n\n### 💡 Eng Yaxshi Amaliyotlar (Best Practices)\n1. Semantikaga doimo e’tibor bering.\n2. Ekran o‘quvchilar uchun qulaylikni ta’minlang.\n3. Layout reflow va repaint xarajatlarini kamaytiring.`,
+      codeExample: `<!DOCTYPE html>\n<html lang="uz">\n  <body>\n    <!-- ${foundTitle} Misoli -->\n    <div class="kodx-example">\n      <h2>${foundTitle}</h2>\n    </div>\n  </body>\n</html>`,
     };
   }
 
