@@ -6,7 +6,7 @@
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
       <Header />
-      <div class="flex-1 flex min-w-0">
+      <div class="flex-1 flex flex-col min-w-0">
         <router-view />
       </div>
     </div>

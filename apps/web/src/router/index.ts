@@ -63,6 +63,11 @@ const routes: RouteRecordRaw[] = [
       { path: ':lessonSlug', component: () => import('../pages/DynamicLessonView.vue') },
     ],
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('../pages/NotFound.vue'),
+  },
 ];
 
 export const router = createRouter({
