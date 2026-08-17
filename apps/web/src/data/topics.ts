@@ -364,7 +364,7 @@ export const coursesData: Record<string, CourseData> = {
 
 // Flattened fallback list for quick access
 export const topics: Record<string, { title: string; path: string }[]> = {
-  html: coursesData.html.modules.flatMap(m => m.lessons.map(l => ({ title: l.title, path: l.path }))),
-  css: coursesData.css.modules.flatMap(m => m.lessons.map(l => ({ title: l.title, path: l.path }))),
-  javascript: coursesData.javascript.modules.flatMap(m => m.lessons.map(l => ({ title: l.title, path: l.path }))),
+  html: (coursesData['html']?.modules || []).flatMap(m => m.lessons.map(l => ({ title: l.title, path: l.path }))),
+  css: (coursesData['css']?.modules || []).flatMap(m => m.lessons.map(l => ({ title: l.title, path: l.path }))),
+  javascript: (coursesData['javascript']?.modules || []).flatMap(m => m.lessons.map(l => ({ title: l.title, path: l.path }))),
 };
