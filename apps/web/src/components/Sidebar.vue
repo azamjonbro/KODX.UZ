@@ -12,11 +12,14 @@
       </router-link>
     </div>
 
-    <!-- Search Input with ⌘K Badge -->
+    <!-- Search Input with ⌘K Badge (Click triggers CommandPalette) -->
     <div class="px-4 py-2">
-      <div class="relative flex items-center">
+      <div
+        @click="openCommandPalette"
+        class="relative flex items-center cursor-pointer group"
+      >
         <svg
-          class="w-4 h-4 text-surface-400 absolute left-3.5 pointer-events-none"
+          class="w-4 h-4 text-surface-400 group-hover:text-brand-400 absolute left-3.5 pointer-events-none transition-colors"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -24,12 +27,12 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         <input
-          v-model="searchQuery"
           type="text"
+          readonly
           placeholder="Qidirish..."
-          class="w-full pl-9 pr-12 py-2 bg-surface-900/80 border border-surface-800 hover:border-surface-700 focus:border-brand-500 rounded-xl text-xs text-white placeholder-surface-500 focus:outline-none focus:ring-1 focus:ring-brand-500/30 transition-all font-sans"
+          class="w-full pl-9 pr-12 py-2 bg-surface-900/80 group-hover:bg-surface-900 border border-surface-800 group-hover:border-surface-700 rounded-xl text-xs text-white placeholder-surface-500 cursor-pointer focus:outline-none transition-all font-sans"
         />
-        <div class="absolute right-2.5 flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-surface-800 border border-surface-700/60 text-[10px] font-mono text-surface-400">
+        <div class="absolute right-2.5 flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-surface-800 border border-surface-700/60 text-[10px] font-mono text-surface-400 group-hover:text-surface-300">
           <span>⌘</span>
           <span>K</span>
         </div>
@@ -192,34 +195,39 @@
         </div>
       </div>
 
-      <!-- User Profile Bar (Abdulloh • Level 7 • 1,240 XP) -->
-      <div class="flex items-center justify-between p-2 rounded-xl hover:bg-surface-900 transition-colors cursor-pointer group">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <!-- Avatar with Gradient Ring -->
-          <div class="relative w-8 h-8 rounded-full overflow-hidden bg-surface-800 border border-surface-700 flex items-center justify-center shrink-0">
-            <span class="text-xs font-bold text-surface-200">👨‍💻</span>
+      <!-- User Profile Bar Wrapped with ProfileMenu -->
+      <ProfileMenu>
+        <div class="flex items-center justify-between p-2 rounded-xl hover:bg-surface-900 transition-colors cursor-pointer group">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <!-- Avatar with Gradient Ring -->
+            <div class="relative w-8 h-8 rounded-full overflow-hidden bg-surface-800 border border-surface-700 flex items-center justify-center shrink-0">
+              <span class="text-xs font-bold text-surface-200">👨‍💻</span>
+            </div>
+
+            <div class="min-w-0 text-left">
+              <div class="text-xs font-bold text-white truncate group-hover:text-brand-300 transition-colors">
+                Abdulloh
+              </div>
+              <div class="text-[10px] text-surface-400">
+                Level 7
+              </div>
+            </div>
           </div>
 
-          <div class="min-w-0 text-left">
-            <div class="text-xs font-bold text-white truncate group-hover:text-brand-300 transition-colors">
-              Abdulloh
-            </div>
-            <div class="text-[10px] text-surface-400">
-              Level 7
-            </div>
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs font-bold text-brand-400">
+              1,240 XP
+            </span>
+            <svg class="w-3.5 h-3.5 text-surface-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
           </div>
         </div>
-
-        <div class="flex items-center gap-2">
-          <span class="font-mono text-xs font-bold text-brand-400">
-            1,240 XP
-          </span>
-          <svg class="w-3.5 h-3.5 text-surface-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      </div>
+      </ProfileMenu>
     </div>
+
+    <!-- Command Palette (⌘K) Modal Component -->
+    <CommandPalette ref="commandPaletteRef" />
   </aside>
 </template>
 
@@ -227,9 +235,15 @@
 import { ref, computed, h, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { coursesData, CourseData, ThemeModuleItem, SubthemeItem } from '../data/topics';
+import ProfileMenu from './ProfileMenu.vue';
+import CommandPalette from './CommandPalette.vue';
 
 const route = useRoute();
-const searchQuery = ref('');
+const commandPaletteRef = ref<InstanceType<typeof CommandPalette> | null>(null);
+
+function openCommandPalette() {
+  commandPaletteRef.value?.open();
+}
 
 // SVG Icon Helper Components
 const createSvgIcon = (d: string) => ({

@@ -11,6 +11,46 @@ const routes: RouteRecordRaw[] = [
     component: Home,
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('../pages/Login.vue'),
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('../pages/Login.vue'),
+  },
+  {
+    path: '/roadmaps',
+    name: 'roadmaps',
+    component: () => import('../pages/Roadmaps.vue'),
+  },
+  {
+    path: '/practice',
+    name: 'practice',
+    component: () => import('../pages/Practice.vue'),
+  },
+  {
+    path: '/challenges',
+    name: 'challenges',
+    component: () => import('../pages/Challenges.vue'),
+  },
+  {
+    path: '/leaderboard',
+    name: 'leaderboard',
+    component: () => import('../pages/Leaderboard.vue'),
+  },
+  {
+    path: '/dictionary',
+    name: 'dictionary',
+    component: () => import('../pages/Dictionary.vue'),
+  },
+  {
+    path: '/news',
+    name: 'news',
+    component: () => import('../pages/News.vue'),
+  },
+  {
     path: '/explorer',
     name: 'knowledge-explorer',
     component: () => import('../pages/KnowledgeExplorer.vue'),
