@@ -15,7 +15,7 @@
       <div class="flex items-center gap-2">
         <button
           @click="toggleBookmark"
-          class="p-2 rounded-xl border border-surface-800 bg-surface-900/60 hover:bg-surface-800 text-surface-400 hover:text-amber-400 transition-all cursor-pointer flex items-center gap-1.5"
+          class="p-2 rounded-xl border border-surface-800 bg-surface-900/60 hover:bg-surface-800 text-surface-400 hover:text-amber-400 transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
           :title="isBookmarked ? 'Saqlanganlardan o‘chirish' : 'Darsni saqlab qo‘yish'"
         >
           <span :class="isBookmarked ? 'text-amber-400' : ''">{{ isBookmarked ? '★' : '☆' }}</span>
@@ -24,10 +24,10 @@
       </div>
     </div>
 
-    <!-- Hero Header Banner (Ultra Premium Glassmorphic Card) -->
-    <div class="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-surface-900/90 via-surface-950/80 to-brand-950/20 border border-surface-800/80 hover:border-surface-700/80 shadow-2xl overflow-hidden backdrop-blur-xl space-y-5">
-      <div class="absolute -right-16 -top-16 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Hero Header Banner (Ultra Premium Glassmorphic Studio Card) -->
+    <div class="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-surface-900/90 via-surface-950/90 to-brand-950/30 border border-surface-800/80 hover:border-surface-700/80 shadow-2xl overflow-hidden backdrop-blur-xl space-y-5">
+      <div class="absolute -right-16 -top-16 w-72 h-72 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-16 -bottom-16 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <!-- Module & ID Pill -->
       <div class="flex flex-wrap items-center justify-between gap-2">
@@ -37,7 +37,7 @@
         <span class="text-xs font-mono text-surface-500 font-semibold">ID: {{ lesson?.id }}</span>
       </div>
 
-      <!-- Main Title -->
+      <!-- Main Title & Description -->
       <div class="space-y-2.5">
         <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
           {{ lesson?.title }}
@@ -47,7 +47,7 @@
         </p>
       </div>
 
-      <!-- Premium Meta Badges -->
+      <!-- CRP Performance Badges Bar -->
       <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-mono">
         <span class="inline-flex items-center gap-1.5 bg-surface-950/80 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
           <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,28 +55,34 @@
           </svg>
           {{ lesson?.estimatedMinutes }} daqiqa o‘qish
         </span>
-        <span class="inline-flex items-center gap-1.5 bg-surface-950/80 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
-          <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          {{ lesson?.spec }}
+        <span class="inline-flex items-center gap-1.5 bg-surface-950/80 px-3 py-1.5 rounded-xl border border-surface-800 text-blue-400 shadow-sm font-semibold">
+          <span>📜</span> {{ lesson?.spec }}
         </span>
-        <span class="inline-flex items-center gap-1.5 bg-surface-950/80 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
-          <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-          Chromium Blink C++
+        <span
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-semibold shadow-sm"
+          :class="[
+            lesson?.deepDive?.crpCost?.reflow === 'High'
+              ? 'bg-red-950/40 text-red-400 border-red-500/30'
+              : lesson?.deepDive?.crpCost?.reflow === 'Medium'
+              ? 'bg-amber-950/40 text-amber-400 border-amber-500/30'
+              : 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30'
+          ]"
+        >
+          <span>⚡</span> Reflow: {{ lesson?.deepDive?.crpCost?.reflow }}
+        </span>
+        <span class="inline-flex items-center gap-1.5 bg-purple-950/40 px-3 py-1.5 rounded-xl border border-purple-500/30 text-purple-300 shadow-sm font-semibold">
+          <span>♿</span> {{ lesson?.deepDive?.axTreeMapping?.implicitRole }}
         </span>
       </div>
     </div>
 
     <!-- Multi-Layer Tab Navigator (Sleek Glassmorphic Pills) -->
-    <div class="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-surface-950/90 border border-surface-800/80 backdrop-blur-xl">
+    <div class="flex flex-wrap gap-1.5 p-1.5 rounded-2xl bg-surface-950/90 border border-surface-800/80 backdrop-blur-xl">
       <button
         v-for="tab in tabs"
         :key="tab.id"
         @click="activeTab = tab.id"
-        class="px-4 py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 cursor-pointer select-none"
+        class="px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 cursor-pointer select-none"
         :class="[
           activeTab === tab.id
             ? 'bg-brand-500 text-surface-950 font-bold shadow-lg shadow-brand-500/25 scale-[1.02]'
@@ -88,14 +94,14 @@
         <span
           v-if="tab.badge"
           class="px-1.5 py-0.5 rounded-md text-[10px] font-mono"
-          :class="activeTab === tab.id ? 'bg-surface-950/20 text-surface-950' : 'bg-surface-800 text-surface-400'"
+          :class="activeTab === tab.id ? 'bg-surface-950/20 text-surface-950 font-bold' : 'bg-surface-800 text-surface-400'"
         >
           {{ tab.badge }}
         </span>
       </button>
     </div>
 
-    <!-- TAB 1: 📘 To‘liq Darslik (Normative Theory, Tables & Callouts) -->
+    <!-- TAB 1: 📘 Darslik & Standartlar (Normative Theory & Specs) -->
     <div v-if="activeTab === 'theory'" class="space-y-8 animate-in fade-in duration-200">
       <!-- Rendered Markdown Content -->
       <div
@@ -154,7 +160,125 @@
       </div>
     </div>
 
-    <!-- TAB 2: 👶 5 Yoshli Bola Uchun (Story & C++ Under-the-hood Toggle) -->
+    <!-- TAB 2: 🔬 Chromium Blink & V8 Dvigateli (Deep C++ Architecture) -->
+    <div v-else-if="activeTab === 'internals'" class="space-y-6 animate-in fade-in duration-200">
+      <!-- C++ Class Hierarchy Visualizer -->
+      <div class="p-6 rounded-3xl bg-surface-900/80 border border-surface-800 space-y-4">
+        <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+          <span>🧬</span> Chromium Blink C++ Merosxo‘rlik Shajarasi (Inheritance Tree)
+        </h3>
+
+        <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+          <template v-for="(cls, cIdx) in lesson?.deepDive?.blinkClassHierarchy" :key="cIdx">
+            <span
+              class="px-3 py-1.5 rounded-xl border shadow-sm"
+              :class="[
+                cIdx === (lesson?.deepDive?.blinkClassHierarchy?.length || 0) - 1
+                  ? 'bg-brand-500/20 text-brand-300 border-brand-500/40 font-bold'
+                  : 'bg-surface-950 text-surface-300 border-surface-800'
+              ]"
+            >
+              {{ cls }}
+            </span>
+            <span v-if="cIdx < (lesson?.deepDive?.blinkClassHierarchy?.length || 0) - 1" class="text-surface-600 font-bold">→</span>
+          </template>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-surface-950 border border-surface-800/80 text-xs text-surface-400 font-mono flex items-center justify-between">
+          <span>Xotiradagi Hajmi:</span>
+          <span class="text-brand-400 font-bold">{{ lesson?.deepDive?.memoryAllocation }}</span>
+        </div>
+      </div>
+
+      <!-- Real C++ Implementation Code Card -->
+      <div class="p-6 rounded-3xl bg-surface-900/80 border border-surface-800 space-y-4">
+        <div class="flex items-center justify-between border-b border-surface-800 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">⚙️</span>
+            <h4 class="text-sm font-bold text-white font-mono">Blink C++ Layout & Invalidation Handler</h4>
+          </div>
+          <span class="text-[11px] font-mono text-brand-400">{{ lesson?.cppInternalCode?.filename }}</span>
+        </div>
+
+        <pre class="p-4 rounded-2xl bg-surface-950 border border-surface-800 text-cyan-300 text-xs font-mono leading-relaxed overflow-x-auto shadow-inner"><code>{{ lesson?.cppInternalCode?.code }}</code></pre>
+
+        <p class="text-xs text-surface-300 leading-relaxed font-sans">
+          {{ lesson?.cppInternalCode?.explanation }}
+        </p>
+      </div>
+
+      <BrowserInternalsDeepDive />
+    </div>
+
+    <!-- TAB 3: ♿ Accessibility & AXTree (A11y & Screen Readers) -->
+    <div v-else-if="activeTab === 'a11y'" class="space-y-6 animate-in fade-in duration-200">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Implicit Role -->
+        <div class="p-5 rounded-2xl bg-surface-900/80 border border-surface-800 space-y-2">
+          <div class="text-[11px] font-mono text-surface-400 uppercase">WAI-ARIA Implicit Role</div>
+          <div class="text-base font-bold text-brand-400 font-mono">{{ lesson?.deepDive?.axTreeMapping?.implicitRole }}</div>
+          <p class="text-xs text-surface-400">Brauzer ushbu elementga avtomatik biriktiruvchi accessibility roli.</p>
+        </div>
+
+        <!-- Accessible Name Algorithm -->
+        <div class="p-5 rounded-2xl bg-surface-900/80 border border-surface-800 space-y-2">
+          <div class="text-[11px] font-mono text-surface-400 uppercase">Accessible Name (accName)</div>
+          <div class="text-xs font-bold text-blue-400 font-mono">{{ lesson?.deepDive?.axTreeMapping?.accessibleName }}</div>
+          <p class="text-xs text-surface-400">Ekran o‘quvchi dasturlar nomni hisoblash ketma-ketligi.</p>
+        </div>
+
+        <!-- Keyboard Navigation -->
+        <div class="p-5 rounded-2xl bg-surface-900/80 border border-surface-800 space-y-2">
+          <div class="text-[11px] font-mono text-surface-400 uppercase">Klaviatura Fokusi</div>
+          <div class="text-xs font-bold text-purple-400 font-mono">Tab / Space / Enter</div>
+          <p class="text-xs text-surface-400">{{ lesson?.deepDive?.axTreeMapping?.keyboardNav }}</p>
+        </div>
+      </div>
+
+      <!-- Screen Reader Output Simulation -->
+      <div class="p-6 rounded-3xl bg-surface-900/80 border border-surface-800 space-y-4">
+        <h4 class="text-sm font-bold text-white font-mono flex items-center gap-2">
+          <span>🔊</span> NVDA / VoiceOver Ekran O‘quvchi Ovozli Simulyatsiyasi
+        </h4>
+        <div class="p-4 rounded-2xl bg-surface-950 border border-purple-500/30 font-mono text-xs text-purple-300 leading-relaxed flex items-center gap-3">
+          <span class="text-xl">🎙️</span>
+          <span>"{{ lesson?.title }}, {{ lesson?.deepDive?.axTreeMapping?.implicitRole }}, boshqaruv tugmasi. Faollashtirish uchun Enter bosing."</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: 🛡️ Xavfsizlik & Core Web Vitals -->
+    <div v-else-if="activeTab === 'security'" class="space-y-6 animate-in fade-in duration-200">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Security & XSS -->
+        <div class="p-6 rounded-3xl bg-surface-900/80 border border-red-500/30 space-y-4">
+          <div class="flex items-center gap-2 text-red-400 font-bold text-sm font-mono">
+            <span>🛡️</span> XSS Vektori va Xavflar
+          </div>
+          <div class="p-3.5 rounded-xl bg-surface-950 border border-red-500/20 text-xs font-mono text-red-300">
+            {{ lesson?.deepDive?.security?.xssVector }}
+          </div>
+          <p class="text-xs text-surface-300 leading-relaxed">
+            <strong>Himoya Qoidasi:</strong> {{ lesson?.deepDive?.security?.sanitizationTip }}
+          </p>
+        </div>
+
+        <!-- Core Web Vitals -->
+        <div class="p-6 rounded-3xl bg-surface-900/80 border border-blue-500/30 space-y-4">
+          <div class="flex items-center gap-2 text-blue-400 font-bold text-sm font-mono">
+            <span>⚡</span> Core Web Vitals (Metrika: {{ lesson?.deepDive?.coreWebVitals?.metric }})
+          </div>
+          <p class="text-xs text-surface-300 leading-relaxed">
+            {{ lesson?.deepDive?.coreWebVitals?.impact }}
+          </p>
+          <div class="p-3.5 rounded-xl bg-surface-950 border border-blue-500/20 text-xs font-mono text-blue-300">
+            <strong>Optimizatsiya:</strong> {{ lesson?.deepDive?.coreWebVitals?.optimizationRule }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: 👶 5 Yoshli Bola Uchun (Story & C++ Under-the-hood Toggle) -->
     <div v-else-if="activeTab === 'kid'" class="space-y-6 animate-in fade-in duration-200">
       <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-amber-500/10 via-brand-500/10 to-surface-900 border border-amber-500/30 space-y-6 shadow-2xl">
         <div class="flex items-center justify-between flex-wrap gap-2 border-b border-amber-500/20 pb-4">
@@ -201,39 +325,52 @@
       </div>
     </div>
 
-    <!-- TAB 3: 🔬 Brauzer Dvigateli (C++ Internals) -->
-    <div v-else-if="activeTab === 'internals'" class="space-y-6 animate-in fade-in duration-200">
-      <div class="p-6 rounded-3xl bg-surface-900/80 border border-surface-800 space-y-4">
-        <div class="flex items-center justify-between border-b border-surface-800 pb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">🔬</span>
-            <h3 class="text-base font-bold text-white">Chromium Blink Dvigateli Xotira Tuzilishi</h3>
-          </div>
-          <span class="text-xs font-mono text-brand-400">{{ lesson?.cppInternalCode?.filename }}</span>
-        </div>
-
-        <pre class="p-4 rounded-2xl bg-surface-950 border border-surface-800 text-cyan-300 text-xs font-mono leading-relaxed overflow-x-auto"><code>{{ lesson?.cppInternalCode?.code }}</code></pre>
-
-        <p class="text-xs text-surface-300 leading-relaxed">
-          {{ lesson?.cppInternalCode?.explanation }}
-        </p>
-      </div>
-
-      <BrowserInternalsDeepDive />
-    </div>
-
-    <!-- TAB 4: 💻 Jonli Sandbox (Interactive IDE) -->
+    <!-- TAB 6: 💻 Jonli Sandbox (Interactive IDE) -->
     <div v-else-if="activeTab === 'sandbox'" class="space-y-4 animate-in fade-in duration-200">
       <InteractiveCodePlayground />
     </div>
 
-    <!-- TAB 5: 🎬 Video Simulyator -->
+    <!-- TAB 7: 🎬 Video Simulyator -->
     <div v-else-if="activeTab === 'video'" class="space-y-4 animate-in fade-in duration-200">
       <InteractiveEngineVisualizer />
     </div>
 
-    <!-- TAB 6: 🎯 Bilimni Sinash (Quiz Arena) -->
-    <div v-else-if="activeTab === 'quiz'" class="space-y-6 animate-in fade-in duration-200">
+    <!-- TAB 8: 🧩 Debugging Challenge & Quiz Arena -->
+    <div v-else-if="activeTab === 'quiz'" class="space-y-8 animate-in fade-in duration-200">
+      <!-- Debugging Challenge Card -->
+      <div v-if="lesson?.deepDive?.debuggingChallenge" class="p-6 sm:p-8 rounded-3xl bg-surface-900/90 border border-amber-500/30 space-y-5 shadow-xl">
+        <div class="flex items-center justify-between border-b border-surface-800 pb-3">
+          <div class="flex items-center gap-2.5">
+            <span class="text-xl">🛠️</span>
+            <h3 class="text-base font-bold text-white">{{ lesson.deepDive.debuggingChallenge.title }}</h3>
+          </div>
+          <span class="text-xs font-mono font-bold text-amber-400">+25 XP Challenge</span>
+        </div>
+
+        <p class="text-xs text-surface-300 leading-relaxed">
+          {{ lesson.deepDive.debuggingChallenge.bugDescription }}
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-xs">
+          <!-- Broken Code -->
+          <div class="space-y-1.5">
+            <div class="text-red-400 font-bold flex items-center gap-1">
+              <span>✗</span> Xato Kod:
+            </div>
+            <pre class="p-3.5 rounded-2xl bg-surface-950 border border-red-500/30 text-red-300 overflow-x-auto leading-relaxed"><code>{{ lesson.deepDive.debuggingChallenge.brokenCode }}</code></pre>
+          </div>
+
+          <!-- Fixed Code -->
+          <div class="space-y-1.5">
+            <div class="text-emerald-400 font-bold flex items-center gap-1">
+              <span>✓</span> To‘g‘rilangan Normativ Kod:
+            </div>
+            <pre class="p-3.5 rounded-2xl bg-surface-950 border border-emerald-500/30 text-emerald-300 overflow-x-auto leading-relaxed"><code>{{ lesson.deepDive.debuggingChallenge.fixedCode }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Multiple Choice Quiz Card -->
       <div class="p-6 sm:p-8 rounded-3xl bg-surface-900/80 border border-surface-800 space-y-6">
         <div class="flex items-center justify-between border-b border-surface-800 pb-4">
           <div class="flex items-center gap-3">
@@ -241,7 +378,7 @@
               🎯
             </div>
             <div>
-              <h3 class="text-base font-bold text-white">Tezkor Mavzuni Mustahkamlash Testi</h3>
+              <h3 class="text-base font-bold text-white">Tezkor Injiniring Savollari</h3>
               <p class="text-xs text-surface-400 font-mono">To‘g‘ri javoblar orqali +XP to‘plang</p>
             </div>
           </div>
@@ -285,47 +422,21 @@
       </div>
     </div>
 
-    <!-- Bottom Navigation (Prev / Next & Complete Buttons) -->
-    <div class="pt-8 border-t border-surface-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <button
-        v-if="prevLesson"
-        @click="navigateToLesson(prevLesson.path)"
-        class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-surface-900 hover:bg-surface-800 border border-surface-800 hover:border-surface-700 text-left transition-all cursor-pointer flex items-center gap-3 group"
-      >
-        <span class="text-surface-400 group-hover:-translate-x-1 transition-transform">←</span>
-        <div>
-          <div class="text-[10px] font-mono text-surface-500 uppercase">Oldingi Dars</div>
-          <div class="text-xs font-bold text-white truncate max-w-[200px]">{{ prevLesson.title }}</div>
-        </div>
-      </button>
-      <div v-else class="hidden sm:block"></div>
-
+    <!-- Bottom Navigation (Complete Button) -->
+    <div class="pt-8 border-t border-surface-800 flex justify-center">
       <!-- Mark Completed Button -->
       <button
         @click="completeLesson"
-        class="w-full sm:w-auto px-6 py-3.5 rounded-2xl font-bold text-xs transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
+        class="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-sm transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
         :class="[
           isCompleted
             ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30'
-            : 'bg-brand-500 hover:bg-brand-400 text-surface-950 shadow-brand-500/25 scale-[1.02]'
+            : 'bg-brand-500 hover:bg-brand-400 text-surface-950 shadow-brand-500/25 hover:scale-105'
         ]"
       >
         <span v-if="isCompleted">✓ Dars O‘zlashtirildi</span>
         <span v-else>Darsni O‘zlashtirdim ✓ (+50 XP)</span>
       </button>
-
-      <button
-        v-if="nextLesson"
-        @click="navigateToLesson(nextLesson.path)"
-        class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-surface-900 hover:bg-surface-800 border border-surface-800 hover:border-surface-700 text-right transition-all cursor-pointer flex items-center justify-end gap-3 group"
-      >
-        <div>
-          <div class="text-[10px] font-mono text-surface-500 uppercase">Keyingi Dars</div>
-          <div class="text-xs font-bold text-white truncate max-w-[200px]">{{ nextLesson.title }}</div>
-        </div>
-        <span class="text-surface-400 group-hover:translate-x-1 transition-transform">→</span>
-      </button>
-      <div v-else class="hidden sm:block"></div>
     </div>
   </div>
 </template>
@@ -352,12 +463,14 @@ const userAnswers = ref<Record<number, number>>({});
 const quizScore = ref(0);
 
 const tabs = [
-  { id: 'theory', label: 'Darslik & Standartlar', icon: '📘' },
+  { id: 'theory', label: 'Standartlar & Nazariya', icon: '📘' },
+  { id: 'internals', label: 'Blink C++ Xotira', icon: '🔬' },
+  { id: 'a11y', label: 'Accessibility (AXTree)', icon: '♿' },
+  { id: 'security', label: 'Xavfsizlik & CWV', icon: '🛡️' },
   { id: 'kid', label: '5 Yoshli Bola', icon: '👶' },
-  { id: 'internals', label: 'C++ Internals', icon: '🔬' },
-  { id: 'sandbox', label: 'Jonli Sandbox', icon: '💻' },
+  { id: 'sandbox', label: 'Sandbox IDE', icon: '💻' },
   { id: 'video', label: 'Simulyator', icon: '🎬' },
-  { id: 'quiz', label: 'Test Arena', icon: '🎯', badge: '3' },
+  { id: 'quiz', label: 'Debugging & Test', icon: '🧩', badge: 'Challenge' },
 ];
 
 const lessonSlug = computed(() => {
