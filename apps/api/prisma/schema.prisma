@@ -288,3 +288,64 @@ model Certificate {
   @@index([certificateNumber])
   @@map("certificates")
 }
+
+// ============================================================================
+// GLOBAL KNOWLEDGE UNIVERSE MODELS
+// ============================================================================
+
+model KnowledgeCategory {
+  id          String          @id @default(uuid()) @db.Uuid
+  technology  String          // "html", "css", "javascript", "svg", "xml", "markdown", "canvas"
+  slug        String
+  name        String
+  description String?         @db.Text
+  order       Int             @default(0)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  nodes       KnowledgeNode[]
+
+  @@unique([technology, slug])
+  @@index([technology])
+  @@map("knowledge_categories")
+}
+
+model KnowledgeNode {
+  id                String            @id @default(uuid()) @db.Uuid
+  categoryId        String            @db.Uuid
+  technology        String            // "html", "css", "javascript", "svg", "xml", "markdown", "canvas"
+  nodeType          String            // "element", "attribute", "concept", "api", "rule", "historical"
+  name              String            // e.g. "article", "href", "Tokenization"
+  slug              String            // e.g. "article", "href"
+  englishName       String?
+  status            String            @default("CURRENT") // "CURRENT", "DEPRECATED", "OBSOLETE", "EXPERIMENTAL"
+  introducedIn      String?           // e.g. "HTML5", "HTML 2.0"
+  deprecatedIn      String?
+  replacedBy        String?
+  syntax            String?           @db.Text
+  kidExplanation    String?           @db.Text
+  kidAnalogy        String?           @db.Text
+  technicalSummary  String            @db.Text
+  detailedContent   String            @db.Text
+  codeExample       String?           @db.Text
+  expectedOutput    String?           @db.Text
+  commonMistakes    String?           @db.Text
+  browserSupport    Json?
+  accessibility     String?           @db.Text
+  security          String?           @db.Text
+  specUrl           String?
+  specName          String?
+  aliases           String[]          @default([])
+  relatedNodes      String[]          @default([])
+  order             Int               @default(0)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  category          KnowledgeCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([technology, slug])
+  @@index([technology, nodeType])
+  @@index([slug])
+  @@index([name])
+  @@map("knowledge_nodes")
+}
