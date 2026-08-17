@@ -1,132 +1,116 @@
 <template>
-  <div class="space-y-10 max-w-4xl pb-16">
-    <!-- Header & Meta -->
+  <div class="space-y-10 max-w-4xl pb-20 text-left">
+    <!-- Breadcrumbs Navigation -->
+    <nav class="flex items-center flex-wrap gap-2 text-xs font-mono text-surface-400">
+      <router-link to="/html/kirish" class="hover:text-surface-200 transition-colors">HTML Asoslari</router-link>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-surface-400">3-Modul</span>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-brand-400 font-bold">&lt;dialog&gt; & Popover API</span>
+    </nav>
+
+    <!-- Title & Meta -->
     <div class="space-y-4 border-b border-surface-800 pb-6">
-      <div class="flex items-center gap-2 text-xs font-mono text-brand-400">
-        <span>HTML Asoslari</span>
-        <span>/</span>
-        <span class="text-surface-400">8-Dars</span>
-      </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-        Zamonaviy HTML5 &lt;dialog&gt;, &lt;details&gt; va &lt;summary&gt;
+        HTML5 &lt;dialog&gt; va Popover API — Nativ Modallar Inqilobi
       </h1>
-      <p class="text-base sm:text-lg text-surface-300 leading-relaxed">
-        Ortiqcha kutubxonalarsiz toza HTML5 yordamida modal oynalar, alertlar va ochiluvchi FAQ akkordeonlarini yaratish.
+      <p class="text-sm sm:text-base text-surface-300 leading-relaxed font-normal">
+        Endi og‘ir JavaScript kutubxonalarisiz (Bootstrap, jQuery) to‘g‘ridan-to‘g‘ri HTML5 standarti orqali brauzerning <strong>Top Layer</strong> qatlamida ochiluvchi modallar va popoverlar yaratish mumkin.
       </p>
 
-      <div class="flex flex-wrap items-center gap-4 text-xs text-surface-400 pt-2">
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          ⏱️ O‘qish vaqti: 6 daqiqa
+      <!-- Premium Metadata Badges -->
+      <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-mono">
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          O‘qish vaqti: 5 daqiqa
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          🎯 Daraja: O‘rta
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          WHATWG Top Layer & ::backdrop
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          📚 MDN: The HTML &lt;dialog&gt; element
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          HTMLDialogElement
         </span>
       </div>
     </div>
 
-    <!-- 👶 5 Yoshli Bola Uchun Analogiya -->
-    <div class="p-6 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-cyan-500/10 to-transparent border border-emerald-500/20 space-y-3">
-      <div class="flex items-center gap-2 text-emerald-400 font-bold text-base">
-        <span class="text-xl">👶</span>
-        <span>5 yoshli bola uchun tushuntirish: Ochiluvchi Sehrli Sandiq</span>
+    <!-- 👶 5 Yoshli Bola Uchun Analogiya + C++ Under-the-hood Toggle -->
+    <div class="p-6 rounded-2xl bg-surface-900/40 border border-surface-800/80 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5 text-amber-400 font-bold text-sm sm:text-base">
+          <span class="text-xl">👶</span>
+          <span>5 yoshli bola uchun tushuntirish: Sehrli Oyna</span>
+        </div>
+        <button
+          @click="showUnderTheHood = !showUnderTheHood"
+          class="px-2.5 py-1 rounded-lg bg-surface-800 hover:bg-surface-700 text-[11px] font-mono text-brand-400 border border-brand-500/30 transition-all cursor-pointer"
+        >
+          <span>{{ showUnderTheHood ? 'Analogiyaga qaytish' : '🔬 Ostidagi Kodni Ko‘rish' }}</span>
+        </button>
       </div>
-      <p class="text-sm text-surface-200 leading-relaxed">
-        Ilgari ekranda oyna ochish uchun juda ko‘p murakkab mexanizmlar kerak edi.
-      </p>
-      <p class="text-xs text-surface-300 leading-relaxed">
-        Endi HTML5 da <code>&lt;dialog&gt;</code> va <code>&lt;details&gt;</code> nomli tayyor sehrli sandiqlar bor. Bir marta bosasiz — o‘zi ochiladi, yana bossangiz — yopiladi!
-      </p>
+
+      <div v-if="!showUnderTheHood" class="space-y-2 text-xs sm:text-sm text-surface-300 leading-relaxed animate-in fade-in duration-200">
+        <p>
+          O‘yin o‘ynayotganingizda to‘satdan ekranda "Yutdingiz!" degan xabarnoma chiqib, orqa fon xiralashib qolishini ko‘rganmisiz?
+        </p>
+        <p class="pt-1">
+          HTML5 <code>&lt;dialog&gt;</code> tegi — aynan shunday popup oynalarni bitta buyruq bilan chiqarish uchun maxsus yaratilgan!
+        </p>
+      </div>
+
+      <div v-else class="space-y-2 font-mono text-xs animate-in fade-in duration-200">
+        <div class="text-cyan-300 font-bold">Blink Engine: Top Layer Stacking Context & Inert Isolation</div>
+        <pre class="p-3.5 rounded-xl bg-surface-950 border border-surface-800 text-cyan-300 text-[11px] leading-relaxed overflow-x-auto"><code>// third_party/blink/renderer/core/html/html_dialog_element.cc
+void HTMLDialogElement::showModal(ExceptionState& exception_state) {
+  GetDocument().AddToTopLayer(this); // z-index ga bog'liq bo'lmagan eng yuqori qatlam
+  GetDocument().SetInertSubtree(true); // Orqa fonni bosilmaydigan qilish
+}</code></pre>
+      </div>
     </div>
 
-    <!-- ⚡ Interaktiv Demo -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-        <span class="text-brand-400">⚡</span> Jonli Sinov: Native Modal va Akkordeon
+    <!-- Dialog Native Features (Hard & Deep) -->
+    <section class="space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 1. showModal() vs show() Farqi
       </h2>
 
-      <div class="p-6 rounded-2xl bg-surface-900 border border-surface-800 space-y-6">
-        <!-- Native Dialog Demo -->
-        <div class="space-y-3">
-          <div class="text-xs font-semibold text-surface-300">1. HTML5 Native Modal Oyna:</div>
-          <button
-            @click="isModalOpen = true"
-            class="px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-bold text-xs transition-colors"
-          >
-            Modal Oynani Ochish ✨
-          </button>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+        <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-2">
+          <div class="text-brand-400 font-bold text-sm">dialog.showModal()</div>
+          <p class="text-surface-300 text-[11px] font-sans leading-relaxed">
+            Elementni <strong>Top Layer</strong>ga joylashtiradi, orqa fonni <code>::backdrop</code> bilan qoplaydi, fokusni modal ichiga qamrab oladi va ESC tugmasi orqali yopilishni avtomatik yoqadi.
+          </p>
         </div>
 
-        <!-- Details / Summary FAQ -->
-        <div class="space-y-3 pt-4 border-t border-surface-800">
-          <div class="text-xs font-semibold text-surface-300">2. Native Akkordeon (&lt;details&gt; va &lt;summary&gt;):</div>
-          <div class="space-y-2">
-            <details class="p-3.5 rounded-xl bg-surface-950 border border-surface-800 text-xs text-surface-300 cursor-pointer">
-              <summary class="font-bold text-white hover:text-brand-400 transition-colors">
-                KODX 2.0 kurslari bepulmi?
-              </summary>
-              <p class="mt-2 text-surface-400 leading-relaxed">
-                Ha, KODX platformasidagi barcha darslar va amaliy topshiriqlar o‘zbek dasturchilari uchun mutlaqo ochiqdir.
-              </p>
-            </details>
-
-            <details class="p-3.5 rounded-xl bg-surface-950 border border-surface-800 text-xs text-surface-300 cursor-pointer">
-              <summary class="font-bold text-white hover:text-brand-400 transition-colors">
-                Darslarni tugatgach sertifikat beriladimi?
-              </summary>
-              <p class="mt-2 text-surface-400 leading-relaxed">
-                Albatta! Kurs yakunida imtihon topshirib, o‘z nomingizga QR-kodli rasmiy sertifikat olishingiz mumkin.
-              </p>
-            </details>
-          </div>
+        <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-2">
+          <div class="text-blue-400 font-bold text-sm">Popover API (HTML Standarti)</div>
+          <p class="text-surface-300 text-[11px] font-sans leading-relaxed">
+            JavaScript siz ishlaydigan tooltip yoki dropdown: <code>&lt;button popovertarget="my-pop"&gt;</code> va <code>&lt;div id="my-pop" popover&gt;</code>.
+          </p>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Custom Modal Overlay for Demo -->
-    <div
-      v-if="isModalOpen"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-    >
-      <div class="p-6 rounded-2xl bg-surface-900 border border-surface-700 max-w-md w-full space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
-        <h3 class="text-lg font-bold text-white">Xush kelibsiz! 👋</h3>
-        <p class="text-xs text-surface-300 leading-relaxed">
-          Bu toza HTML5 <code>&lt;dialog&gt;</code> elementining ishlash mexanizmi. Hech qanday og‘ir kutubxonalarsiz engil va tezkor!
-        </p>
-        <div class="flex justify-end">
-          <button
-            @click="isModalOpen = false"
-            class="px-4 py-2 rounded-xl bg-surface-800 hover:bg-surface-700 text-white font-bold text-xs transition-colors"
-          >
-            Yopish ❌
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Navigation -->
-    <div class="pt-6 border-t border-surface-800 flex flex-wrap items-center justify-between gap-4">
-      <router-link
-        to="/html/formalar"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-900 hover:bg-surface-800 text-surface-300 text-xs font-semibold border border-surface-700 transition-colors"
-      >
-        <span>← 7-Dars: Formalar & Validatsiya</span>
-      </router-link>
-
-      <router-link
-        to="/html/seo"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-bold text-xs transition-colors"
-      >
-        <span>Keyingi Dars: SEO & Core Web Vitals →</span>
-      </router-link>
-    </div>
+    <!-- Interactive Live Code Editor -->
+    <section class="space-y-4 pt-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 2. Jonli Mashq: Dialog Elementini Sinab Ko‘ring
+      </h2>
+      <InteractiveCodePlayground />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import InteractiveCodePlayground from '../../components/InteractiveCodePlayground.vue';
 
-const isModalOpen = ref(false);
+const showUnderTheHood = ref(false);
 </script>

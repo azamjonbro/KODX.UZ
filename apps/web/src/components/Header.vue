@@ -18,7 +18,7 @@
         </router-link>
       </nav>
 
-      <!-- Right Header Elements: Streak, Bell & Avatar -->
+      <!-- Right Header Elements: Streak, Bell, Login Button & Avatar -->
       <div class="flex items-center gap-3 sm:gap-4">
         <!-- Daily Streak (🔥 12 kun) Modal Trigger -->
         <StreakModal />
@@ -28,6 +28,15 @@
 
         <!-- User Profile Dropdown Menu -->
         <ProfileMenu />
+
+        <!-- Quick Login Link Button -->
+        <router-link
+          to="/login"
+          class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-500/10 hover:bg-brand-500 border border-brand-500/30 hover:border-transparent text-brand-400 hover:text-surface-950 text-xs font-bold transition-all shadow-sm"
+        >
+          <span>Kirish</span>
+          <span>→</span>
+        </router-link>
       </div>
     </div>
   </header>
