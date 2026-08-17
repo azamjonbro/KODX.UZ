@@ -12,7 +12,6 @@
   "dependencies": {
     "@kodx/types": "workspace:*",
     "@kodx/validation": "workspace:*",
-    "axios": "^1.7.9",
     "lucide-vue-next": "^0.475.0",
     "pinia": "^3.0.1",
     "vue": "^3.5.17",

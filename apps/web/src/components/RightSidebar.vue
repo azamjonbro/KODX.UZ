@@ -112,49 +112,13 @@
       </div>
     </div>
 
-    <!-- Lesson Navigation Buttons (Oldingi dars / Keyingi dars) -->
-    <div class="space-y-3 mt-auto pt-2">
-      <!-- Previous Lesson -->
-      <router-link
-        v-if="prevLesson"
-        :to="prevLesson.path"
-        class="group flex items-center gap-3 p-3 rounded-xl bg-surface-900/70 hover:bg-surface-800/80 border border-surface-800 hover:border-surface-700 text-surface-300 hover:text-white transition-all text-xs"
-      >
-        <div class="w-8 h-8 rounded-lg bg-surface-800 group-hover:bg-surface-700 flex items-center justify-center text-surface-400 group-hover:text-white transition-colors shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-        </div>
-        <div class="min-w-0 flex-1 text-left">
-          <div class="text-[10px] text-surface-500 font-medium">Oldingi dars</div>
-          <div class="truncate font-semibold text-surface-200 group-hover:text-white">{{ prevLesson.title }}</div>
-        </div>
-      </router-link>
 
-      <!-- Next Lesson (Prominent Green Card) -->
-      <router-link
-        v-if="nextLesson"
-        :to="nextLesson.path"
-        class="group flex items-center gap-3 p-3 rounded-xl bg-brand-950/80 hover:bg-brand-900/90 border border-brand-500/30 hover:border-brand-500/60 text-surface-100 transition-all text-xs shadow-lg shadow-brand-950/40"
-      >
-        <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 group-hover:bg-brand-500 group-hover:text-surface-950 flex items-center justify-center transition-all shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </div>
-        <div class="min-w-0 flex-1 text-left">
-          <div class="text-[10px] text-brand-400 font-semibold">Keyingi dars</div>
-          <div class="truncate font-bold text-white group-hover:text-brand-300">{{ nextLesson.title }}</div>
-        </div>
-      </router-link>
-    </div>
   </aside>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { coursesData, CourseData } from '../data/topics';
 import { useProgressStore } from '../stores/progress';
 
 const route = useRoute();
@@ -182,11 +146,7 @@ const currentCourseSlug = computed(() => {
   return route.path.split('/')[1] || 'html';
 });
 
-const currentCourse = computed<CourseData>(() => {
-  const found = coursesData[currentCourseSlug.value];
-  if (found) return found;
-  return coursesData['html'] as CourseData;
-});
+
 
 const courseStats = computed(() => {
   return progressStore.getCourseStats(currentCourseSlug.value);
@@ -200,29 +160,6 @@ function handleToggleComplete() {
   progressStore.toggleLessonComplete(route.path, 50);
 }
 
-const allLessonsFlat = computed(() => {
-  return currentCourse.value.modules.flatMap(m => m.lessons);
-});
-
-const currentLessonIndex = computed(() => {
-  const currentPath = route.path;
-  const idx = allLessonsFlat.value.findIndex(l => l.path === currentPath || (currentPath === '/html' && l.path === '/html/kirish'));
-  return idx !== -1 ? idx : 0;
-});
-
-const prevLesson = computed(() => {
-  if (currentLessonIndex.value > 0 && allLessonsFlat.value[currentLessonIndex.value - 1]) {
-    return allLessonsFlat.value[currentLessonIndex.value - 1];
-  }
-  return null;
-});
-
-const nextLesson = computed(() => {
-  if (currentLessonIndex.value < allLessonsFlat.value.length - 1 && allLessonsFlat.value[currentLessonIndex.value + 1]) {
-    return allLessonsFlat.value[currentLessonIndex.value + 1];
-  }
-  return null;
-});
 
 function scrollToHeading(href: string) {
   const target = document.querySelector(href);
