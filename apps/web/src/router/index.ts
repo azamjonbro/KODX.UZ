@@ -81,6 +81,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'kirish', name: 'css-kirish', component: () => import('../pages/css/Kirish.vue') },
       { path: 'selectorlar', name: 'css-selectorlar', component: () => import('../pages/css/Selectorlar.vue') },
       { path: 'box-model', name: 'css-box-model', component: () => import('../pages/css/BoxModel.vue') },
+      { path: 'display-position', name: 'css-display-position', component: () => import('../pages/css/DisplayPosition.vue') },
       { path: 'flexbox', name: 'css-flexbox', component: () => import('../pages/css/Flexbox.vue') },
       { path: 'grid', name: 'css-grid', component: () => import('../pages/css/Grid.vue') },
       { path: 'modern', name: 'css-modern', component: () => import('../pages/css/ModernCss.vue') },
