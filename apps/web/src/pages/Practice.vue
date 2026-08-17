@@ -107,7 +107,7 @@ const tasks = ref<TaskItem[]>([
     difficulty: 'Oson',
     xp: 25,
     tag: 'HTML5 • Semantika',
-    link: '/html/semantika',
+    link: '/practice/t1',
   },
   {
     id: 't2',
@@ -116,7 +116,7 @@ const tasks = ref<TaskItem[]>([
     difficulty: 'Oson',
     xp: 30,
     tag: 'CSS • Flexbox',
-    link: '/css/flexbox',
+    link: '/practice/t2',
   },
   {
     id: 't3',
@@ -125,7 +125,7 @@ const tasks = ref<TaskItem[]>([
     difficulty: 'O‘rta',
     xp: 45,
     tag: 'JS • DOM Events',
-    link: '/javascript/events',
+    link: '/practice/t1',
   },
   {
     id: 't4',
@@ -134,7 +134,7 @@ const tasks = ref<TaskItem[]>([
     difficulty: 'Qiyin',
     xp: 75,
     tag: 'JS • Async/Await',
-    link: '/javascript/async',
+    link: '/practice/t2',
   },
 ]);
 
