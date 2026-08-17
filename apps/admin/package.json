@@ -1,12 +1,12 @@
 {
-  "name": "@kodx/web",
+  "name": "@kodx/admin",
   "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5175 --strictPort",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview",
+    "preview": "vite preview --port 5175",
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
@@ -16,8 +16,7 @@
     "lucide-vue-next": "^0.475.0",
     "pinia": "^3.0.1",
     "vue": "^3.5.17",
-    "vue-router": "^4.5.1",
-    "zod": "^3.24.2"
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@kodx/config": "workspace:*",

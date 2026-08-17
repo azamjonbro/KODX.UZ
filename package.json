@@ -6,11 +6,19 @@
   "scripts": {
     "dev": "pnpm --parallel --filter \"@kodx/*\" dev",
     "dev:web": "pnpm --filter @kodx/web dev",
+    "dev:api": "pnpm --filter @kodx/api dev",
+    "dev:admin": "pnpm --filter @kodx/admin dev",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
-    "clean": "pnpm -r exec rimraf dist .turbo node_modules"
+    "clean": "pnpm -r exec rimraf dist .turbo node_modules",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "db:generate": "pnpm --filter @kodx/api db:generate",
+    "db:push": "pnpm --filter @kodx/api db:push",
+    "db:migrate": "pnpm --filter @kodx/api db:migrate",
+    "db:studio": "pnpm --filter @kodx/api db:studio"
   },
   "devDependencies": {
     "rimraf": "^6.0.1",

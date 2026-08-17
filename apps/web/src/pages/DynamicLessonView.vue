@@ -422,31 +422,12 @@
       </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <div class="pt-8 border-t border-surface-800 flex flex-col lg:flex-row items-center justify-between gap-4">
-      
-      <!-- Previous Lesson -->
-      <button
-        v-if="prevLesson"
-        @click="navigateToLesson(prevLesson.path)"
-        class="w-full lg:w-[30%] group flex items-center gap-3 p-3 rounded-xl bg-surface-900/70 hover:bg-surface-800/80 border border-surface-800 hover:border-surface-700 text-surface-300 hover:text-white transition-all text-xs cursor-pointer"
-      >
-        <div class="w-8 h-8 rounded-lg bg-surface-800 group-hover:bg-surface-700 flex items-center justify-center text-surface-400 group-hover:text-white transition-colors shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-        </div>
-        <div class="min-w-0 flex-1 text-left">
-          <div class="text-[10px] text-surface-500 font-medium uppercase tracking-wider">Oldingi dars</div>
-          <div class="truncate font-semibold text-surface-200 group-hover:text-white">{{ prevLesson.title }}</div>
-        </div>
-      </button>
-      <div v-else class="w-full lg:w-[30%] hidden lg:block"></div>
-
+    <!-- Bottom Navigation (Complete Button) -->
+    <div class="pt-8 border-t border-surface-800 flex justify-center">
       <!-- Mark Completed Button -->
       <button
         @click="completeLesson"
-        class="w-full lg:w-[35%] px-8 py-3.5 rounded-2xl font-bold text-sm transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
+        class="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-sm transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
         :class="[
           isCompleted
             ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30'
@@ -456,24 +437,6 @@
         <span v-if="isCompleted">✓ Dars O‘zlashtirildi</span>
         <span v-else>Darsni O‘zlashtirdim ✓ (+50 XP)</span>
       </button>
-
-      <!-- Next Lesson (Prominent Green Card) -->
-      <button
-        v-if="nextLesson"
-        @click="navigateToLesson(nextLesson.path)"
-        class="w-full lg:w-[30%] group flex items-center gap-3 p-3 rounded-xl bg-brand-950/80 hover:bg-brand-900/90 border border-brand-500/30 hover:border-brand-500/60 text-surface-100 transition-all text-xs shadow-lg shadow-brand-950/40 cursor-pointer"
-      >
-        <div class="min-w-0 flex-1 text-right">
-          <div class="text-[10px] text-brand-400 font-semibold uppercase tracking-wider">Keyingi dars</div>
-          <div class="truncate font-bold text-white group-hover:text-brand-300">{{ nextLesson.title }}</div>
-        </div>
-        <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 group-hover:bg-brand-500 group-hover:text-surface-950 flex items-center justify-center transition-all shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </div>
-      </button>
-      <div v-else class="w-full lg:w-[30%] hidden lg:block"></div>
     </div>
   </div>
 </template>
@@ -592,7 +555,6 @@ function completeLesson() {
 function navigateToLesson(path: string) {
   router.push(path);
 }
-
 
 const renderedContent = computed(() => {
   if (!lesson.value?.content) return '';
