@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "id": "tc39-ecma262",
+      "name": "ECMA-262 ECMAScript Language Specification",
+      "type": "NORMATIVE",
+      "url": "https://tc39.es/ecma262/",
+      "organization": "Ecma International / TC39",
+      "status": "OFFICIAL_STANDARD"
+    },
+    {
+      "id": "v8-dev-guide",
+      "name": "V8 JavaScript Engine Architecture",
+      "type": "TECHNICAL_AUTHORITATIVE",
+      "url": "https://v8.dev/",
+      "organization": "Google V8 Team",
+      "status": "ENGINE_STANDARD"
+    },
+    {
+      "id": "mdn-javascript-reference",
+      "name": "MDN Web Docs — JavaScript Reference",
+      "type": "HIGH_QUALITY_TECHNICAL",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+      "organization": "Mozilla",
+      "status": "COMMUNITY_AUTHORITATIVE"
+    }
+  ]
+}

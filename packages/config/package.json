@@ -1,0 +1,12 @@
+{
+  "name": "@kodx/config",
+  "version": "2.0.0",
+  "private": true,
+  "main": "index.js",
+  "files": [
+    "tsconfig.base.json",
+    "tsconfig.node.json",
+    "tsconfig.vue.json",
+    "tailwind.base.js"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "technology": "CSS",
+  "auditDate": "2026-08-18",
+  "metrics": {
+    "totalRelevantNodes": 148,
+    "verifiedNodes": 148,
+    "partiallyVerifiedNodes": 0,
+    "needsReviewNodes": 0,
+    "coveragePercentage": "100.0%"
+  }
+}

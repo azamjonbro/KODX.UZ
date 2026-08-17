@@ -1,19 +1,27 @@
 {
-  "name": "kod",
+  "name": "kodx-monorepo",
+  "version": "2.0.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "description": "KODX 2.0 — Modern Interactive Programming Education Platform for Uzbek Developers",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "vue": "^3.5.17",
-    "vue-router": "^4.5.1"
+    "dev": "pnpm --parallel --filter \"@kodx/*\" dev",
+    "dev:web": "pnpm --filter @kodx/web dev",
+    "dev:api": "pnpm --filter @kodx/api dev",
+    "dev:admin": "pnpm --filter @kodx/admin dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r exec rimraf dist .turbo node_modules",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "db:generate": "pnpm --filter @kodx/api db:generate",
+    "db:push": "pnpm --filter @kodx/api db:push",
+    "db:migrate": "pnpm --filter @kodx/api db:migrate",
+    "db:studio": "pnpm --filter @kodx/api db:studio"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.0",
-    "vite": "^7.0.0"
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3"
   }
 }

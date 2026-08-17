@@ -1,0 +1,54 @@
+{
+  "technology": "JavaScript",
+  "name": "ECMAScript & Modern JavaScript",
+  "standard": "ECMA-262 / TC39 Specification",
+  "standardUrl": "https://tc39.es/ecma262/",
+  "description": "O‘zbek tilidagi eng to‘liq, TC39 va V8 standartlariga asoslangan JavaScript Knowledge Universe taksonomiyasi.",
+  "categories": [
+    {
+      "id": "history",
+      "name": "JavaScript Tarixi va ECMAScript Evolyutsiyasi",
+      "description": "1995 (Brendan Eich) dan to ES6 (2015) va yillik TC39 (ES2026) standartlarigacha."
+    },
+    {
+      "id": "engine-and-internals",
+      "name": "JS Dvigateli (V8) va Bajarilish Muhiti",
+      "description": "Ignition Interpreter, TurboFan JIT Compiler, Call Stack, Memory Heap, Garbage Collection (Mark-and-Sweep)."
+    },
+    {
+      "id": "types-and-primitives",
+      "name": "Ma’lumot Turlari va Xotira",
+      "description": "Primitive (string, number, bigint, boolean, undefined, symbol, null) vs Reference (Object, Array, Function, Map, Set)."
+    },
+    {
+      "id": "execution-context-and-scope",
+      "name": "Execution Context, Scope va Closures",
+      "description": "Global Execution Context, Function Context, Scope Chain, Lexical Environment, Closures, Hoisting (TDZ)."
+    },
+    {
+      "id": "functions-and-this",
+      "name": "Funksiyalar va this Kalit So‘zi",
+      "description": "Function Declaration, Expression, Arrow Functions, this binding (Implicit, Explicit: call/apply/bind, new, Lexical)."
+    },
+    {
+      "id": "objects-and-prototypes",
+      "name": "Obyektlar, Prototiplar va OOP",
+      "description": "Prototype Chain, Object.create, ES6 Classes, constructor, super, encapsulation (#private fields), Inheritance."
+    },
+    {
+      "id": "async-and-event-loop",
+      "name": "Asinxron Dasturlash va Event Loop",
+      "description": "Call Stack, Web APIs, Callback Queue (Macrotasks), Microtask Queue (Promises, queueMicrotask), async/await."
+    },
+    {
+      "id": "modern-es6-plus",
+      "name": "Zamonaviy ES6+ Imkoniyatlari",
+      "description": "Destructuring, Spread/Rest (...), Optional Chaining (?.), Nullish Coalescing (??), Modules (import/export)."
+    },
+    {
+      "id": "dom-and-browser-apis",
+      "name": "DOM Manipulyatsiyasi va Web APIs",
+      "description": "document.querySelector, addEventListener, Event Bubbling/Capturing, Fetch API, LocalStorage, IntersectionObserver."
+    }
+  ]
+}

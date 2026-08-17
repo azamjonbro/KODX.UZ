@@ -1,0 +1,104 @@
+{
+  "technology": "HTML",
+  "name": "HyperText Markup Language",
+  "standard": "WHATWG HTML Living Standard",
+  "standardUrl": "https://html.spec.whatwg.org/multipage/",
+  "description": "O‘zbek tilidagi eng to‘liq, normativ spetsifikatsiyalarga asoslangan HTML Knowledge Universe taksonomiyasi.",
+  "categories": [
+    {
+      "id": "history",
+      "name": "Tarix va Standartlar",
+      "description": "HTML 1.0 dan to zamonaviy WHATWG Living Standardgacha bo‘lgan barcha versiyalar evolyutsiyasi."
+    },
+    {
+      "id": "root-and-metadata",
+      "name": "Hujjat Ildizi va Metadata",
+      "description": "<!DOCTYPE>, <html>, <head>, <title>, <meta>, <link>, <style>, <base>."
+    },
+    {
+      "id": "sectioning",
+      "name": "Semantik Bo‘limlar (Sectioning)",
+      "description": "<header>, <nav>, <main>, <article>, <section>, <aside>, <footer>, <address>, <hgroup>, <h1>-<h6>."
+    },
+    {
+      "id": "text-content",
+      "name": "Guruhlangan Matn Elementlari",
+      "description": "<p>, <hr>, <pre>, <blockquote>, <ol>, <ul>, <li>, <dl>, <dt>, <dd>, <figure>, <figcaption>, <div>."
+    },
+    {
+      "id": "inline-semantics",
+      "name": "Qator Ichidagi (Inline) Semantika",
+      "description": "<a>, <em>, <strong>, <small>, <s>, <cite>, <q>, <dfn>, <abbr>, <ruby>, <data>, <time>, <code>, <var>, <samp>, <kbd>, <sub>, <sup>, <i>, <b>, <u>, <mark>, <bdi>, <bdo>, <span>, <br>, <wbr>."
+    },
+    {
+      "id": "multimedia",
+      "name": "Tasvirlar va Multimedia",
+      "description": "<img>, <picture>, <source>, <audio>, <video>, <track>, <map>, <area>."
+    },
+    {
+      "id": "embedded",
+      "name": "O‘rnatilgan Kontent va Vektor",
+      "description": "<iframe>, <embed>, <object>, <param>, <svg>, <math>."
+    },
+    {
+      "id": "scripting",
+      "name": "Skriptlar va Kanvas",
+      "description": "<script>, <noscript>, <canvas>."
+    },
+    {
+      "id": "tables",
+      "name": "Jadvallar (Tables)",
+      "description": "<table>, <caption>, <colgroup>, <col>, <tbody>, <thead>, <tfoot>, <tr>, <td>, <th>."
+    },
+    {
+      "id": "forms",
+      "name": "Formalar va Foydalanuvchi Kiritishi",
+      "description": "<form>, <label>, <input>, <button>, <select>, <datalist>, <optgroup>, <option>, <textarea>, <output>, <progress>, <meter>, <fieldset>, <legend>."
+    },
+    {
+      "id": "interactive",
+      "name": "Interaktiv va Dialog Elementlar",
+      "description": "<details>, <summary>, <dialog>, <popover>."
+    },
+    {
+      "id": "web-components",
+      "name": "Web Components va Shablonlar",
+      "description": "<template>, <slot>."
+    },
+    {
+      "id": "global-attributes",
+      "name": "Global Atributlar",
+      "description": "id, class, style, title, lang, dir, hidden, tabindex, accesskey, contenteditable, spellcheck, autofocus, draggable, enterkeyhint, inputmode, inert, popover, data-*."
+    },
+    {
+      "id": "internals-and-parsing",
+      "name": "Brauzer Internals va HTML Parsing",
+      "description": "Tokenizer, Tree Construction, Insertion Modes, Malformed HTML recovery, DOM vs HTML."
+    },
+    {
+      "id": "accessibility",
+      "name": "Accessibility (A11y) va ARIA",
+      "description": "Screen readerlar, WCAG 2.2, WAI-ARIA rollar va atributlar."
+    },
+    {
+      "id": "seo-and-metadata",
+      "name": "SEO, OpenGraph va Qidiruv Optimizatsiyasi",
+      "description": "Meta description, robots, canonical, OpenGraph, Twitter Card, JSON-LD Microdata."
+    },
+    {
+      "id": "performance",
+      "name": "Web Performans va Core Web Vitals",
+      "description": "Preload, Preconnect, Prefetch, Lazy Loading, LCP, CLS, INP optimizatsiyasi."
+    },
+    {
+      "id": "security",
+      "name": "Veb Xavfsizligi",
+      "description": "XSS, iframe sandbox, rel='noopener noreferrer', Content Security Policy (CSP)."
+    },
+    {
+      "id": "deprecated-and-obsolete",
+      "name": "Eskirgan va Bekor Qilinganlar (Obsolete)",
+      "description": "<font>, <center>, <marquee>, <blink>, <frame>, <frameset>, <applet>, <big>, <strike>, align, bgcolor."
+    }
+  ]
+}
