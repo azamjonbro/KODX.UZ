@@ -24,6 +24,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'formalar', name: 'html-formalar', component: () => import('../pages/html/Formalar.vue') },
       { path: 'dialog', name: 'html-dialog', component: () => import('../pages/html/Dialog.vue') },
       { path: 'seo', name: 'html-seo', component: () => import('../pages/html/SeoOptimizatsiya.vue') },
+      // Dynamic Database-driven route for any other HTML lesson
+      { path: ':lessonSlug', component: () => import('../pages/DynamicLessonView.vue') },
     ],
   },
   {
@@ -37,6 +39,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'flexbox', name: 'css-flexbox', component: () => import('../pages/css/Flexbox.vue') },
       { path: 'grid', name: 'css-grid', component: () => import('../pages/css/Grid.vue') },
       { path: 'modern', name: 'css-modern', component: () => import('../pages/css/ModernCss.vue') },
+      // Dynamic Database-driven route for any other CSS lesson
+      { path: ':lessonSlug', component: () => import('../pages/DynamicLessonView.vue') },
     ],
   },
   {
@@ -50,6 +54,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'dom', name: 'js-dom', component: () => import('../pages/javascript/Dom.vue') },
       { path: 'events', name: 'js-events', component: () => import('../pages/javascript/Events.vue') },
       { path: 'async', name: 'js-async', component: () => import('../pages/javascript/AsyncJs.vue') },
+      // Dynamic Database-driven route for any other JS lesson
+      { path: ':lessonSlug', component: () => import('../pages/DynamicLessonView.vue') },
     ],
   },
 ];
