@@ -36,11 +36,11 @@
         <div class="grid grid-cols-2 gap-2 pt-2 text-center text-xs">
           <div class="p-2 rounded-xl bg-surface-900 border border-surface-800">
             <div class="text-[10px] text-surface-400 font-mono uppercase">Daraja</div>
-            <div class="font-bold text-white">Level 7</div>
+            <div class="font-bold text-white">Level {{ progressStore.level.value }}</div>
           </div>
           <div class="p-2 rounded-xl bg-surface-900 border border-surface-800">
             <div class="text-[10px] text-surface-400 font-mono uppercase">Tajriba</div>
-            <div class="font-bold text-brand-400 font-mono">1,240 XP</div>
+            <div class="font-bold text-brand-400 font-mono">{{ progressStore.xp.value.toLocaleString() }} XP</div>
           </div>
         </div>
       </div>
@@ -70,8 +70,8 @@
           @click="isOpen = false"
           class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-surface-300 hover:text-white hover:bg-surface-800 transition-colors"
         >
-          <span class="text-sm">⚙️</span>
-          <span>Profil Sozlamalari</span>
+          <span class="text-sm">🔑</span>
+          <span>Tizimga Kirish / Ro‘yxatdan O‘tish</span>
         </router-link>
       </div>
 
@@ -91,6 +91,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useProgressStore } from '../stores/progress';
 
 const isOpen = ref(false);
+const progressStore = useProgressStore();
 </script>
