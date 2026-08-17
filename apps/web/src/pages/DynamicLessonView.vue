@@ -24,9 +24,9 @@
       <!-- Title & Header Meta -->
       <div class="space-y-4 border-b border-surface-800 pb-6">
         <div class="flex items-center gap-2 text-xs font-mono text-brand-400">
-          <router-link :to="`/${courseSlug}`" class="hover:underline">{{ lesson.module?.course?.title?.split('—')[0] || courseSlug.toUpperCase() }}</router-link>
+          <router-link :to="`/${courseSlug}`" class="hover:underline">{{ courseSlug.toUpperCase() }} ASOSLARI</router-link>
           <span>/</span>
-          <span class="text-surface-400">{{ lesson.module?.title || 'Dars' }}</span>
+          <span class="text-surface-400">{{ lesson.moduleTitle }}</span>
         </div>
 
         <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -48,25 +48,25 @@
             <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
-            Daraja: Injiniring & Standart
+            Standart: {{ lesson.spec || 'WHATWG Living Standard' }}
           </span>
           <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
             <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
-            WHATWG / W3C / TC39
+            Blink / V8 Dvigatel Injiniringi
           </span>
         </div>
       </div>
 
-      <!-- Multi-Layer Tab Selector (👶 5 Yoshli Bola | 🚀 Dasturchi | 🔬 Internals | 🎬 Video Simulyator) -->
+      <!-- Multi-Layer Tab Selector -->
       <div class="flex flex-wrap gap-2 border-b border-surface-800 pb-3">
         <button
           v-for="tab in tabs"
           :key="tab.id"
           @click="activeTab = tab.id"
+          class="px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 cursor-pointer"
           :class="[
-            'px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 cursor-pointer',
             activeTab === tab.id
               ? 'bg-brand-500 text-surface-950 shadow-lg shadow-brand-500/20 font-bold'
               : 'bg-surface-900 text-surface-400 hover:text-white hover:bg-surface-800'
@@ -94,65 +94,40 @@
           </div>
 
           <p v-if="!showKidUnderTheHood" class="text-sm sm:text-base text-surface-200 leading-relaxed">
-            {{ getKidAnalogy(lesson) }}
+            {{ lesson.kidAnalogy }}
           </p>
 
           <div v-else class="space-y-2 font-mono text-xs text-left">
-            <div class="text-[11px] text-cyan-300 font-bold">Brauzer Xotirasida: C++ Object Initialization</div>
-            <pre class="p-3 rounded-xl bg-surface-950 border border-surface-800 text-cyan-300 leading-relaxed overflow-x-auto"><code>// Chromium Blink Tree Node Creation
-auto* node = Document::CreateRawNode(k{{ lesson.title.replace(/[^a-zA-Z]/g, '') }}NodeType);
-tree_builder_->Attach(current_parent_, node);</code></pre>
+            <div class="text-cyan-300 font-bold">Brauzer va Dvigatel C++ Arxitekturasi:</div>
+            <pre class="p-3.5 rounded-xl bg-surface-950 border border-surface-800 text-cyan-300 text-[11px] leading-relaxed overflow-x-auto"><code>{{ lesson.cppInternalCode }}</code></pre>
           </div>
-        </div>
-
-        <div class="p-5 rounded-2xl bg-surface-900 border border-surface-800 space-y-3">
-          <div class="text-xs font-mono font-bold text-brand-400 uppercase">💡 Hayotiy Misol:</div>
-          <p class="text-xs sm:text-sm text-surface-300 leading-relaxed">
-            {{ getKidExample(lesson) }}
-          </p>
         </div>
       </div>
 
-      <!-- Tab 2: 🚀 Dasturchi va To‘liq Tushuntirish -->
-      <div v-else-if="activeTab === 'dev'" class="space-y-8 animate-in fade-in duration-200">
-        <div class="prose prose-invert max-w-none text-surface-200 leading-relaxed space-y-6 text-sm sm:text-base">
-          <div v-html="renderedContent"></div>
-        </div>
+      <!-- Tab 2: 🚀 Dasturchi Darsi (Normativ Nazariya) -->
+      <div v-else-if="activeTab === 'dev'" class="space-y-6 animate-in fade-in duration-200">
+        <div class="prose prose-invert max-w-none text-surface-200 text-sm sm:text-base leading-relaxed space-y-4" v-html="renderedContent"></div>
 
-        <!-- Practice Task & Live Code Playground -->
-        <div class="space-y-4 pt-6 border-t border-surface-800">
+        <!-- Code Playground Inside Lesson -->
+        <div class="space-y-3 pt-6 border-t border-surface-800">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>⚡</span> Jonli Kodlash Maydoni (Sandbox)
+          </h3>
           <InteractiveCodePlayground />
         </div>
       </div>
 
-      <!-- Tab 3: 🔬 Brauzer Internals va Mexanizmlar (Hard & Deep) -->
+      <!-- Tab 3: 🔬 Brauzer Internals (C++) -->
       <div v-else-if="activeTab === 'internals'" class="space-y-6 animate-in fade-in duration-200">
         <BrowserInternalsDeepDive />
       </div>
 
       <!-- Tab 4: 🎬 Video Simulyator -->
       <div v-else-if="activeTab === 'video'" class="space-y-6 animate-in fade-in duration-200">
-        <InteractiveEngineVisualizer />
-      </div>
-
-      <!-- Next & Previous Lesson Navigation -->
-      <div class="pt-8 border-t border-surface-800 flex flex-wrap items-center justify-between gap-4">
-        <router-link
-          v-if="lesson.prevLesson"
-          :to="`/${courseSlug}/${lesson.prevLesson.slug.replace(`${courseSlug}-`, '')}`"
-          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-900 hover:bg-surface-800 text-surface-300 text-xs font-semibold border border-surface-700 transition-colors"
-        >
-          <span>← Oldingi: {{ lesson.prevLesson.title }}</span>
-        </router-link>
-        <div v-else></div>
-
-        <router-link
-          v-if="lesson.nextLesson"
-          :to="`/${courseSlug}/${lesson.nextLesson.slug.replace(`${courseSlug}-`, '')}`"
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-bold text-xs transition-colors shadow-lg shadow-brand-500/20"
-        >
-          <span>Keyingi Dars: {{ lesson.nextLesson.title }} →</span>
-        </router-link>
+        <div class="space-y-3">
+          <h3 class="text-lg font-bold text-white">Brauzer Render Pipeline Simulyatori</h3>
+          <InteractiveEngineVisualizer />
+        </div>
       </div>
     </div>
   </div>
@@ -161,41 +136,14 @@ tree_builder_->Attach(current_parent_, node);</code></pre>
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { apiClient } from '../services/api';
+import { html25ModulesData, type ComprehensiveLesson } from '../data/htmlModulesData';
 import InteractiveEngineVisualizer from '../components/InteractiveEngineVisualizer.vue';
 import InteractiveCodePlayground from '../components/InteractiveCodePlayground.vue';
 import BrowserInternalsDeepDive from '../components/BrowserInternalsDeepDive.vue';
 
 const route = useRoute();
 
-interface PracticeTask {
-  id: string;
-  title: string;
-  description: string;
-  starterCode?: string;
-  points: number;
-}
-
-interface LessonData {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  content: string;
-  estimatedMinutes: number;
-  module?: {
-    title: string;
-    course?: {
-      title: string;
-      slug: string;
-    };
-  };
-  practiceTasks?: PracticeTask[];
-  prevLesson?: { slug: string; title: string } | null;
-  nextLesson?: { slug: string; title: string } | null;
-}
-
-const lesson = ref<LessonData | null>(null);
+const lesson = ref<ComprehensiveLesson | null>(null);
 const loading = ref(true);
 const error = ref<string | null>(null);
 const activeTab = ref('dev');
@@ -216,51 +164,37 @@ const lessonSlug = computed(() => {
   const param = route.params.lessonSlug as string;
   if (param) return param;
   const parts = route.path.split('/');
-  return parts[parts.length - 1] || 'kirish';
+  return parts[parts.length - 1] || 'html-tarixi';
 });
 
-const fullSlug = computed(() => {
-  if (lessonSlug.value.startsWith(`${courseSlug.value}-`)) {
-    return lessonSlug.value;
-  }
-  return `${courseSlug.value}-${lessonSlug.value}`;
-});
-
-async function fetchLesson() {
+function fetchLesson() {
   loading.value = true;
   error.value = null;
 
-  try {
-    const res = await apiClient.get<{ success: boolean; data: LessonData }>(`/lessons/${fullSlug.value}`);
-    if (res.data?.success && res.data.data) {
-      lesson.value = res.data.data;
-    } else {
-      // Fallback sample lesson so it never breaks offline
-      lesson.value = {
-        id: 'fallback-lesson',
-        slug: fullSlug.value,
-        title: `${courseSlug.value.toUpperCase()} Chuqur Injiniring Darsi`,
-        description: 'Ushbu dars normativ WHATWG va W3C spetsifikatsiyalari asosida tuzilgan.',
-        content: `## 🚀 Darsning Asosiy Nazariyasi\n\nBrauzer DOM daraxtini tuzish jarayonida tokenizator oqimidan foydalanadi.\n\n\`\`\`html\n<!DOCTYPE html>\n<html lang="uz">\n  <body>\n    <h1>KODX Knowledge Universe</h1>\n  </body>\n</html>\n\`\`\`\n\n### 🔬 Muhim Qoidalar\nHar doim xotira boshqaruvi va Reflow xarajatlarini hisobga oling.`,
-        estimatedMinutes: 8,
-      };
-    }
-  } catch (_err: any) {
-    // Offline fallback
+  const found = html25ModulesData[lessonSlug.value];
+  if (found) {
+    lesson.value = found;
+  } else {
+    // Generate intelligent default
     lesson.value = {
-      id: 'fallback-lesson',
-      slug: fullSlug.value,
-      title: `${courseSlug.value.toUpperCase()} Chuqur Injiniring Darsi`,
-      description: 'Ushbu dars normativ WHATWG va W3C spetsifikatsiyalari asosida tuzilgan.',
-      content: `## 🚀 Darsning Asosiy Nazariyasi\n\nBrauzer DOM daraxtini tuzish jarayonida tokenizator oqimidan foydalanadi.\n\n\`\`\`html\n<!DOCTYPE html>\n<html lang="uz">\n  <body>\n    <h1>KODX Knowledge Universe</h1>\n  </body>\n</html>\n\`\`\`\n\n### 🔬 Muhim Qoidalar\nHar doim xotira boshqaruvi va Reflow xarajatlarini hisobga oling.`,
-      estimatedMinutes: 8,
+      id: 'custom',
+      slug: lessonSlug.value,
+      title: `${lessonSlug.value.replace(/-/g, ' ').toUpperCase()} Injiniring Darsi`,
+      moduleTitle: 'HTML Knowledge Universe',
+      moduleOrder: 1,
+      description: 'WHATWG va W3C xalqaro standartlari bo‘yicha chuqur muhandislik qo‘llanmasi.',
+      estimatedMinutes: 7,
+      spec: 'WHATWG HTML Living Standard',
+      kidAnalogy: 'Har bir detalning o‘z o‘rni va qoidasi bor, xuddi qiziqarli o‘yindek!',
+      cppInternalCode: '// Blink DOM Parsing & Layout\nblink::HTMLDocumentParser::Parse();',
+      content: `## 🚀 Darsning Asosiy Nazariyasi\n\nUshbu mavzu zamonaviy veb standartlari va brauzer arxitekturasining ajralmas qismidir.\n\n### 🔬 Muhim Qoidalar\nHar doim xotira boshqaruvi, semantika va qulaylikni (A11y) hisobga oling.`,
+      codeExample: `<!DOCTYPE html>\n<html lang="uz">\n  <body>\n    <h1>KODX HTML Universe</h1>\n  </body>\n</html>`,
     };
-  } finally {
-    loading.value = false;
   }
+
+  loading.value = false;
 }
 
-// Convert markdown to clean readable HTML
 const renderedContent = computed(() => {
   if (!lesson.value?.content) return '';
   const text = lesson.value.content;
@@ -273,19 +207,6 @@ const renderedContent = computed(() => {
     .replace(/`([^`]+)`/gim, '<code class="px-1.5 py-0.5 rounded bg-surface-900 border border-surface-800 font-mono text-xs text-brand-300">$1</code>')
     .replace(/\n\n/gim, '<p class="my-3"></p>');
 });
-
-function getKidAnalogy(l: LessonData): string {
-  if (courseSlug.value === 'html') {
-    return `Tasavvur qiling, siz Lego o‘yinchoq uychasini quryapsiz. ${l.title} — bu uychangizning eng mustahkam poydevori yoki chiroyli eshigidir!`;
-  } else if (courseSlug.value === 'css') {
-    return `Oq-qora rasmlar daftarini o‘zingiz yoqtirgan sevimli rangli qalamlar bilan chiroyli qilib bo‘yashni tasavvur qiling. ${l.title} — sizning sehrli bo‘yog‘ingizdir!`;
-  }
-  return `Robot o‘yinchog‘ingiz tugmasini bossangiz, u quvonch bilan qo‘llarini ko‘tarib sakraydi. ${l.title} — bu robotga xuddi shunday aql va harakat beruvchi mexanizmdir!`;
-}
-
-function getKidExample(l: LessonData): string {
-  return `Agar bu qoida bo‘lmaganida, sahifadagi hamma narsa bir-biriga chalkashib ketardi. ${l.title} orqali har bir narsa o‘zining aniq o‘rnini topadi!`;
-}
 
 onMounted(() => {
   fetchLesson();
