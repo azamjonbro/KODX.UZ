@@ -34,6 +34,9 @@ const routes: RouteRecordRaw[] = [
       { path: 'kirish', name: 'css-kirish', component: () => import('../pages/css/Kirish.vue') },
       { path: 'selectorlar', name: 'css-selectorlar', component: () => import('../pages/css/Selectorlar.vue') },
       { path: 'box-model', name: 'css-box-model', component: () => import('../pages/css/BoxModel.vue') },
+      { path: 'flexbox', name: 'css-flexbox', component: () => import('../pages/css/Flexbox.vue') },
+      { path: 'grid', name: 'css-grid', component: () => import('../pages/css/Grid.vue') },
+      { path: 'modern', name: 'css-modern', component: () => import('../pages/css/ModernCss.vue') },
     ],
   },
   {
@@ -44,6 +47,9 @@ const routes: RouteRecordRaw[] = [
       { path: 'kirish', name: 'js-kirish', component: () => import('../pages/javascript/Kirish.vue') },
       { path: 'ozgaruvchilar', name: 'js-ozgaruvchilar', component: () => import('../pages/javascript/Ozgaruvchilar.vue') },
       { path: 'funksiyalar', name: 'js-funksiyalar', component: () => import('../pages/javascript/Funksiyalar.vue') },
+      { path: 'dom', name: 'js-dom', component: () => import('../pages/javascript/Dom.vue') },
+      { path: 'events', name: 'js-events', component: () => import('../pages/javascript/Events.vue') },
+      { path: 'async', name: 'js-async', component: () => import('../pages/javascript/AsyncJs.vue') },
     ],
   },
 ];
