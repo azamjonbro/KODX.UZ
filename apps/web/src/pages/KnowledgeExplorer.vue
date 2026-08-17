@@ -3,45 +3,56 @@
     <!-- Header -->
     <div class="space-y-4 border-b border-surface-800 pb-8">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 font-mono text-xs font-bold">
-        <span>🌐 Global Knowledge Universe Matrix</span>
+        <span>🌐 Global Knowledge Universe & Element Ensiklopediyasi</span>
       </div>
       <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
         Universal Dasturlash Ensiklopediyasi
       </h1>
       <p class="text-base sm:text-lg text-surface-300 max-w-3xl leading-relaxed">
-        WHATWG, W3C va TC39 standartlari asosida HTML, CSS va JavaScript bo‘yicha to‘liq qamrovli bilimlar daraxti: 5 yoshli bola darajasidan to C++ dvigatel darajasigacha.
+        Rasmiy WHATWG, W3C va TC39 standartlari asosida tuzilgan to‘liq inventar: 5 yoshli bola tushuntirishidan tortib C++ dvigatel darajasigacha.
       </p>
     </div>
 
-    <!-- Technology & Search Controls -->
-    <div class="p-6 rounded-3xl bg-surface-900 border border-surface-800 space-y-6 shadow-2xl">
-      <!-- Technology Selector (HTML / CSS / JavaScript) -->
-      <div class="flex flex-wrap gap-2">
-        <button
-          v-for="tech in techTabs"
-          :key="tech.id"
-          @click="activeTech = tech.id"
-          class="px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
-          :class="[
-            activeTech === tech.id
-              ? 'bg-brand-500 text-surface-950 shadow-lg shadow-brand-500/20'
-              : 'bg-surface-950 text-surface-400 hover:text-white border border-surface-800'
-          ]"
-        >
-          <span>{{ tech.icon }}</span>
-          <span>{{ tech.name }} ({{ tech.count }})</span>
-        </button>
-      </div>
-
+    <!-- Search & Filters Container -->
+    <div class="p-6 rounded-3xl bg-surface-900 border border-surface-800 space-y-5 shadow-2xl">
       <!-- Search Input -->
       <div class="relative">
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="Element, selektor, API yoki kalit so‘zni qidiring (masalan: dialog, grid, flexbox, async, closure)..."
+          placeholder="Teg, element, atribut yoki kalit so‘zni qidiring (masalan: dialog, picture, nav, header, button, form)..."
           class="w-full pl-12 pr-4 py-3.5 bg-surface-950 border border-surface-700 focus:border-brand-500 rounded-2xl text-sm text-white placeholder-surface-500 focus:outline-none transition-all font-mono"
         />
         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-surface-500">🔍</span>
+      </div>
+
+      <!-- Categories Filter Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
+        <button
+          @click="selectedCategory = 'all'"
+          class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer"
+          :class="[
+            selectedCategory === 'all'
+              ? 'bg-brand-500 text-surface-950 font-bold shadow-lg shadow-brand-500/20'
+              : 'bg-surface-950 text-surface-400 hover:text-white border border-surface-800'
+          ]"
+        >
+          Barchasi ({{ htmlElementsData.length }})
+        </button>
+
+        <button
+          v-for="cat in availableCategories"
+          :key="cat.slug"
+          @click="selectedCategory = cat.slug"
+          class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer"
+          :class="[
+            selectedCategory === cat.slug
+              ? 'bg-brand-500 text-surface-950 font-bold shadow-lg shadow-brand-500/20'
+              : 'bg-surface-950 text-surface-400 hover:text-white border border-surface-800'
+          ]"
+        >
+          {{ cat.name }} ({{ cat.count }})
+        </button>
       </div>
     </div>
 
@@ -58,8 +69,15 @@
             <span class="text-base font-mono font-bold text-brand-400 group-hover:text-brand-300 transition-colors">
               {{ node.name }}
             </span>
-            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-surface-950 border border-surface-800 text-surface-400">
-              {{ node.category }}
+            <span
+              class="text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase"
+              :class="[
+                node.status === 'CURRENT'
+                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                  : 'bg-red-500/10 text-red-400 border border-red-500/20'
+              ]"
+            >
+              {{ node.status }}
             </span>
           </div>
 
@@ -69,10 +87,17 @@
         </div>
 
         <div class="pt-2 border-t border-surface-800/80 flex items-center justify-between text-[11px] font-mono text-surface-500">
-          <span>{{ node.spec }}</span>
+          <span>{{ node.categoryName }}</span>
           <span class="text-brand-400 group-hover:underline">Batafsil →</span>
         </div>
       </div>
+    </div>
+
+    <!-- Empty State if no match -->
+    <div v-else class="p-12 text-center rounded-3xl bg-surface-900/50 border border-surface-800 space-y-3">
+      <div class="text-3xl">🔍</div>
+      <div class="text-white font-bold text-base">Hech narsa topilmadi</div>
+      <p class="text-xs text-surface-400">Qidiruv so‘zini o‘zgartirib ko‘ring yoki barcha toifalarni tanlang.</p>
     </div>
 
     <!-- Node Detail Modal -->
@@ -91,10 +116,20 @@
         </button>
 
         <div class="space-y-2">
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2.5">
             <h2 class="text-2xl font-black font-mono text-white">{{ selectedNode.name }}</h2>
-            <span class="px-2.5 py-0.5 rounded bg-brand-500/10 text-brand-400 font-mono text-xs font-bold border border-brand-500/20">
-              {{ selectedNode.category }}
+            <span
+              class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full uppercase"
+              :class="[
+                selectedNode.status === 'CURRENT'
+                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                  : 'bg-red-500/10 text-red-400 border border-red-500/20'
+              ]"
+            >
+              {{ selectedNode.status }}
+            </span>
+            <span v-if="selectedNode.introduced" class="text-xs font-mono text-surface-400">
+              ({{ selectedNode.introduced }})
             </span>
           </div>
           <p class="text-sm text-surface-300 leading-relaxed">{{ selectedNode.description }}</p>
@@ -108,9 +143,9 @@
           <p class="text-xs text-surface-300 leading-relaxed">{{ selectedNode.kidAnalogy }}</p>
         </div>
 
-        <!-- 🔬 C++ / Engine Internals -->
+        <!-- 🔬 Code Snippet -->
         <div class="p-4 rounded-2xl bg-surface-950 border border-surface-800 font-mono text-xs text-cyan-300 space-y-1 overflow-x-auto">
-          <div class="text-[10px] text-surface-400 uppercase font-bold">Dvigatel Xotirasi & Kod:</div>
+          <div class="text-[10px] text-surface-400 uppercase font-bold">Misol va Sintaksis:</div>
           <pre><code>{{ selectedNode.code }}</code></pre>
         </div>
 
@@ -122,7 +157,7 @@
             @click="selectedNode = null"
             class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-bold text-xs transition-all shadow-lg shadow-brand-500/20"
           >
-            To‘liq darsni o‘qish 🚀
+            Tegishli darsga o‘tish 🚀
           </router-link>
         </div>
       </div>
@@ -132,102 +167,31 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { htmlElementsData, type KnowledgeItem } from '../data/knowledgeData';
 
-const activeTech = ref('html');
 const searchQuery = ref('');
-const selectedNode = ref<any>(null);
+const selectedCategory = ref('all');
+const selectedNode = ref<KnowledgeItem | null>(null);
 
-const techTabs = [
-  { id: 'html', name: 'HTML5 Standartlari', icon: '🌐', count: 162 },
-  { id: 'css', name: 'CSS3 & Layout', icon: '🎨', count: 148 },
-  { id: 'js', name: 'JavaScript & V8', icon: '⚙️', count: 120 },
-];
+const availableCategories = computed(() => {
+  const map: Record<string, { slug: string; name: string; count: number }> = {};
 
-const nodesData = {
-  html: [
-    {
-      name: '<dialog>',
-      category: 'Top Layer & Modals',
-      description: 'JavaScript kutubxonalarisiz to‘g‘ridan-to‘g‘ri brauzerning Top Layer qatlamida modal oyna ochish.',
-      kidAnalogy: 'O‘yinda yutganingizda ekranning o‘rtasiga sakrab chiqadigan tabriknoma oynasi.',
-      code: '// HTMLDialogElement::showModal()\ndialog.showModal();',
-      spec: 'WHATWG HTML 4.11.1',
-      link: '/html/dialog',
-    },
-    {
-      name: '<picture>',
-      category: 'Responsive Images',
-      description: 'Ekran o‘lchami va brauzer formatiga (AVIF, WebP) mos rasm yuklovchi konteyner.',
-      kidAnalogy: 'Telefon va televizorga moslab alohida fotosurat taqdim etuvchi sehrli ramka.',
-      code: '<picture>\n  <source type="image/avif" srcset="hero.avif">\n  <img src="hero.jpg">\n</picture>',
-      spec: 'WHATWG HTML 4.8.1',
-      link: '/html/rasmlar',
-    },
-    {
-      name: '<article>',
-      category: 'Sectioning Elements',
-      description: 'Mustaqil o‘qilishi va tarqatilishi mumkin bo‘lgan semantik maqola blog posti.',
-      kidAnalogy: 'Gazetadagi alohida sarlavha va matnga ega maqola qutisi.',
-      code: '<article>\n  <h2>Sarlavha</h2>\n  <p>Matn</p>\n</article>',
-      spec: 'WHATWG HTML 4.3.2',
-      link: '/html/semantika',
-    },
-  ],
-  css: [
-    {
-      name: ':has() Selector',
-      category: 'Relational Selectors',
-      description: 'Ota elementni uning bolalari tarkibiga qarab tanlab oluvchi inqilobiy selektor.',
-      kidAnalogy: 'Agar sumkada kitob bo‘lsa, butun sumkani sariq rangga bo‘yash.',
-      code: '.card:has(img) {\n  border: 2px solid #22c55e;\n}',
-      spec: 'W3C Selectors 4',
-      link: '/css/modern',
-    },
-    {
-      name: 'display: flex',
-      category: '1D Layout',
-      description: 'Elementlarni bitta qator yoki ustun bo‘ylab moslashuvchan tekislovchi model.',
-      kidAnalogy: 'Poyezd vagonlarini bitta ipga terib, oralarini ochib qo‘yish.',
-      code: '.container {\n  display: flex;\n  justify-content: space-between;\n}',
-      spec: 'W3C CSS Flexbox 1',
-      link: '/css/flexbox',
-    },
-    {
-      name: 'display: grid',
-      category: '2D Layout',
-      description: 'Qatorlar va ustunlar bo‘ylab to‘liq 2 o‘lchamli maket chizish tizimi.',
-      kidAnalogy: 'Shaxmat taxtasi kataklari kabi tekis qator va ustunlar.',
-      code: '.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));\n}',
-      spec: 'W3C CSS Grid 2',
-      link: '/css/grid',
-    },
-  ],
-  js: [
-    {
-      name: 'Event Loop',
-      category: 'Asinxron Runtime',
-      description: 'Microtasks (Promises) va Macrotasks navbatlarini Call Stack orqali boshqaruvchi dvigatel.',
-      kidAnalogy: 'Restorandagi bitta ofitsiant o‘nlab stollarga navbat bilan taom olib kelishi.',
-      code: 'Promise.resolve().then(() => console.log("Microtask!"));',
-      spec: 'HTML5 Event Loop Specification',
-      link: '/javascript/async',
-    },
-    {
-      name: 'Closure',
-      category: 'Funksiyalar',
-      description: 'Ichki funksiyaning o‘zidan tashqaridagi o‘zgaruvchilarni xotirada saqlab qolish qobiliyati.',
-      kidAnalogy: 'Uydan chiqib ketsangiz ham cho‘ntagingizda uy kaliti borligi.',
-      code: 'function createCounter() {\n  let c = 0;\n  return () => ++c;\n}',
-      spec: 'ECMA-262 Lexical Environments',
-      link: '/javascript/funksiyalar',
-    },
-  ],
-};
+  htmlElementsData.forEach((item) => {
+    if (!map[item.category]) {
+      map[item.category] = { slug: item.category, name: item.categoryName, count: 0 };
+    }
+    map[item.category]!.count++;
+  });
+
+  return Object.values(map);
+});
 
 const filteredNodes = computed(() => {
-  const list = nodesData[activeTech.value as keyof typeof nodesData] || [];
-  if (!searchQuery.value.trim()) return list;
-  const q = searchQuery.value.toLowerCase();
-  return list.filter(n => n.name.toLowerCase().includes(q) || n.description.toLowerCase().includes(q) || n.category.toLowerCase().includes(q));
+  return htmlElementsData.filter((node) => {
+    const matchesCategory = selectedCategory.value === 'all' || node.category === selectedCategory.value;
+    const q = searchQuery.value.toLowerCase().trim();
+    const matchesQuery = !q || node.name.toLowerCase().includes(q) || node.description.toLowerCase().includes(q) || node.categoryName.toLowerCase().includes(q);
+    return matchesCategory && matchesQuery;
+  });
 });
 </script>
