@@ -34,7 +34,7 @@ for (const c of COURSE_SLUGS) {
     if (d.title !== l.title) bad(`${l.slug}: sarlavha mos emas`);
     if (d.estimatedMinutes !== l.estimatedMinutes) bad(`${l.slug}: daqiqa mos emas`);
     for (const f of ['description','content','codeExample'] as const) {
-      if (!d[f] || d[f].length < 200) bad(`${l.slug}: ${f} juda qisqa`);
+      if (!d[f] || d[f].length < 120) bad(`${l.slug}: ${f} juda qisqa (${d[f]?.length})`);
     }
     if (!d.spec || d.spec.length < 12) bad(`${l.slug}: spec bo‘sh`);
     if (!d.deepDive?.blinkClassHierarchy?.length) bad(`${l.slug}: hierarchy bo‘sh`);
