@@ -12,11 +12,14 @@
       </router-link>
     </div>
 
-    <!-- Search Input with ⌘K Badge -->
+    <!-- Search Input with ⌘K Badge (Click triggers CommandPalette) -->
     <div class="px-4 py-2">
-      <div class="relative flex items-center">
+      <div
+        @click="openCommandPalette"
+        class="relative flex items-center cursor-pointer group"
+      >
         <svg
-          class="w-4 h-4 text-surface-400 absolute left-3.5 pointer-events-none"
+          class="w-4 h-4 text-surface-400 group-hover:text-brand-400 absolute left-3.5 pointer-events-none transition-colors"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -24,12 +27,12 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         <input
-          v-model="searchQuery"
           type="text"
+          readonly
           placeholder="Qidirish..."
-          class="w-full pl-9 pr-12 py-2 bg-surface-900/80 border border-surface-800 hover:border-surface-700 focus:border-brand-500 rounded-xl text-xs text-white placeholder-surface-500 focus:outline-none focus:ring-1 focus:ring-brand-500/30 transition-all font-sans"
+          class="w-full pl-9 pr-12 py-2 bg-surface-900/80 group-hover:bg-surface-900 border border-surface-800 group-hover:border-surface-700 rounded-xl text-xs text-white placeholder-surface-500 cursor-pointer focus:outline-none transition-all font-sans"
         />
-        <div class="absolute right-2.5 flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-surface-800 border border-surface-700/60 text-[10px] font-mono text-surface-400">
+        <div class="absolute right-2.5 flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-surface-800 border border-surface-700/60 text-[10px] font-mono text-surface-400 group-hover:text-surface-300">
           <span>⌘</span>
           <span>K</span>
         </div>
@@ -59,8 +62,8 @@
           <h2 class="text-[11px] font-mono font-bold uppercase tracking-wider text-surface-400">
             {{ currentCourse.title }}
           </h2>
-          <span class="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-surface-900 border border-surface-800 text-surface-300">
-            {{ currentCourse.completedLessons }} / {{ currentCourse.totalLessons }}
+          <span class="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-surface-900 border border-surface-800 text-brand-400">
+            {{ courseStats.completedLessons }} / {{ courseStats.totalLessons }}
           </span>
         </div>
 
@@ -80,14 +83,14 @@
             <button
               type="button"
               @click="toggleModule(mod.id)"
-              class="w-full flex items-center justify-between p-2.5 text-xs text-left rounded-xl transition-colors group"
+              class="w-full flex items-center justify-between p-2.5 text-xs text-left rounded-xl transition-colors group cursor-pointer"
             >
               <div class="flex items-center gap-2.5 min-w-0 pr-2">
                 <!-- Theme Status Indicator (Completed Checkmark / Green Dot / Circle) -->
                 <div class="shrink-0 flex items-center justify-center">
                   <!-- Completed Icon -->
                   <div
-                    v-if="mod.isCompleted"
+                    v-if="isModuleCompleted(mod)"
                     class="w-4 h-4 rounded-full border border-brand-500/60 text-brand-400 flex items-center justify-center text-[10px] bg-brand-500/10"
                   >
                     <svg class="w-3 h-3 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,7 +115,7 @@
                 <span
                   class="truncate text-xs font-semibold"
                   :class="[
-                    isModuleActive(mod) ? 'text-white' : mod.isCompleted ? 'text-surface-300' : 'text-surface-400'
+                    isModuleActive(mod) ? 'text-white' : isModuleCompleted(mod) ? 'text-surface-300' : 'text-surface-400'
                   ]"
                 >
                   {{ mod.title }}
@@ -121,7 +124,7 @@
 
               <!-- Right Indicator: Checkmark or Chevron Arrow -->
               <div class="shrink-0 flex items-center">
-                <span v-if="mod.isCompleted" class="text-brand-400 text-xs font-bold mr-1">✓</span>
+                <span v-if="isModuleCompleted(mod)" class="text-brand-400 text-xs font-bold mr-1">✓</span>
                 <svg
                   class="w-3.5 h-3.5 text-surface-400 transition-transform duration-200"
                   :class="{ 'rotate-180': openModules.includes(mod.id) }"
@@ -143,31 +146,38 @@
                 v-for="sub in mod.lessons"
                 :key="sub.id"
                 :to="sub.path"
-                class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all group"
+                class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium transition-all group"
                 :class="[
                   isSubthemeActive(sub)
                     ? 'text-brand-400 bg-brand-500/10 font-bold'
                     : 'text-surface-400 hover:text-surface-200 hover:bg-surface-800/40'
                 ]"
               >
-                <!-- Subtheme Bullet Point (Solid Dot if active, Hollow Circle if inactive) -->
-                <div class="shrink-0 flex items-center justify-center">
-                  <div
-                    v-if="isSubthemeActive(sub)"
-                    class="w-2 h-2 rounded-full bg-brand-400 shadow-sm shadow-brand-400/80"
-                  ></div>
-                  <div
-                    v-else-if="sub.isCompleted"
-                    class="w-2 h-2 rounded-full bg-brand-500/50"
-                  ></div>
-                  <div
-                    v-else
-                    class="w-2 h-2 rounded-full border border-surface-600"
-                  ></div>
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <!-- Subtheme Bullet Point -->
+                  <div class="shrink-0 flex items-center justify-center">
+                    <div
+                      v-if="isSubthemeActive(sub)"
+                      class="w-2 h-2 rounded-full bg-brand-400 shadow-sm shadow-brand-400/80"
+                    ></div>
+                    <div
+                      v-else-if="progressStore.isLessonCompleted(sub.path)"
+                      class="w-2 h-2 rounded-full bg-brand-500/80"
+                    ></div>
+                    <div
+                      v-else
+                      class="w-2 h-2 rounded-full border border-surface-600"
+                    ></div>
+                  </div>
+
+                  <!-- Subtheme Title -->
+                  <span class="truncate">{{ sub.title }}</span>
                 </div>
 
-                <!-- Subtheme Title -->
-                <span class="truncate">{{ sub.title }}</span>
+                <!-- Done Checkmark -->
+                <span v-if="progressStore.isLessonCompleted(sub.path)" class="text-[10px] text-brand-400 font-bold shrink-0 ml-1">
+                  ✓
+                </span>
               </router-link>
             </div>
           </div>
@@ -181,55 +191,71 @@
       <div class="p-3 rounded-xl bg-surface-900/80 border border-surface-800/80 space-y-2">
         <div class="flex items-center justify-between text-[11px]">
           <span class="text-surface-400 font-medium">Kursni davom ettirish</span>
-          <span class="font-mono font-bold text-white">40%</span>
+          <span class="font-mono font-bold text-brand-400">{{ courseStats.progressPercent }}%</span>
         </div>
-        <p class="text-xs font-semibold text-white truncate">
+        <p class="text-xs font-semibold text-white truncate text-left">
           {{ activeSubthemeTitle }}
         </p>
         <!-- Progress Bar -->
         <div class="w-full h-1.5 bg-surface-800 rounded-full overflow-hidden">
-          <div class="h-full bg-gradient-to-r from-brand-500 to-emerald-400 rounded-full w-[40%] transition-all duration-500"></div>
+          <div
+            class="h-full bg-gradient-to-r from-brand-500 to-emerald-400 rounded-full transition-all duration-500"
+            :style="{ width: `${courseStats.progressPercent}%` }"
+          ></div>
         </div>
       </div>
 
-      <!-- User Profile Bar (Abdulloh • Level 7 • 1,240 XP) -->
-      <div class="flex items-center justify-between p-2 rounded-xl hover:bg-surface-900 transition-colors cursor-pointer group">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <!-- Avatar with Gradient Ring -->
-          <div class="relative w-8 h-8 rounded-full overflow-hidden bg-surface-800 border border-surface-700 flex items-center justify-center shrink-0">
-            <span class="text-xs font-bold text-surface-200">👨‍💻</span>
+      <!-- User Profile Bar Wrapped with ProfileMenu -->
+      <ProfileMenu>
+        <div class="flex items-center justify-between p-2 rounded-xl hover:bg-surface-900 transition-colors cursor-pointer group">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <!-- Avatar with Gradient Ring -->
+            <div class="relative w-8 h-8 rounded-full overflow-hidden bg-surface-800 border border-surface-700 flex items-center justify-center shrink-0">
+              <span class="text-xs font-bold text-surface-200">👨‍💻</span>
+            </div>
+
+            <div class="min-w-0 text-left">
+              <div class="text-xs font-bold text-white truncate group-hover:text-brand-300 transition-colors">
+                Abdulloh
+              </div>
+              <div class="text-[10px] text-surface-400 font-mono">
+                Level {{ progressStore.level.value }}
+              </div>
+            </div>
           </div>
 
-          <div class="min-w-0 text-left">
-            <div class="text-xs font-bold text-white truncate group-hover:text-brand-300 transition-colors">
-              Abdulloh
-            </div>
-            <div class="text-[10px] text-surface-400">
-              Level 7
-            </div>
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs font-bold text-brand-400">
+              {{ progressStore.xp.value.toLocaleString() }} XP
+            </span>
+            <svg class="w-3.5 h-3.5 text-surface-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
           </div>
         </div>
-
-        <div class="flex items-center gap-2">
-          <span class="font-mono text-xs font-bold text-brand-400">
-            1,240 XP
-          </span>
-          <svg class="w-3.5 h-3.5 text-surface-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      </div>
+      </ProfileMenu>
     </div>
+
+    <!-- Command Palette (⌘K) Modal Component -->
+    <CommandPalette ref="commandPaletteRef" />
   </aside>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, h, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { coursesData, CourseData, ThemeModuleItem, SubthemeItem } from '../data/topics';
+import { coursesData, resolveCourseSlug, CourseData, ThemeModuleItem, SubthemeItem } from '../data/topics';
+import { useProgressStore } from '../stores/progress';
+import ProfileMenu from './ProfileMenu.vue';
+import CommandPalette from './CommandPalette.vue';
 
 const route = useRoute();
-const searchQuery = ref('');
+const progressStore = useProgressStore();
+const commandPaletteRef = ref<InstanceType<typeof CommandPalette> | null>(null);
+
+function openCommandPalette() {
+  commandPaletteRef.value?.open();
+}
 
 // SVG Icon Helper Components
 const createSvgIcon = (d: string) => ({
@@ -270,11 +296,12 @@ const mainNavLinks = [
   { label: 'Yangiliklar', path: '/news', icon: NewspaperIcon },
 ];
 
-const currentCourse = computed<CourseData>(() => {
-  const segment = route.path.split('/')[1] || 'html';
-  const found = coursesData[segment];
-  if (found) return found;
-  return coursesData['html'] as CourseData;
+const currentCourseSlug = computed(() => resolveCourseSlug(route.path));
+
+const currentCourse = computed<CourseData>(() => coursesData[currentCourseSlug.value]);
+
+const courseStats = computed(() => {
+  return progressStore.getCourseStats(currentCourseSlug.value);
 });
 
 // Manage open modules accordion state
@@ -290,6 +317,10 @@ function toggleModule(id: string) {
 
 function isModuleActive(mod: ThemeModuleItem) {
   return mod.lessons.some(sub => isSubthemeActive(sub));
+}
+
+function isModuleCompleted(mod: ThemeModuleItem) {
+  return mod.lessons.every(sub => progressStore.isLessonCompleted(sub.path));
 }
 
 function isSubthemeActive(sub: SubthemeItem) {

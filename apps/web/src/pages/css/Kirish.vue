@@ -1,198 +1,124 @@
 <template>
-  <div class="space-y-10 max-w-4xl pb-16">
+  <div class="space-y-10 max-w-4xl pb-20 text-left">
+    <!-- Breadcrumbs Navigation -->
+    <nav class="flex items-center flex-wrap gap-2 text-xs font-mono text-surface-400">
+      <router-link to="/css/kirish" class="hover:text-surface-200 transition-colors">CSS Asoslari</router-link>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-surface-400">1-Modul</span>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-brand-400 font-bold">1.1. CSS Sintaksisi & Ulash</span>
+    </nav>
+
     <!-- Title & Meta -->
     <div class="space-y-4 border-b border-surface-800 pb-6">
-      <div class="flex items-center gap-2 text-xs font-mono text-brand-400">
-        <span>CSS Asoslari</span>
-        <span>/</span>
-        <span class="text-surface-400">1-Dars</span>
-      </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-        CSS Kirish — Veb Sahifaga Jon va Chiroy Bag‘ishlash
+        CSS Kirish — Web Sahifani Bezatish & Cascade Qoidalari
       </h1>
-      <p class="text-base sm:text-lg text-surface-300 leading-relaxed">
-        CSS nima, u HTML bilan qanday bog‘lanadi va veb-saytni oddiy qora-oq matndan zamonaviy vizual asarga qanday aylantiradi?
+      <p class="text-sm sm:text-base text-surface-300 leading-relaxed font-normal">
+        CSS (Cascading Style Sheets) — HTML elementlarining rangi, shrifti, o‘lchami va ekranda joylashishini boshqaruvchi stilar jadval tilidir.
       </p>
 
-      <div class="flex flex-wrap items-center gap-4 text-xs text-surface-400 pt-2">
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          ⏱️ O‘qish vaqti: 6 daqiqa
+      <!-- Premium Metadata Badges -->
+      <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-mono">
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          O‘qish vaqti: 5 daqiqa
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          🎯 Daraja: Boshlang‘ich
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          CSSOM (CSS Object Model)
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          📚 MDN: CSS Basics
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          Cascade & Inheritance
         </span>
       </div>
     </div>
 
-    <!-- 👶 5 Yoshli Bola Uchun Analogiya -->
-    <div class="p-6 rounded-2xl bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-transparent border border-pink-500/20 space-y-3">
-      <div class="flex items-center gap-2 text-pink-400 font-bold text-base">
-        <span class="text-xl">👶</span>
-        <span>5 yoshli bola uchun tushuntirish: Bo‘yash Kitobi (Coloring Book)</span>
-      </div>
-      <p class="text-sm text-surface-200 leading-relaxed">
-        Tasavvur qiling, sizga <strong>qora-oq chizilgan rasmlar daftari</strong> berildi. Bu — <strong>HTML</strong>.
-      </p>
-      <p class="text-xs text-surface-300 leading-relaxed">
-        Siz qo‘lingizga <strong>rangli qalamlar va mo‘yqalam</strong> olasiz: uyni moviy rangga, quyoshni yorqin sariqqa, daraxtlarni zumrad yashilga bo‘yaysiz. Mana shu sizning rangli qalamlaringiz — <strong>CSS</strong> deb ataladi!
-      </p>
-    </div>
-
-    <!-- CSS nima? -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-        <span class="text-brand-400">#</span> CSS qanday ishlaydi?
-      </h2>
-      <p class="text-sm sm:text-base text-surface-300 leading-relaxed">
-        <strong>CSS</strong> — <em>Cascading Style Sheets</em> (Kaskadli uslublar jadvallari). U HTML elementlarining rangi, o‘lchami, shrifti, joylashuvi (layout) va animatsiyalarini boshqaradi.
-      </p>
-    </div>
-
-    <!-- ⚡ Interaktiv CSS Stil Laboratoriyasi -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-        <span class="text-brand-400">⚡</span> Jonli Sinov: Tugmani Stil Bilan O‘zgartiring
-      </h2>
-      <p class="text-sm text-surface-400">
-        Quyidagi slayderlar va ranglarni o‘zgartirib, CSS qoidalarining darhol ta’sirini ko‘ring:
-      </p>
-
-      <div class="p-5 rounded-2xl bg-surface-900 border border-surface-800 space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          <!-- Background Color -->
-          <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-surface-300">Orqa fon rangi (background):</label>
-            <div class="flex items-center gap-2">
-              <input
-                v-model="boxBg"
-                type="color"
-                class="w-10 h-8 rounded border border-surface-700 cursor-pointer bg-transparent"
-              />
-              <span class="font-mono text-xs text-surface-400">{{ boxBg }}</span>
-            </div>
-          </div>
-
-          <!-- Text Color -->
-          <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-surface-300">Matn rangi (color):</label>
-            <div class="flex items-center gap-2">
-              <input
-                v-model="boxColor"
-                type="color"
-                class="w-10 h-8 rounded border border-surface-700 cursor-pointer bg-transparent"
-              />
-              <span class="font-mono text-xs text-surface-400">{{ boxColor }}</span>
-            </div>
-          </div>
-
-          <!-- Border Radius -->
-          <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-surface-300">Burchak radiusi: {{ borderRadius }}px</label>
-            <input
-              v-model="borderRadius"
-              type="range"
-              min="0"
-              max="30"
-              class="w-full accent-brand-500"
-            />
-          </div>
-
-          <!-- Padding -->
-          <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-surface-300">Ichki masofa: {{ boxPadding }}px</label>
-            <input
-              v-model="boxPadding"
-              type="range"
-              min="8"
-              max="32"
-              class="w-full accent-brand-500"
-            />
-          </div>
+    <!-- 👶 5 Yoshli Bola Uchun Analogiya + C++ Under-the-hood Toggle -->
+    <div class="p-6 rounded-2xl bg-surface-900/40 border border-surface-800/80 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5 text-amber-400 font-bold text-sm sm:text-base">
+          <span class="text-xl">👶</span>
+          <span>5 yoshli bola uchun tushuntirish: Oq-Qora Rasm va Bo‘yoqlar</span>
         </div>
+        <button
+          @click="showUnderTheHood = !showUnderTheHood"
+          class="px-2.5 py-1 rounded-lg bg-surface-800 hover:bg-surface-700 text-[11px] font-mono text-brand-400 border border-brand-500/30 transition-all cursor-pointer"
+        >
+          <span>{{ showUnderTheHood ? 'Analogiyaga qaytish' : '🔬 Ostidagi Kodni Ko‘rish' }}</span>
+        </button>
+      </div>
 
-        <!-- Result -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-          <div class="p-4 rounded-xl bg-surface-950 border border-surface-800 space-y-2">
-            <div class="text-xs font-mono text-surface-500">CSS Kodi:</div>
-            <pre class="text-xs font-mono text-pink-300"><code>.chiroyli-tugma {
-  background-color: {{ boxBg }};
-  color: {{ boxColor }};
-  border-radius: {{ borderRadius }}px;
-  padding: {{ boxPadding }}px 24px;
-  font-weight: bold;
-  cursor: pointer;
+      <div v-if="!showUnderTheHood" class="space-y-2 text-xs sm:text-sm text-surface-300 leading-relaxed animate-in fade-in duration-200">
+        <p>
+          HTML — bu oq-qora chizilgan rasmlar daftari. Unda hamma narsa faqat oddiy chiziqlardan iborat.
+        </p>
+        <p class="pt-1">
+          CSS esa — sizning yorqin rangli qalamlaringiz! U daraxtni <strong>yashil</strong>, quyoshni <strong>sariq</strong> va uyni <strong>qizil</strong> qilib bo‘yaydi.
+        </p>
+      </div>
+
+      <div v-else class="space-y-2 font-mono text-xs animate-in fade-in duration-200">
+        <div class="text-cyan-300 font-bold">Blink StyleResolver: CSS Rule Matching & ComputedStyle Calculation</div>
+        <pre class="p-3.5 rounded-xl bg-surface-950 border border-surface-800 text-cyan-300 text-[11px] leading-relaxed overflow-x-auto"><code>// third_party/blink/renderer/core/css/resolver/style_resolver.cc
+scoped_refptr&lt;ComputedStyle&gt; StyleResolver::ResolveStyle(Element* element) {
+  ElementResolveContext context(*element);
+  MatchAuthorRules(context); // CSS fayldan selectorlarni elementga solishtirish
+  return builder.TakeStyle(); // Elementning yakuniy pikselli poydevori
 }</code></pre>
-          </div>
-
-          <div class="p-4 rounded-xl bg-surface-950 border border-surface-800 flex flex-col justify-center items-center">
-            <div class="text-xs font-semibold text-surface-500 mb-4">Jonli Ko‘rinish:</div>
-            <button
-              :style="{
-                backgroundColor: boxBg,
-                color: boxColor,
-                borderRadius: borderRadius + 'px',
-                padding: boxPadding + 'px 24px',
-              }"
-              class="font-bold transition-all shadow-lg"
-            >
-              Mening Tugmam 🚀
-            </button>
-          </div>
-        </div>
       </div>
     </div>
 
-    <!-- CSS Ulanish Usullari -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-        <span class="text-brand-400">#</span> CSS ni HTMLga ulashning 3 usuli
+    <!-- 3 Ways to Apply CSS (Hard & Deep) -->
+    <section class="space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 1. CSS ni Sahifaga Ulashning 3 Xil Yo‘li
       </h2>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
         <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-2">
-          <span class="font-bold text-brand-400 text-sm">1. Tashqi Fayl (External) ⭐</span>
-          <p class="text-surface-300">Eng tavsiya etiladigan to‘g‘ri usul. <code>&lt;link rel="stylesheet" href="style.css"&gt;</code> orqali ulanadi.</p>
+          <div class="text-brand-400 font-bold text-sm">1. External CSS (Tavsiya)</div>
+          <p class="text-surface-300 text-[11px] font-sans leading-relaxed">
+            Alohida <code>style.css</code> faylida yoziladi va <code>&lt;link rel="stylesheet" href="style.css"&gt;</code> orqali ulanadi. Brauzer uni keshlaydi!
+          </p>
         </div>
 
         <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-2">
-          <span class="font-bold text-blue-400 text-sm">2. Ichki Stil (Internal)</span>
-          <p class="text-surface-300">HTMLning <code>&lt;head&gt;</code> qismida <code>&lt;style&gt;</code> tegi ichida yoziladi.</p>
+          <div class="text-blue-400 font-bold text-sm">2. Internal CSS</div>
+          <p class="text-surface-300 text-[11px] font-sans leading-relaxed">
+            HTML fayl ichidagi <code>&lt;head&gt;</code> tegi ostida <code>&lt;style&gt;</code> blokida yoziladi. Faqat bitta sahifa uchun qulay.
+          </p>
         </div>
 
         <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-2">
-          <span class="font-bold text-amber-400 text-sm">3. Qator Ichidagi (Inline)</span>
-          <p class="text-surface-300">Elementning ichida <code>style="..."</code> atributi orqali yoziladi. Katta loyihalarda tavsiya etilmaydi.</p>
+          <div class="text-amber-400 font-bold text-sm">3. Inline CSS</div>
+          <p class="text-surface-300 text-[11px] font-sans leading-relaxed">
+            To‘g‘ridan-to‘g‘ri teg ichida <code>style="color: red;"</code> deb yoziladi. Katta loyihalarda ishlatish tavsiya etilmaydi (antipattern).
+          </p>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Navigation -->
-    <div class="pt-6 border-t border-surface-800 flex flex-wrap items-center justify-between gap-4">
-      <router-link
-        to="/html/attributlar"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-900 hover:bg-surface-800 text-surface-300 text-xs font-semibold border border-surface-700 transition-colors"
-      >
-        <span>← HTML: Atributlar</span>
-      </router-link>
-
-      <router-link
-        to="/css/selectorlar"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-bold text-xs transition-colors"
-      >
-        <span>Keyingi Dars: CSS Selektorlar →</span>
-      </router-link>
-    </div>
+    <!-- Interactive Live Code Editor -->
+    <section class="space-y-4 pt-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 2. Jonli Mashq: CSS Ranglari va Shriftlarini Sinab Ko‘ring
+      </h2>
+      <InteractiveCodePlayground />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import InteractiveCodePlayground from '../../components/InteractiveCodePlayground.vue';
 
-const boxBg = ref('#22a675');
-const boxColor = ref('#ffffff');
-const borderRadius = ref(12);
-const boxPadding = ref(16);
+const showUnderTheHood = ref(false);
 </script>

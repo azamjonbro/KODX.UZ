@@ -1,160 +1,113 @@
 <template>
-  <div class="space-y-10 max-w-4xl pb-16">
-    <!-- Header & Meta -->
+  <div class="space-y-10 max-w-4xl pb-20 text-left">
+    <!-- Breadcrumbs Navigation -->
+    <nav class="flex items-center flex-wrap gap-2 text-xs font-mono text-surface-400">
+      <router-link to="/html/kirish" class="hover:text-surface-200 transition-colors">HTML Asoslari</router-link>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-surface-400">2-Modul</span>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-brand-400 font-bold">Multimedia & Responsive Rasmlar</span>
+    </nav>
+
+    <!-- Title & Meta -->
     <div class="space-y-4 border-b border-surface-800 pb-6">
-      <div class="flex items-center gap-2 text-xs font-mono text-brand-400">
-        <span>HTML Asoslari</span>
-        <span>/</span>
-        <span class="text-surface-400">6-Dars</span>
-      </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-        Rasmlar, Zamonaviy Formatlar va Lazy Loading
+        HTML Multimedia — Rasmlar va Zamonaviy &lt;picture&gt; Standartlari
       </h1>
-      <p class="text-base sm:text-lg text-surface-300 leading-relaxed">
-        Saytni sekinlashtirmasdan yuqori sifatli rasmlarni yuklash, WebP/AVIF formatlari va <code>loading="lazy"</code> orqali 70% trafikni tejash sirlari.
+      <p class="text-sm sm:text-base text-surface-300 leading-relaxed font-normal">
+        Rasmlarni vebda to‘g‘ri yuklash — sahifa tezligi (LCP), qidiruv tizimlari (SEO) va foydalanuvchi trafigini tejashdagi eng muhim omildir.
       </p>
 
-      <div class="flex flex-wrap items-center gap-4 text-xs text-surface-400 pt-2">
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          ⏱️ O‘qish vaqti: 7 daqiqa
+      <!-- Premium Metadata Badges -->
+      <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-mono">
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          O‘qish vaqti: 6 daqiqa
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          🎯 Daraja: Boshlang‘ich - O‘rta
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          AVIF / WebP Formatlar
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          📚 MDN: Responsive Images & Lazy Loading
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          CLS & Lazy Loading
         </span>
       </div>
     </div>
 
-    <!-- 👶 5 Yoshli Bola Uchun Analogiya -->
-    <div class="p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-transparent border border-amber-500/20 space-y-3">
-      <div class="flex items-center gap-2 text-amber-400 font-bold text-base">
-        <span class="text-xl">👶</span>
-        <span>5 yoshli bola uchun tushuntirish: Og‘ir Kitob va Yengil Fotosurat</span>
+    <!-- 👶 5 Yoshli Bola Uchun Analogiya + C++ Under-the-hood Toggle -->
+    <div class="p-6 rounded-2xl bg-surface-900/40 border border-surface-800/80 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5 text-amber-400 font-bold text-sm sm:text-base">
+          <span class="text-xl">👶</span>
+          <span>5 yoshli bola uchun tushuntirish: Suratlar Albomi</span>
+        </div>
+        <button
+          @click="showUnderTheHood = !showUnderTheHood"
+          class="px-2.5 py-1 rounded-lg bg-surface-800 hover:bg-surface-700 text-[11px] font-mono text-brand-400 border border-brand-500/30 transition-all cursor-pointer"
+        >
+          <span>{{ showUnderTheHood ? 'Analogiyaga qaytish' : '🔬 Ostidagi Kodni Ko‘rish' }}</span>
+        </button>
       </div>
-      <p class="text-sm text-surface-200 leading-relaxed">
-        Tasavvur qiling, ryukzagingizda 100 ta og‘ir tosh olib yurish — bu eski, siqilmagan <strong>katta PNG/JPG</strong> rasmlardir. Telefoningiz uni ko‘tarolmay qotib qoladi!
-      </p>
-      <p class="text-xs text-surface-300 leading-relaxed">
-        Agar ularni <strong>WebP/AVIF</strong> formatida siqsangiz va faqat sahifani pastga tushirganda (<strong>lazy loading</strong>) olib kelsangiz, ryukzagingiz patdek yengil bo‘ladi!
-      </p>
+
+      <div v-if="!showUnderTheHood" class="space-y-2 text-xs sm:text-sm text-surface-300 leading-relaxed animate-in fade-in duration-200">
+        <p>
+          Albomdagi rasmni ko‘rsatish uchun uni chizish shart emas, unga fotosuratni yopishtirish kifoya.
+        </p>
+        <p class="pt-1">
+          HTMLda ham <code>&lt;img&gt;</code> tegi rasmning o‘zini fayl ichida saqlamaydi, balki rasm qayerdaligini (<code>src="rasm.jpg"</code>) ko‘rsatuvchi ko‘zgudir!
+        </p>
+      </div>
+
+      <div v-else class="space-y-2 font-mono text-xs animate-in fade-in duration-200">
+        <div class="text-cyan-300 font-bold">Blink Image Loader: Asynchronous Decoding & Memory Cache</div>
+        <pre class="p-3.5 rounded-xl bg-surface-950 border border-surface-800 text-cyan-300 text-[11px] leading-relaxed overflow-x-auto"><code>// third_party/blink/renderer/core/html/html_image_element.cc
+void HTMLImageElement::SelectSourceURL(ImageLoader& loader) {
+  KURL url = SelectBestFitSourceFromPictureParent(); // AVIF > WebP > PNG
+  loader.Load(url, ImageLoader::kAsyncDecoding); // UI ni qotirmasdan fonga yuklash
+}</code></pre>
+      </div>
     </div>
 
-    <!-- ⚡ Interaktiv Rasm Optimizatsiya Taqqoslash -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-        <span class="text-brand-400">⚡</span> Jonli Sinov: Formatlar va Hajm Taqqoslashi
+    <!-- Responsive Picture Element (Hard & Deep) -->
+    <section class="space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 1. Zamonaviy &lt;picture&gt; va WebP/AVIF Formatlari
       </h2>
-      <p class="text-sm text-surface-400">
-        Formatlarni tanlang va ularning yuklanish tezligi hamda hajm farqini ko‘ring:
-      </p>
 
-      <div class="p-5 rounded-2xl bg-surface-900 border border-surface-800 space-y-6">
-        <div class="flex flex-wrap gap-2">
-          <button
-            v-for="fmt in formats"
-            :key="fmt.name"
-            @click="selectedFormat = fmt"
-            :class="[
-              'px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all',
-              selectedFormat.name === fmt.name
-                ? 'bg-brand-500 text-surface-950 shadow-lg shadow-brand-500/20'
-                : 'bg-surface-800 text-surface-300 hover:bg-surface-700'
-            ]"
-          >
-            {{ fmt.name }} ({{ fmt.size }})
-          </button>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Code -->
-          <div class="p-4 rounded-xl bg-surface-950 border border-surface-800 space-y-2">
-            <div class="text-xs font-mono text-surface-500">Tavsiya etiladigan HTML kodi:</div>
-            <pre class="text-xs font-mono text-emerald-300"><code>&lt;picture&gt;
-  &lt;source srcset="banner.avif" type="image/avif" /&gt;
-  &lt;source srcset="banner.webp" type="image/webp" /&gt;
-  &lt;img
-    src="banner.jpg"
-    alt="KODX Platformasi"
-    loading="lazy"
-    width="1200"
-    height="600"
-  /&gt;
-&lt;/picture&gt;</code></pre>
-          </div>
-
-          <!-- Comparison result -->
-          <div class="p-4 rounded-xl bg-surface-950 border border-surface-800 flex flex-col justify-center space-y-3">
-            <div class="flex items-center justify-between text-xs">
-              <span class="text-surface-400">Fayl formati:</span>
-              <span class="font-mono font-bold text-white">{{ selectedFormat.name }}</span>
-            </div>
-            <div class="flex items-center justify-between text-xs">
-              <span class="text-surface-400">Fayl hajmi:</span>
-              <span class="font-mono font-bold text-emerald-400">{{ selectedFormat.size }}</span>
-            </div>
-            <div class="flex items-center justify-between text-xs">
-              <span class="text-surface-400">Yuklanish tezligi:</span>
-              <span class="font-mono font-bold text-brand-400">{{ selectedFormat.speed }}</span>
-            </div>
-            <div class="p-2.5 rounded-lg bg-surface-900 text-[11px] text-surface-300 border border-surface-800">
-              💡 {{ selectedFormat.description }}
-            </div>
-          </div>
+      <div class="rounded-xl overflow-hidden border border-surface-800 bg-surface-950 font-mono text-xs">
+        <div class="p-4 text-cyan-300 leading-relaxed space-y-1">
+          <div><span class="text-brand-400">&lt;picture&gt;</span></div>
+          <div class="pl-4"><span class="text-surface-500">// 1. Agar brauzer AVIF ni qo'llab-quvvatlasa (eng kichik hajm)</span></div>
+          <div class="pl-4"><span class="text-brand-400">&lt;source</span> <span class="text-amber-300">type</span>=<span class="text-emerald-300">"image/avif"</span> <span class="text-amber-300">srcset</span>=<span class="text-emerald-300">"hero.avif"</span><span class="text-brand-400">&gt;</span></div>
+          <div class="pl-4"><span class="text-surface-500">// 2. Agar WebP ni qo'llab-quvvatlasa</span></div>
+          <div class="pl-4"><span class="text-brand-400">&lt;source</span> <span class="text-amber-300">type</span>=<span class="text-emerald-300">"image/webp"</span> <span class="text-amber-300">srcset</span>=<span class="text-emerald-300">"hero.webp"</span><span class="text-brand-400">&gt;</span></div>
+          <div class="pl-4"><span class="text-surface-500">// 3. Eski brauzerlar uchun zaxira</span></div>
+          <div class="pl-4"><span class="text-brand-400">&lt;img</span> <span class="text-amber-300">src</span>=<span class="text-emerald-300">"hero.jpg"</span> <span class="text-amber-300">alt</span>=<span class="text-emerald-300">"Asosiy Banner"</span> <span class="text-amber-300">width</span>=<span class="text-emerald-300">"800"</span> <span class="text-amber-300">height</span>=<span class="text-emerald-300">"450"</span> <span class="text-amber-300">loading</span>=<span class="text-emerald-300">"lazy"</span><span class="text-brand-400">&gt;</span></div>
+          <div><span class="text-brand-400">&lt;/picture&gt;</span></div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Navigation -->
-    <div class="pt-6 border-t border-surface-800 flex flex-wrap items-center justify-between gap-4">
-      <router-link
-        to="/html/semantika"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-900 hover:bg-surface-800 text-surface-300 text-xs font-semibold border border-surface-700 transition-colors"
-      >
-        <span>← 5-Dars: Semantik HTML</span>
-      </router-link>
-
-      <router-link
-        to="/html/formalar"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-bold text-xs transition-colors"
-      >
-        <span>Keyingi Dars: Formalar & Validatsiya →</span>
-      </router-link>
-    </div>
+    <!-- Interactive Live Code Editor -->
+    <section class="space-y-4 pt-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 2. Jonli Mashq: Multimedia Elementlarini Joylashtiring
+      </h2>
+      <InteractiveCodePlayground />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import InteractiveCodePlayground from '../../components/InteractiveCodePlayground.vue';
 
-interface FormatItem {
-  name: string;
-  size: string;
-  speed: string;
-  description: string;
-}
-
-const formats: FormatItem[] = [
-  {
-    name: 'AVIF',
-    size: '120 KB (90% tejamkor)',
-    speed: '~15ms (Eng tez)',
-    description: 'Eng yangi va samarali format. Rasm sifatini yo‘qotmasdan eng kichik hajmga keltiradi.',
-  },
-  {
-    name: 'WebP',
-    size: '250 KB (75% tejamkor)',
-    speed: '~30ms (Tez)',
-    description: 'Google tomonidan yaratilgan universal zamonaviy format. Barcha zamonaviy brauzerlarda ishlaydi.',
-  },
-  {
-    name: 'PNG / JPG',
-    size: '1.2 MB (Eski standart)',
-    speed: '~180ms (Sekin)',
-    description: 'Katta hajm oladi, mobil internetda sahifani sekinlashtiradi.',
-  },
-];
-
-const selectedFormat = ref<FormatItem>(formats[0]!);
+const showUnderTheHood = ref(false);
 </script>

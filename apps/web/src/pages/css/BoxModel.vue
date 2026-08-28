@@ -1,166 +1,119 @@
 <template>
-  <div class="space-y-10 max-w-4xl pb-16">
+  <div class="space-y-10 max-w-4xl pb-20 text-left">
+    <!-- Breadcrumbs Navigation -->
+    <nav class="flex items-center flex-wrap gap-2 text-xs font-mono text-surface-400">
+      <router-link to="/css/kirish" class="hover:text-surface-200 transition-colors">CSS Asoslari</router-link>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-surface-400">2-Modul</span>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-brand-400 font-bold">2.1. CSS Box Model</span>
+    </nav>
+
     <!-- Title & Meta -->
     <div class="space-y-4 border-b border-surface-800 pb-6">
-      <div class="flex items-center gap-2 text-xs font-mono text-brand-400">
-        <span>CSS Asoslari</span>
-        <span>/</span>
-        <span class="text-surface-400">3-Dars</span>
-      </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-        CSS Box Model — Qutining 4 Qavati
+        CSS Box Model — Har Bir Element Bu To‘rtburchak Qutidir
       </h1>
-      <p class="text-base sm:text-lg text-surface-300 leading-relaxed">
-        CSSda har bir element to‘rtburchak qutidir. Box Model elementning o‘lchami va uning atrofi qanday hisoblanishini belgilaydi.
+      <p class="text-sm sm:text-base text-surface-300 leading-relaxed font-normal">
+        Vebdagi har bir HTML elementi 4 qatlamli to‘rtburchak qutidan (Box) iborat: Content, Padding, Border va Margin.
       </p>
 
-      <div class="flex flex-wrap items-center gap-4 text-xs text-surface-400 pt-2">
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          ⏱️ O‘qish vaqti: 8 daqiqa
+      <!-- Premium Metadata Badges -->
+      <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-mono">
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          O‘qish vaqti: 6 daqiqa
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          🎯 Daraja: Boshlang‘ich - O‘rta
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          box-sizing: border-box
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          📚 MDN: The Box Model
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          Margin Collapse
         </span>
       </div>
     </div>
 
-    <!-- 👶 5 Yoshli Bola Uchun Analogiya -->
-    <div class="p-6 rounded-2xl bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-transparent border border-orange-500/20 space-y-3">
-      <div class="flex items-center gap-2 text-orange-400 font-bold text-base">
-        <span class="text-xl">👶</span>
-        <span>5 yoshli bola uchun tushuntirish: Pochta Sovg‘a Qutisi</span>
+    <!-- 👶 5 Yoshli Bola Uchun Analogiya + C++ Under-the-hood Toggle -->
+    <div class="p-6 rounded-2xl bg-surface-900/40 border border-surface-800/80 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5 text-amber-400 font-bold text-sm sm:text-base">
+          <span class="text-xl">👶</span>
+          <span>5 yoshli bola uchun tushuntirish: Pochta Sovg‘a Qutisi</span>
+        </div>
+        <button
+          @click="showUnderTheHood = !showUnderTheHood"
+          class="px-2.5 py-1 rounded-lg bg-surface-800 hover:bg-surface-700 text-[11px] font-mono text-brand-400 border border-brand-500/30 transition-all cursor-pointer"
+        >
+          <span>{{ showUnderTheHood ? 'Analogiyaga qaytish' : '🔬 Ostidagi Kodni Ko‘rish' }}</span>
+        </button>
       </div>
-      <p class="text-sm text-surface-200 leading-relaxed">
-        Tasavvur qiling, siz do‘stingizga pochta orqali mo‘rt <strong>shisha o‘yinchoq</strong> yubormoqchisiz:
-      </p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-2 text-xs">
-        <div class="p-3 rounded-xl bg-surface-950 border border-blue-500/40 space-y-1">
-          <p class="font-bold text-blue-400">1. Content (Tarkib)</p>
-          <p class="text-surface-400">O‘yinchoqning o‘zi (matn yoki rasm).</p>
-        </div>
-        <div class="p-3 rounded-xl bg-surface-950 border border-emerald-500/40 space-y-1">
-          <p class="font-bold text-emerald-400">2. Padding (Ichki masofa)</p>
-          <p class="text-surface-400">O‘yinchoq sinmasligi uchun o‘ralgan yumshoq paxta.</p>
-        </div>
-        <div class="p-3 rounded-xl bg-surface-950 border border-amber-500/40 space-y-1">
-          <p class="font-bold text-amber-400">3. Border (Chegara devor)</p>
-          <p class="text-surface-400">Qutining qattiq karton devori.</p>
-        </div>
-        <div class="p-3 rounded-xl bg-surface-950 border border-orange-500/40 space-y-1">
-          <p class="font-bold text-orange-400">4. Margin (Tashqi masofa)</p>
-          <p class="text-surface-400">Qutining boshqa qutilarga tegmasligi uchun tashqi oraliq.</p>
-        </div>
+
+      <div v-if="!showUnderTheHood" class="space-y-2 text-xs sm:text-sm text-surface-300 leading-relaxed animate-in fade-in duration-200">
+        <p>Do‘stingizga mo‘rt sovg‘a yubormoqchisiz:</p>
+        <ul class="space-y-1 list-disc list-inside text-surface-400 text-xs">
+          <li><strong>Content</strong> — quti ichidagi haqiqiy sovg‘angiz (telefon).</li>
+          <li><strong>Padding</strong> — sovg‘a sinmasligi uchun atrofidagi yumshoq paxta/ko‘pik.</li>
+          <li><strong>Border</strong> — sovg‘aning qattiq karton qutisi.</li>
+          <li><strong>Margin</strong> — boshqa qutilar bilan urilib ketmasligi uchun oraliq masofa.</li>
+        </ul>
+      </div>
+
+      <div v-else class="space-y-2 font-mono text-xs animate-in fade-in duration-200">
+        <div class="text-cyan-300 font-bold">Blink LayoutBoxModel: Physical Geometry Computation</div>
+        <pre class="p-3.5 rounded-xl bg-surface-950 border border-surface-800 text-cyan-300 text-[11px] leading-relaxed overflow-x-auto"><code>// third_party/blink/renderer/core/layout/layout_box_model_object.cc
+LayoutUnit LayoutBoxModelObject::BorderAndPaddingWidth() const {
+  return BorderLeft() + BorderRight() + PaddingLeft() + PaddingRight();
+}</code></pre>
       </div>
     </div>
 
-    <!-- ⚡ Interaktiv Box Model Vizualizatori -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-        <span class="text-brand-400">⚡</span> Jonli Box Model Vizualizatori
+    <!-- Visual Interactive Box Model Diagram (Hard & Deep) -->
+    <section class="space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 1. Box Modelning 4 ta Qatlami
       </h2>
-      <p class="text-sm text-surface-400">
-        Slayderlarni o‘zgartiring va 4 ta qavat qanday kengayishini jonli ko‘ring:
-      </p>
 
-      <div class="p-5 rounded-2xl bg-surface-900 border border-surface-800 space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <!-- Margin -->
-          <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-orange-400">Margin (Tashqi): {{ marginVal }}px</label>
-            <input v-model.number="marginVal" type="range" min="0" max="40" class="w-full accent-orange-500" />
-          </div>
-
-          <!-- Border -->
-          <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-amber-400">Border (Chegara): {{ borderVal }}px</label>
-            <input v-model.number="borderVal" type="range" min="1" max="15" class="w-full accent-amber-500" />
-          </div>
-
-          <!-- Padding -->
-          <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-emerald-400">Padding (Ichki): {{ paddingVal }}px</label>
-            <input v-model.number="paddingVal" type="range" min="4" max="40" class="w-full accent-emerald-500" />
-          </div>
-        </div>
-
-        <!-- Visual Diagram -->
-        <div class="p-6 rounded-2xl bg-surface-950 border border-surface-800 flex justify-center items-center overflow-x-auto min-h-[300px]">
-          <!-- MARGIN Layer (Orange) -->
-          <div
-            :style="{ padding: marginVal + 'px' }"
-            class="bg-orange-500/20 border-2 border-dashed border-orange-500 rounded-2xl transition-all relative flex flex-col items-center justify-center"
-          >
-            <span class="absolute top-1 left-2 text-[10px] font-mono font-bold text-orange-400 uppercase">Margin: {{ marginVal }}px</span>
-
-            <!-- BORDER Layer (Amber) -->
-            <div
-              :style="{ borderWidth: borderVal + 'px' }"
-              class="border-amber-500 rounded-xl transition-all relative flex flex-col items-center justify-center bg-surface-900"
-            >
-              <!-- PADDING Layer (Emerald) -->
-              <div
-                :style="{ padding: paddingVal + 'px' }"
-                class="bg-emerald-500/20 rounded-lg transition-all relative flex items-center justify-center"
-              >
-                <!-- CONTENT Layer (Blue) -->
-                <div class="bg-blue-600/30 border border-blue-400 text-blue-200 px-6 py-4 rounded font-mono font-bold text-xs text-center shadow-inner">
-                  CONTENT (Matn / Rasm)
-                </div>
+      <div class="p-6 rounded-2xl bg-surface-950 border border-surface-800 text-center font-mono text-xs space-y-3">
+        <!-- Margin Outer -->
+        <div class="p-4 rounded-xl bg-amber-500/10 border-2 border-dashed border-amber-500/40 text-amber-400">
+          <div class="font-bold text-xs mb-2">MARGIN (Tashqi masofa — shaffof)</div>
+          <!-- Border Middle -->
+          <div class="p-4 rounded-xl bg-purple-500/10 border-2 border-purple-500/40 text-purple-400">
+            <div class="font-bold text-xs mb-2">BORDER (Hoshiya devori)</div>
+            <!-- Padding Inner -->
+            <div class="p-4 rounded-xl bg-blue-500/10 border-2 border-blue-500/40 text-blue-400">
+              <div class="font-bold text-xs mb-2">PADDING (Ichki oraliq)</div>
+              <!-- Content Core -->
+              <div class="p-4 rounded-lg bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 font-bold">
+                CONTENT (Haqiqiy matn yoki rasm: Width × Height)
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Generated CSS Code -->
-        <div class="p-4 rounded-xl bg-surface-950 border border-surface-800">
-          <div class="text-xs font-mono text-surface-500 mb-2">Hosil bo‘lgan CSS kodi:</div>
-          <pre class="text-xs font-mono text-emerald-300"><code>.quti {
-  margin: {{ marginVal }}px;
-  border: {{ borderVal }}px solid #f59e0b;
-  padding: {{ paddingVal }}px;
-  box-sizing: border-box; /* MDN Tavsiya etadi */
-}</code></pre>
-        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- box-sizing: border-box haqida muhim MDN qoidasi -->
-    <div class="p-5 rounded-xl bg-brand-500/10 border border-brand-500/20 space-y-2">
-      <div class="flex items-center gap-2 text-brand-400 font-bold text-sm">
-        <span>⭐</span>
-        <span>MDN Oltin Qoidasi: `box-sizing: border-box`</span>
-      </div>
-      <p class="text-xs sm:text-sm text-surface-300 leading-relaxed">
-        Odatiy holatda elementga <code>padding</code> yoki <code>border</code> qo‘shsangiz, elementning umumiy eni kattalashib ketadi. Buni oldini olish va o‘lchamlarni aniq ushlab turish uchun barcha zamonaviy loyihalarda <code>* { box-sizing: border-box; }</code> ishlatiladi.
-      </p>
-    </div>
-
-    <!-- Navigation -->
-    <div class="pt-6 border-t border-surface-800 flex flex-wrap items-center justify-between gap-4">
-      <router-link
-        to="/css/selectorlar"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-900 hover:bg-surface-800 text-surface-300 text-xs font-semibold border border-surface-700 transition-colors"
-      >
-        <span>← 2-Dars: CSS Selektorlar</span>
-      </router-link>
-
-      <router-link
-        to="/javascript/kirish"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-bold text-xs transition-colors"
-      >
-        <span>Keyingi Bo‘lim: JavaScript Kirish →</span>
-      </router-link>
-    </div>
+    <!-- Interactive Live Code Editor -->
+    <section class="space-y-4 pt-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 2. Jonli Mashq: Margin va Paddingni Sinab Ko‘ring
+      </h2>
+      <InteractiveCodePlayground />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import InteractiveCodePlayground from '../../components/InteractiveCodePlayground.vue';
 
-const marginVal = ref(16);
-const borderVal = ref(4);
-const paddingVal = ref(20);
+const showUnderTheHood = ref(false);
 </script>

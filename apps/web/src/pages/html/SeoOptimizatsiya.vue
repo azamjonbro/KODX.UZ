@@ -1,107 +1,124 @@
 <template>
-  <div class="space-y-10 max-w-4xl pb-16">
-    <!-- Header & Meta -->
+  <div class="space-y-10 max-w-4xl pb-20 text-left">
+    <!-- Breadcrumbs Navigation -->
+    <nav class="flex items-center flex-wrap gap-2 text-xs font-mono text-surface-400">
+      <router-link to="/html/kirish" class="hover:text-surface-200 transition-colors">HTML Asoslari</router-link>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-surface-400">4-Modul</span>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-brand-400 font-bold">SEO & Core Web Vitals</span>
+    </nav>
+
+    <!-- Title & Meta -->
     <div class="space-y-4 border-b border-surface-800 pb-6">
-      <div class="flex items-center gap-2 text-xs font-mono text-brand-400">
-        <span>HTML Asoslari</span>
-        <span>/</span>
-        <span class="text-surface-400">9-Dars</span>
-      </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-        HTML Optimizatsiyasi, SEO va Core Web Vitals
+        HTML SEO & Core Web Vitals — Qidiruv Tizimlari Cho‘qqisiga Chiqish
       </h1>
-      <p class="text-base sm:text-lg text-surface-300 leading-relaxed">
-        Saytni qidiruv tizimlarida 1-o‘ringa chiqarish, Google PageSpeed ballini 100 ga yetkazish, Preload, Prefetch va CLS sakrashlarini yo‘qotish.
+      <p class="text-sm sm:text-base text-surface-300 leading-relaxed font-normal">
+        To‘g‘ri semantika, meta ma’lumotlar, JSON-LD tuzilgan ma’lumotlar va tezkor render orqali Google qidiruvida 1-o‘ringa chiqish sirlari.
       </p>
 
-      <div class="flex flex-wrap items-center gap-4 text-xs text-surface-400 pt-2">
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          ⏱️ O‘qish vaqti: 10 daqiqa
+      <!-- Premium Metadata Badges -->
+      <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-mono">
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          O‘qish vaqti: 8 daqiqa
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          🎯 Daraja: O‘rta - Yuqori
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          LCP, INP, CLS Metrikalari
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          📚 MDN: Web Performance & Optimization
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          Schema.org / JSON-LD
         </span>
       </div>
     </div>
 
-    <!-- 👶 5 Yoshli Bola Uchun Analogiya -->
-    <div class="p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-brand-500/10 to-transparent border border-amber-500/20 space-y-3">
-      <div class="flex items-center gap-2 text-amber-400 font-bold text-base">
-        <span class="text-xl">👶</span>
-        <span>5 yoshli bola uchun tushuntirish: Poyga Mashinasi</span>
+    <!-- 👶 5 Yoshli Bola Uchun Analogiya + C++ Under-the-hood Toggle -->
+    <div class="p-6 rounded-2xl bg-surface-900/40 border border-surface-800/80 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5 text-amber-400 font-bold text-sm sm:text-base">
+          <span class="text-xl">👶</span>
+          <span>5 yoshli bola uchun tushuntirish: Kutubxona Katalogi</span>
+        </div>
+        <button
+          @click="showUnderTheHood = !showUnderTheHood"
+          class="px-2.5 py-1 rounded-lg bg-surface-800 hover:bg-surface-700 text-[11px] font-mono text-brand-400 border border-brand-500/30 transition-all cursor-pointer"
+        >
+          <span>{{ showUnderTheHood ? 'Analogiyaga qaytish' : '🔬 Ostidagi Kodni Ko‘rish' }}</span>
+        </button>
       </div>
-      <p class="text-sm text-surface-200 leading-relaxed">
-        Mashinangiz tez yurishi uchun ortiqcha yuklarni tushirib qoldirasiz va g‘ildiraklarini moylaysiz.
-      </p>
-      <p class="text-xs text-surface-300 leading-relaxed">
-        <strong>HTML optimizatsiyasi</strong> — bu saytingizni xuddi poyga mashinasidek engil qilib, foydalanuvchi tugmani bosishi bilanoq 0.1 soniyada ochilishini ta’minlashdir!
-      </p>
+
+      <div v-if="!showUnderTheHood" class="space-y-2 text-xs sm:text-sm text-surface-300 leading-relaxed animate-in fade-in duration-200">
+        <p>
+          Katta kutubxonada millionlab kitoblar bor. Agar kitobingiz muqovasida uning nomi aniq yozilgan bo‘lsa, kutubxonachi uni 1 soniyada topib beradi.
+        </p>
+        <p class="pt-1">
+          SEO ham xuddi shunday: HTML dagi aniq sarlavhalar va teglarni ko‘rib, Google qidiruvda aynan sizning saytingizni birinchi qilib chiqaradi!
+        </p>
+      </div>
+
+      <div v-else class="space-y-2 font-mono text-xs animate-in fade-in duration-200">
+        <div class="text-cyan-300 font-bold">Googlebot Crawler: Headless Chromium Parsing & Structured Data</div>
+        <pre class="p-3.5 rounded-xl bg-surface-950 border border-surface-800 text-cyan-300 text-[11px] leading-relaxed overflow-x-auto"><code>// Headless Chromium SEO Extractor
+JSONLDGraph json_ld = document.ExtractStructuredData();
+PerformanceMetrics metrics = document.CalculateCoreWebVitals(); // LCP < 2.5s, CLS < 0.1</code></pre>
+      </div>
     </div>
 
-    <!-- ⚡ Core Web Vitals Metriklari -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-        <span class="text-brand-400">#</span> Google Core Web Vitals ning 3 Asosiy Metrikasi
+    <!-- Core Web Vitals (Hard & Deep) -->
+    <section class="space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 1. Core Web Vitals Metrikalari
       </h2>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-2">
-          <div class="font-bold text-brand-400 text-sm">1. LCP (Largest Contentful Paint)</div>
-          <p class="text-surface-300">Sahifadagi eng katta blok (rasm yoki sarlavha) <strong>2.5 soniyadan tez</strong> yuklanishi kerak.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+        <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-1.5">
+          <div class="text-emerald-400 font-bold text-sm">LCP &lt; 2.5s</div>
+          <div class="text-[10px] text-surface-400">Largest Contentful Paint</div>
+          <p class="text-surface-300 text-[11px] font-sans leading-relaxed">
+            Sahifadagi eng katta rasm yoki sarlavha ekranda to‘liq chizilishi uchun ketgan vaqt.
+          </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-2">
-          <div class="font-bold text-blue-400 text-sm">2. INP / FID (Interactivity)</div>
-          <p class="text-surface-300">Tugma bosilganda sahifa <strong>100 millisekunddan tez</strong> javob qaytarishi shart.</p>
+        <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-1.5">
+          <div class="text-cyan-400 font-bold text-sm">INP &lt; 200ms</div>
+          <div class="text-[10px] text-surface-400">Interaction to Next Paint</div>
+          <p class="text-surface-300 text-[11px] font-sans leading-relaxed">
+            Foydalanuvchi tugmani bosgandan to ekranda o‘zgarish sodir bo‘lguncha bo‘lgan sezgirlik vaqti.
+          </p>
         </div>
 
-        <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-2">
-          <div class="font-bold text-purple-400 text-sm">3. CLS (Cumulative Layout Shift)</div>
-          <p class="text-surface-300">Sahifa yuklanganda elementlar sakrab ketmasligi (kutilmagan joy almashmasligi) kerak.</p>
+        <div class="p-4 rounded-xl bg-surface-900 border border-surface-800 space-y-1.5">
+          <div class="text-amber-400 font-bold text-sm">CLS &lt; 0.1</div>
+          <div class="text-[10px] text-surface-400">Cumulative Layout Shift</div>
+          <p class="text-surface-300 text-[11px] font-sans leading-relaxed">
+            Sahifa yuklanayotganda rasmlar sababli matnlarning kutilmaganda pastga sakrab ketishi darajasi.
+          </p>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Optimizatsiya Kod Qoidalari -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-        <span class="text-brand-400">#</span> Mukammal Performans HTML Shablon
+    <!-- Interactive Live Code Editor -->
+    <section class="space-y-4 pt-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 2. Jonli Mashq: JSON-LD va SEO Meta Teglar
       </h2>
-
-      <div class="p-4 rounded-xl bg-surface-950 border border-surface-800 font-mono text-xs text-surface-200">
-        <pre><code><span class="text-surface-500">&lt;!-- 1. Muhim shriftni oldindan yuklash --&gt;</span>
-<span class="text-brand-400">&lt;link</span> <span class="text-amber-300">rel</span>=<span class="text-emerald-300">"preload"</span> <span class="text-amber-300">href</span>=<span class="text-emerald-300">"/fonts/inter.woff2"</span> <span class="text-amber-300">as</span>=<span class="text-emerald-300">"font"</span> <span class="text-amber-300">type</span>=<span class="text-emerald-300">"font/woff2"</span> <span class="text-amber-300">crossorigin</span> <span class="text-brand-400">/&gt;</span>
-
-<span class="text-surface-500">&lt;!-- 2. Tashqi API serveriga oldindan ulanish --&gt;</span>
-<span class="text-brand-400">&lt;link</span> <span class="text-amber-300">rel</span>=<span class="text-emerald-300">"preconnect"</span> <span class="text-amber-300">href</span>=<span class="text-emerald-300">"https://api.kodx.uz"</span> <span class="text-brand-400">/&gt;</span>
-
-<span class="text-surface-500">&lt;!-- 3. CLS sakrashini oldini olish uchun aniq o‘lchamli rasm --&gt;</span>
-<span class="text-brand-400">&lt;img</span> <span class="text-amber-300">src</span>=<span class="text-emerald-300">"banner.webp"</span> <span class="text-amber-300">width</span>=<span class="text-emerald-300">"1200"</span> <span class="text-amber-300">height</span>=<span class="text-emerald-300">"600"</span> <span class="text-amber-300">loading</span>=<span class="text-emerald-300">"lazy"</span> <span class="text-amber-300">alt</span>=<span class="text-emerald-300">"Banner"</span> <span class="text-brand-400">/&gt;</span></code></pre>
-      </div>
-    </div>
-
-    <!-- Navigation -->
-    <div class="pt-6 border-t border-surface-800 flex flex-wrap items-center justify-between gap-4">
-      <router-link
-        to="/html/dialog"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-900 hover:bg-surface-800 text-surface-300 text-xs font-semibold border border-surface-700 transition-colors"
-      >
-        <span>← 8-Dars: Zamonaviy &lt;dialog&gt;</span>
-      </router-link>
-
-      <router-link
-        to="/css/kirish"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-bold text-xs transition-colors"
-      >
-        <span>Keyingi Bo‘lim: CSS Kursi →</span>
-      </router-link>
-    </div>
+      <InteractiveCodePlayground />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-// SEO & Web Optimization Lesson
+import { ref } from 'vue';
+import InteractiveCodePlayground from '../../components/InteractiveCodePlayground.vue';
+
+const showUnderTheHood = ref(false);
 </script>

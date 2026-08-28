@@ -1,111 +1,110 @@
 <template>
-  <div class="space-y-10 max-w-4xl pb-16">
-    <!-- Header & Meta -->
+  <div class="space-y-10 max-w-4xl pb-20 text-left">
+    <!-- Breadcrumbs Navigation -->
+    <nav class="flex items-center flex-wrap gap-2 text-xs font-mono text-surface-400">
+      <router-link to="/javascript/kirish" class="hover:text-surface-200 transition-colors">JavaScript Asoslari</router-link>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-surface-400">2-Modul</span>
+      <span class="text-surface-600">&gt;</span>
+      <span class="text-brand-400 font-bold">2.3. Hodisalar & Event Delegation</span>
+    </nav>
+
+    <!-- Title & Meta -->
     <div class="space-y-4 border-b border-surface-800 pb-6">
-      <div class="flex items-center gap-2 text-xs font-mono text-brand-400">
-        <span>JavaScript Asoslari</span>
-        <span>/</span>
-        <span class="text-surface-400">5-Dars</span>
-      </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-        Hodisalar (Events), Bubbling va Capturing
+        DOM Hodisalari — Event Bubbling, Capturing & Delegation
       </h1>
-      <p class="text-base sm:text-lg text-surface-300 leading-relaxed">
-        Foydalanuvchi harakatlarini (bosish, yozish, skroll qilish) eshitib turish (`addEventListener`) va hodisalarning yuqoriga ko‘tarilish (Event Bubbling) qonuniyati.
+      <p class="text-sm sm:text-base text-surface-300 leading-relaxed font-normal">
+        Foydalanuvchining har bir harakati (klik, klaviatura, skroll) brauzerda hodisa (Event) yaratadi. DOM Event Flow (oqimi) 3 ta fazadan iborat.
       </p>
 
-      <div class="flex flex-wrap items-center gap-4 text-xs text-surface-400 pt-2">
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          ⏱️ O‘qish vaqti: 8 daqiqa
+      <!-- Premium Metadata Badges -->
+      <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-mono">
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          O‘qish vaqti: 7 daqiqa
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          🎯 Daraja: O‘rta
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Event Delegation Pattern
         </span>
-        <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-          📚 MDN: Introduction to events
+        <span class="inline-flex items-center gap-1.5 bg-surface-900/90 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          Passive Listeners (120Hz Scroll)
         </span>
       </div>
     </div>
 
-    <!-- 👶 5 Yoshli Bola Uchun Analogiya -->
-    <div class="p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-transparent border border-amber-500/20 space-y-3">
-      <div class="flex items-center gap-2 text-amber-400 font-bold text-base">
-        <span class="text-xl">👶</span>
-        <span>5 yoshli bola uchun tushuntirish: Eshik Qo‘ng‘irog‘i</span>
+    <!-- 👶 5 Yoshli Bola Uchun Analogiya + C++ Under-the-hood Toggle -->
+    <div class="p-6 rounded-2xl bg-surface-900/40 border border-surface-800/80 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5 text-amber-400 font-bold text-sm sm:text-base">
+          <span class="text-xl">👶</span>
+          <span>5 yoshli bola uchun tushuntirish: Hovuzga Tosh Otish (Bubbles)</span>
+        </div>
+        <button
+          @click="showUnderTheHood = !showUnderTheHood"
+          class="px-2.5 py-1 rounded-lg bg-surface-800 hover:bg-surface-700 text-[11px] font-mono text-brand-400 border border-brand-500/30 transition-all cursor-pointer"
+        >
+          <span>{{ showUnderTheHood ? 'Analogiyaga qaytish' : '🔬 Ostidagi Kodni Ko‘rish' }}</span>
+        </button>
       </div>
-      <p class="text-sm text-surface-200 leading-relaxed">
-        Mehmon eshik qo‘ng‘irog‘ini bosganida, butun uyda "Jiring-jiring!" degan ovoz yangraydi.
-      </p>
-      <p class="text-xs text-surface-300 leading-relaxed">
-        <strong>Hodisa (Event)</strong> — bu xuddi shu qo‘ng‘iroq: foydalanuvchi tugmani bosishi bilan kompyuterda oldindan tayyorlab qo‘yilgan maxsus funksiya uyg‘onadi va ishga tushadi!
-      </p>
+
+      <div v-if="!showUnderTheHood" class="space-y-2 text-xs sm:text-sm text-surface-300 leading-relaxed animate-in fade-in duration-200">
+        <p>
+          Suv ostidagi pufakcha eng chuqurdan boshlab tepaga qarab ko‘tariladi.
+        </p>
+        <p class="pt-1">
+          HTML da ham tugmani bossangiz, hodisa avval tugmada sodir bo‘ladi, so‘ng uning otasiga (<code>div</code>), keyin <code>body</code> va <code>window</code> gacha pufakcha kabi ko‘tariladi (Bubbling)!
+        </p>
+      </div>
+
+      <div v-else class="space-y-2 font-mono text-xs animate-in fade-in duration-200">
+        <div class="text-cyan-300 font-bold">Blink EventDispatcher: 3-Phase Tree Traversal in C++</div>
+        <pre class="p-3.5 rounded-xl bg-surface-950 border border-surface-800 text-cyan-300 text-[11px] leading-relaxed overflow-x-auto"><code>// third_party/blink/renderer/core/dom/events/event_dispatcher.cc
+void EventDispatcher::Dispatch() {
+  DispatchEventAtCapturing(); // 1. Tepadan pastga (Window -> Target)
+  DispatchEventAtTarget();    // 2. Elementning o'zida
+  DispatchEventAtBubbling();  // 3. Pastdan tepaga (Target -> Window)
+}</code></pre>
+      </div>
     </div>
 
-    <!-- ⚡ Interaktiv Event Bubbling Simulator -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-        <span class="text-brand-400">⚡</span> Jonli Sinov: Qaysi Qavat Bosilganini Aniqlang
+    <!-- Event Delegation (Hard & Deep) -->
+    <section class="space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 1. Event Delegation Pattern
       </h2>
 
-      <div class="p-6 rounded-2xl bg-surface-900 border border-surface-800 space-y-4">
-        <div
-          @click="logEvent('1. Katta Ota Quti (Grandparent)')"
-          class="p-8 rounded-2xl bg-surface-950 border-2 border-brand-500/40 cursor-pointer space-y-4 hover:border-brand-500 transition-colors"
-        >
-          <div class="text-xs font-mono font-bold text-brand-400">Grandparent (#ota)</div>
-
-          <div
-            @click.stop="logEvent('2. O‘rta Bola Quti (Parent)')"
-            class="p-6 rounded-xl bg-surface-900 border-2 border-blue-500/40 cursor-pointer space-y-4 hover:border-blue-500 transition-colors"
-          >
-            <div class="text-xs font-mono font-bold text-blue-400">Parent (.ona)</div>
-
-            <button
-              @click.stop="logEvent('3. Markaziy Tugma (Target Button)')"
-              class="px-4 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-surface-950 font-bold text-xs shadow-lg shadow-emerald-500/20"
-            >
-              Meni Bosing! ✨
-            </button>
-          </div>
-        </div>
-
-        <!-- Log output -->
-        <div class="p-3 rounded-xl bg-surface-950 border border-surface-800 text-xs font-mono space-y-1">
-          <div class="text-surface-500">Hodisalar Tarixi:</div>
-          <div v-if="logs.length === 0" class="text-surface-600 italic">Hali hech qaysi quti bosilmadi...</div>
-          <div v-for="(log, idx) in logs" :key="idx" class="text-emerald-300">
-            👉 {{ log }}
-          </div>
-        </div>
+      <div class="p-4 rounded-xl bg-surface-950 border border-surface-800 font-mono text-xs text-cyan-300 leading-relaxed space-y-1">
+        <div class="text-surface-500">// 1000 ta &lt;li&gt; ga 1000 ta listener qo'ymasdan, faqat bitta &lt;ul&gt; ga ulash:</div>
+        <div>document.<span class="text-yellow-300">querySelector</span>(<span class="text-emerald-300">'ul'</span>).<span class="text-yellow-300">addEventListener</span>(<span class="text-emerald-300">'click'</span>, (e) =&gt; {</div>
+        <div class="pl-4"><span class="text-purple-400">if</span> (e.target.<span class="text-yellow-300">matches</span>(<span class="text-emerald-300">'li'</span>)) {</div>
+        <div class="pl-8">console.<span class="text-yellow-300">log</span>(<span class="text-emerald-300">'Bosilgan element:'</span>, e.target.textContent);</div>
+        <div class="pl-4">}</div>
+        <div>});</div>
       </div>
-    </div>
+    </section>
 
-    <!-- Navigation -->
-    <div class="pt-6 border-t border-surface-800 flex flex-wrap items-center justify-between gap-4">
-      <router-link
-        to="/javascript/dom"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-900 hover:bg-surface-800 text-surface-300 text-xs font-semibold border border-surface-700 transition-colors"
-      >
-        <span>← 4-Dars: DOM Manipulyatsiyasi</span>
-      </router-link>
-
-      <router-link
-        to="/javascript/async"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-bold text-xs transition-colors"
-      >
-        <span>Keyingi Dars: Asinxron JS & Event Loop →</span>
-      </router-link>
-    </div>
+    <!-- Interactive Live Code Editor -->
+    <section class="space-y-4 pt-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+        <span class="text-brand-400">#</span> 2. Jonli Mashq: Hodisalarni Quloq Solish va Boshqarish
+      </h2>
+      <InteractiveCodePlayground />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import InteractiveCodePlayground from '../../components/InteractiveCodePlayground.vue';
 
-const logs = ref<string[]>([]);
-
-const logEvent = (msg: string) => {
-  logs.value.unshift(msg);
-  if (logs.value.length > 4) logs.value.pop();
-};
+const showUnderTheHood = ref(false);
 </script>

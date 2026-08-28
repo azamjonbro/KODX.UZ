@@ -1,299 +1,577 @@
 <template>
-  <div class="space-y-10 max-w-4xl pb-20">
-    <!-- Loading State -->
-    <div v-if="loading" class="flex flex-col items-center justify-center py-24 space-y-4">
-      <div class="w-12 h-12 rounded-full border-4 border-surface-800 border-t-brand-500 animate-spin"></div>
-      <p class="text-xs font-mono text-surface-400">Dars yuklanmoqda...</p>
+  <div class="space-y-8 max-w-5xl mx-auto pb-24 text-left animate-in fade-in duration-300">
+    <!-- Top Breadcrumb & Quick Actions -->
+    <div class="flex items-center justify-between flex-wrap gap-3 text-xs font-mono">
+      <nav class="flex items-center flex-wrap gap-2 text-surface-400">
+        <router-link :to="courseTheme.rootPath" class="hover:text-surface-200 transition-colors flex items-center gap-1">
+          <span>{{ courseTheme.icon }}</span> {{ courseTheme.title }}
+        </router-link>
+        <span class="text-surface-600">&gt;</span>
+        <span class="text-surface-400">{{ lesson?.moduleTitle }}</span>
+        <span class="text-surface-600">&gt;</span>
+        <span class="text-brand-400 font-bold">{{ lesson?.title }}</span>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button
+          @click="toggleBookmark"
+          class="p-2 rounded-xl border border-surface-800 bg-surface-900/60 hover:bg-surface-800 text-surface-400 hover:text-amber-400 transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+          :title="isBookmarked ? 'Saqlanganlardan o‘chirish' : 'Darsni saqlab qo‘yish'"
+        >
+          <span :class="isBookmarked ? 'text-amber-400' : ''">{{ isBookmarked ? '★' : '☆' }}</span>
+          <span class="text-[11px] hidden sm:inline">{{ isBookmarked ? 'Saqlandi' : 'Saqlash' }}</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="p-8 rounded-2xl bg-red-500/10 border border-red-500/30 text-center space-y-4">
-      <div class="text-3xl">⚠️</div>
-      <h2 class="text-lg font-bold text-red-400">Darsni yuklashda xatolik yuz berdi</h2>
-      <p class="text-xs text-surface-300">{{ error }}</p>
+    <!-- Hero Header Banner (Ultra Premium Glassmorphic Studio Card) -->
+    <div class="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-surface-900/90 via-surface-950/90 to-brand-950/30 border border-surface-800/80 hover:border-surface-700/80 shadow-2xl overflow-hidden backdrop-blur-xl space-y-5">
+      <div class="absolute -right-16 -top-16 w-72 h-72 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-16 -bottom-16 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Module & ID Pill -->
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-mono font-bold">
+          <span>⚡</span> {{ lesson?.moduleTitle }}
+        </div>
+        <span class="text-xs font-mono text-surface-500 font-semibold">ID: {{ lesson?.id }}</span>
+      </div>
+
+      <!-- Main Title & Description -->
+      <div class="space-y-2.5">
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+          {{ lesson?.title }}
+        </h1>
+        <p class="text-xs sm:text-sm text-surface-300 leading-relaxed max-w-3xl">
+          {{ lesson?.description }}
+        </p>
+      </div>
+
+      <!-- CRP Performance Badges Bar -->
+      <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-mono">
+        <span class="inline-flex items-center gap-1.5 bg-surface-950/80 px-3 py-1.5 rounded-xl border border-surface-800 text-surface-300 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {{ lesson?.estimatedMinutes }} daqiqa o‘qish
+        </span>
+        <span class="inline-flex items-center gap-1.5 bg-surface-950/80 px-3 py-1.5 rounded-xl border border-surface-800 text-blue-400 shadow-sm font-semibold">
+          <span>📜</span> {{ lesson?.spec }}
+        </span>
+        <span
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-semibold shadow-sm"
+          :class="[
+            lesson?.deepDive?.crpCost?.reflow === 'High'
+              ? 'bg-red-950/40 text-red-400 border-red-500/30'
+              : lesson?.deepDive?.crpCost?.reflow === 'Medium'
+              ? 'bg-amber-950/40 text-amber-400 border-amber-500/30'
+              : 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30'
+          ]"
+        >
+          <span>⚡</span> Reflow: {{ lesson?.deepDive?.crpCost?.reflow }}
+        </span>
+        <span class="inline-flex items-center gap-1.5 bg-purple-950/40 px-3 py-1.5 rounded-xl border border-purple-500/30 text-purple-300 shadow-sm font-semibold">
+          <span>♿</span> {{ lesson?.deepDive?.axTreeMapping?.implicitRole }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Multi-Layer Tab Navigator (Sleek Glassmorphic Pills) -->
+    <div class="flex flex-wrap gap-1.5 p-1.5 rounded-2xl bg-surface-950/90 border border-surface-800/80 backdrop-blur-xl">
       <button
-        @click="fetchLesson"
-        class="px-4 py-2 rounded-xl bg-surface-800 hover:bg-surface-700 text-xs font-bold text-white transition-colors"
+        v-for="tab in tabs"
+        :key="tab.id"
+        @click="activeTab = tab.id"
+        class="px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 cursor-pointer select-none"
+        :class="[
+          activeTab === tab.id
+            ? 'bg-brand-500 text-surface-950 font-bold shadow-lg shadow-brand-500/25 scale-[1.02]'
+            : 'text-surface-400 hover:text-white hover:bg-surface-900/80'
+        ]"
       >
-        Qayta urinish
+        <span>{{ tab.icon }}</span>
+        <span>{{ tab.label }}</span>
+        <span
+          v-if="tab.badge"
+          class="px-1.5 py-0.5 rounded-md text-[10px] font-mono"
+          :class="activeTab === tab.id ? 'bg-surface-950/20 text-surface-950 font-bold' : 'bg-surface-800 text-surface-400'"
+        >
+          {{ tab.badge }}
+        </span>
       </button>
     </div>
 
-    <!-- Lesson Content -->
-    <div v-else-if="lesson" class="space-y-10">
-      <!-- Title & Header Meta -->
-      <div class="space-y-4 border-b border-surface-800 pb-6">
-        <div class="flex items-center gap-2 text-xs font-mono text-brand-400">
-          <router-link :to="`/${courseSlug}`" class="hover:underline">{{ lesson.module?.course?.title?.split('—')[0] || courseSlug.toUpperCase() }}</router-link>
-          <span>/</span>
-          <span class="text-surface-400">{{ lesson.module?.title || 'Dars' }}</span>
-        </div>
+    <!-- TAB 1: 📘 Darslik & Standartlar (Normative Theory & Specs) -->
+    <div v-if="activeTab === 'theory'" class="space-y-8 animate-in fade-in duration-200">
+      <!-- Rendered Markdown Content -->
+      <div
+        class="prose prose-invert max-w-none text-surface-200 text-sm sm:text-base leading-relaxed space-y-4 font-sans"
+        v-html="renderedContent"
+      ></div>
 
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-          {{ lesson.title }}
-        </h1>
-        <p class="text-base sm:text-lg text-surface-300 leading-relaxed">
-          {{ lesson.description }}
-        </p>
-
-        <div class="flex flex-wrap items-center gap-3 text-xs text-surface-400 pt-2">
-          <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-            ⏱️ O‘qish vaqti: {{ lesson.estimatedMinutes }} daqiqa
-          </span>
-          <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-            🎯 Daraja: Boshlang‘ichdan Professionalgacha
-          </span>
-          <span class="flex items-center gap-1.5 bg-surface-900 px-3 py-1.5 rounded-lg border border-surface-800">
-            📚 Standart: Normativ Spetsifikatsiya
-          </span>
+      <!-- Attributes Reference Table -->
+      <div v-if="lesson?.attributes && lesson.attributes.length > 0" class="space-y-3 pt-4">
+        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+          <span>📋</span> Standart Atributlar Jadvali
+        </h3>
+        <div class="overflow-x-auto rounded-2xl border border-surface-800 bg-surface-950/60 shadow-xl">
+          <table class="w-full text-left text-xs font-mono divide-y divide-surface-800">
+            <thead class="bg-surface-900/90 text-surface-400 uppercase tracking-wider">
+              <tr>
+                <th class="p-3.5">Atribut</th>
+                <th class="p-3.5">Turi</th>
+                <th class="p-3.5">Boshlang‘ich</th>
+                <th class="p-3.5">Tavsifi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-surface-800/60">
+              <tr v-for="attr in lesson.attributes" :key="attr.name" class="hover:bg-surface-900/40 transition-colors">
+                <td class="p-3.5 font-bold text-brand-400">{{ attr.name }}</td>
+                <td class="p-3.5 text-blue-400">{{ attr.type }}</td>
+                <td class="p-3.5 text-surface-500">{{ attr.defaultVal }}</td>
+                <td class="p-3.5 font-sans text-surface-300">{{ attr.description }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <!-- Multi-Layer Tab Selector (👶 5 Yoshli Bola | 🚀 Dasturchi | 🔬 Internals | 🛠️ Amaliyot) -->
-      <div class="flex flex-wrap gap-2 border-b border-surface-800 pb-3">
-        <button
-          v-for="tab in tabs"
-          :key="tab.id"
-          @click="activeTab = tab.id"
-          :class="[
-            'px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2',
-            activeTab === tab.id
-              ? 'bg-brand-500 text-surface-950 shadow-lg shadow-brand-500/20 font-bold'
-              : 'bg-surface-900 text-surface-400 hover:text-white hover:bg-surface-800'
-          ]"
-        >
-          <span>{{ tab.icon }}</span>
-          <span>{{ tab.label }}</span>
-        </button>
-      </div>
-
-      <!-- Tab 1: 👶 5 Yoshli Bola Uchun Sodda Analogiya -->
-      <div v-if="activeTab === 'kid'" class="space-y-6 animate-in fade-in duration-200">
-        <div class="p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-brand-500/10 to-transparent border border-amber-500/20 space-y-4">
-          <div class="flex items-center gap-2 text-amber-400 font-bold text-base">
-            <span class="text-2xl">👶</span>
-            <span>5 yoshli bola uchun tushuntirish</span>
+      <!-- Pro Tips & Gotchas Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+        <!-- Pro Tips -->
+        <div class="p-5 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 space-y-3">
+          <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+            <span>💡</span> Pro Maslahatlar (Best Practices)
           </div>
-          <p class="text-sm sm:text-base text-surface-200 leading-relaxed">
-            {{ getKidAnalogy(lesson) }}
-          </p>
+          <ul class="space-y-2 text-xs text-surface-300 list-disc list-inside leading-relaxed">
+            <li v-for="(tip, idx) in lesson?.proTips" :key="idx">{{ tip }}</li>
+          </ul>
         </div>
 
-        <!-- Visual Example Card -->
-        <div class="p-5 rounded-2xl bg-surface-900 border border-surface-800 space-y-3">
-          <div class="text-xs font-mono font-bold text-brand-400 uppercase">💡 Hayotiy Misol:</div>
-          <p class="text-xs sm:text-sm text-surface-300 leading-relaxed">
-            {{ getKidExample(lesson) }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Tab 2: 🚀 Dasturchi va To‘liq Tushuntirish -->
-      <div v-else-if="activeTab === 'dev'" class="space-y-8 animate-in fade-in duration-200">
-        <div class="prose prose-invert max-w-none text-surface-200 leading-relaxed space-y-6 text-sm sm:text-base">
-          <div v-html="renderedContent"></div>
-        </div>
-
-        <!-- Practice Task if exists -->
-        <div v-if="lesson.practiceTasks && lesson.practiceTasks.length > 0" class="space-y-4 pt-6 border-t border-surface-800">
-          <h2 class="text-xl font-bold text-white flex items-center gap-2">
-            <span class="text-brand-400">⚡</span> Amaliy Topshiriq
-          </h2>
-
-          <div
-            v-for="task in lesson.practiceTasks"
-            :key="task.id"
-            class="p-5 rounded-2xl bg-surface-900 border border-surface-800 space-y-4"
-          >
-            <div class="flex items-center justify-between">
-              <span class="text-sm font-bold text-white">{{ task.title }}</span>
-              <span class="px-2.5 py-1 rounded-md bg-brand-500/10 text-brand-400 text-xs font-mono font-bold border border-brand-500/20">
-                +{{ task.points }} ball
-              </span>
-            </div>
-            <p class="text-xs text-surface-300 leading-relaxed">{{ task.description }}</p>
-
-            <div v-if="task.starterCode" class="p-3.5 rounded-xl bg-surface-950 border border-surface-800 font-mono text-xs text-cyan-300">
-              <pre><code>{{ task.starterCode }}</code></pre>
-            </div>
+        <!-- Gotchas / Pitfalls -->
+        <div class="p-5 rounded-2xl bg-amber-950/20 border border-amber-500/30 space-y-3">
+          <div class="flex items-center gap-2 text-amber-400 font-bold text-sm">
+            <span>⚠️</span> Ko‘p Uchraydigan Xatolar (Gotchas)
           </div>
-        </div>
-      </div>
-
-      <!-- Tab 3: 🔬 Brauzer Internals va Mexanizmlar -->
-      <div v-else-if="activeTab === 'internals'" class="space-y-6 animate-in fade-in duration-200">
-        <div class="p-6 rounded-2xl bg-surface-900 border border-surface-800 space-y-4">
-          <h3 class="text-lg font-bold text-white flex items-center gap-2">
-            <span class="text-blue-400">🔬</span> Brauzer va Dvigatel Ichida Nima Sodir Bo‘ladi?
-          </h3>
-          <p class="text-xs sm:text-sm text-surface-300 leading-relaxed">
-            Brauzer (Chromium, WebKit, Gecko) ushbu buyruqni qabul qilganda xotirada qanday o‘zgarishlar qiladi:
-          </p>
-          <ul class="text-xs sm:text-sm text-surface-300 space-y-2 list-disc list-inside bg-surface-950 p-4 rounded-xl border border-surface-800">
-            <li><strong>Parsing & Tokenization</strong>: Baytlar ketma-ketligi tokenlarga ajratiladi.</li>
-            <li><strong>DOM / CSSOM Tree</strong>: Daraxtsimon xotira modeli yaratiladi.</li>
-            <li><strong>Layout & Paint</strong>: Koordinatalar hisoblanadi va piksellar GPU orqali ekranga chiziladi.</li>
-            <li><strong>Performans Qoidasi</strong>: Ortiqcha Reflow va Repaint chaqirilmasligi uchun DOM manipulatsiyasini optimallashtirish zarur.</li>
+          <ul class="space-y-2 text-xs text-surface-300 list-disc list-inside leading-relaxed">
+            <li v-for="(gotcha, idx) in lesson?.gotchas" :key="idx">{{ gotcha }}</li>
           </ul>
         </div>
       </div>
+    </div>
 
-      <!-- Tab 4: 📚 Normativ Spetsifikatsiya Manbalari -->
-      <div v-else-if="activeTab === 'specs'" class="space-y-6 animate-in fade-in duration-200">
-        <div class="p-6 rounded-2xl bg-surface-900 border border-surface-800 space-y-4">
-          <h3 class="text-lg font-bold text-white flex items-center gap-2">
-            <span class="text-purple-400">📚</span> Rasmiy Normativ Manbalar
-          </h3>
-          <div class="space-y-2 text-xs font-mono">
-            <div class="p-3 rounded-xl bg-surface-950 border border-surface-800 flex items-center justify-between">
-              <span class="text-surface-300">WHATWG HTML Living Standard / W3C CSS / TC39 JS</span>
-              <span class="text-brand-400 font-bold">VERIFIED ✅</span>
+    <!-- TAB 2: 🔬 Dvigatel ichki tuzilishi (Blink / Style Engine / V8) -->
+    <div v-else-if="activeTab === 'internals'" class="space-y-6 animate-in fade-in duration-200">
+      <!-- C++ Class Hierarchy Visualizer -->
+      <div class="p-6 rounded-3xl bg-surface-900/80 border border-surface-800 space-y-4">
+        <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+          <span>🧬</span> {{ courseTheme.internalsHeading }}
+        </h3>
+
+        <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+          <template v-for="(cls, cIdx) in lesson?.deepDive?.blinkClassHierarchy" :key="cIdx">
+            <span
+              class="px-3 py-1.5 rounded-xl border shadow-sm"
+              :class="[
+                cIdx === (lesson?.deepDive?.blinkClassHierarchy?.length || 0) - 1
+                  ? 'bg-brand-500/20 text-brand-300 border-brand-500/40 font-bold'
+                  : 'bg-surface-950 text-surface-300 border-surface-800'
+              ]"
+            >
+              {{ cls }}
+            </span>
+            <span v-if="cIdx < (lesson?.deepDive?.blinkClassHierarchy?.length || 0) - 1" class="text-surface-600 font-bold">→</span>
+          </template>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-surface-950 border border-surface-800/80 text-xs text-surface-400 font-mono flex items-center justify-between">
+          <span>Xotiradagi Hajmi:</span>
+          <span class="text-brand-400 font-bold">{{ lesson?.deepDive?.memoryAllocation }}</span>
+        </div>
+      </div>
+
+      <!-- Real C++ Implementation Code Card -->
+      <div class="p-6 rounded-3xl bg-surface-900/80 border border-surface-800 space-y-4">
+        <div class="flex items-center justify-between border-b border-surface-800 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">⚙️</span>
+            <h4 class="text-sm font-bold text-white font-mono">{{ courseTheme.engineName }} C++ Implementatsiyasi</h4>
+          </div>
+          <span class="text-[11px] font-mono text-brand-400">{{ lesson?.cppInternalCode?.filename }}</span>
+        </div>
+
+        <pre class="p-4 rounded-2xl bg-surface-950 border border-surface-800 text-cyan-300 text-xs font-mono leading-relaxed overflow-x-auto shadow-inner"><code>{{ lesson?.cppInternalCode?.code }}</code></pre>
+
+        <p class="text-xs text-surface-300 leading-relaxed font-sans">
+          {{ lesson?.cppInternalCode?.explanation }}
+        </p>
+      </div>
+
+      <BrowserInternalsDeepDive />
+    </div>
+
+    <!-- TAB 3: ♿ Accessibility & AXTree (A11y & Screen Readers) -->
+    <div v-else-if="activeTab === 'a11y'" class="space-y-6 animate-in fade-in duration-200">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Implicit Role -->
+        <div class="p-5 rounded-2xl bg-surface-900/80 border border-surface-800 space-y-2">
+          <div class="text-[11px] font-mono text-surface-400 uppercase">WAI-ARIA Implicit Role</div>
+          <div class="text-base font-bold text-brand-400 font-mono">{{ lesson?.deepDive?.axTreeMapping?.implicitRole }}</div>
+          <p class="text-xs text-surface-400">Brauzer ushbu elementga avtomatik biriktiruvchi accessibility roli.</p>
+        </div>
+
+        <!-- Accessible Name Algorithm -->
+        <div class="p-5 rounded-2xl bg-surface-900/80 border border-surface-800 space-y-2">
+          <div class="text-[11px] font-mono text-surface-400 uppercase">Accessible Name (accName)</div>
+          <div class="text-xs font-bold text-blue-400 font-mono">{{ lesson?.deepDive?.axTreeMapping?.accessibleName }}</div>
+          <p class="text-xs text-surface-400">Ekran o‘quvchi dasturlar nomni hisoblash ketma-ketligi.</p>
+        </div>
+
+        <!-- Keyboard Navigation -->
+        <div class="p-5 rounded-2xl bg-surface-900/80 border border-surface-800 space-y-2">
+          <div class="text-[11px] font-mono text-surface-400 uppercase">Klaviatura Fokusi</div>
+          <div class="text-xs font-bold text-purple-400 font-mono">Tab / Space / Enter</div>
+          <p class="text-xs text-surface-400">{{ lesson?.deepDive?.axTreeMapping?.keyboardNav }}</p>
+        </div>
+      </div>
+
+      <!-- Screen Reader Output Simulation -->
+      <div class="p-6 rounded-3xl bg-surface-900/80 border border-surface-800 space-y-4">
+        <h4 class="text-sm font-bold text-white font-mono flex items-center gap-2">
+          <span>🔊</span> NVDA / VoiceOver Ekran O‘quvchi Ovozli Simulyatsiyasi
+        </h4>
+        <div class="p-4 rounded-2xl bg-surface-950 border border-purple-500/30 font-mono text-xs text-purple-300 leading-relaxed flex items-center gap-3">
+          <span class="text-xl">🎙️</span>
+          <span>"{{ lesson?.title }}, {{ lesson?.deepDive?.axTreeMapping?.implicitRole }}, boshqaruv tugmasi. Faollashtirish uchun Enter bosing."</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: 🛡️ Xavfsizlik & Core Web Vitals -->
+    <div v-else-if="activeTab === 'security'" class="space-y-6 animate-in fade-in duration-200">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Security & XSS -->
+        <div class="p-6 rounded-3xl bg-surface-900/80 border border-red-500/30 space-y-4">
+          <div class="flex items-center gap-2 text-red-400 font-bold text-sm font-mono">
+            <span>🛡️</span> XSS Vektori va Xavflar
+          </div>
+          <div class="p-3.5 rounded-xl bg-surface-950 border border-red-500/20 text-xs font-mono text-red-300">
+            {{ lesson?.deepDive?.security?.xssVector }}
+          </div>
+          <p class="text-xs text-surface-300 leading-relaxed">
+            <strong>Himoya Qoidasi:</strong> {{ lesson?.deepDive?.security?.sanitizationTip }}
+          </p>
+        </div>
+
+        <!-- Core Web Vitals -->
+        <div class="p-6 rounded-3xl bg-surface-900/80 border border-blue-500/30 space-y-4">
+          <div class="flex items-center gap-2 text-blue-400 font-bold text-sm font-mono">
+            <span>⚡</span> Core Web Vitals (Metrika: {{ lesson?.deepDive?.coreWebVitals?.metric }})
+          </div>
+          <p class="text-xs text-surface-300 leading-relaxed">
+            {{ lesson?.deepDive?.coreWebVitals?.impact }}
+          </p>
+          <div class="p-3.5 rounded-xl bg-surface-950 border border-blue-500/20 text-xs font-mono text-blue-300">
+            <strong>Optimizatsiya:</strong> {{ lesson?.deepDive?.coreWebVitals?.optimizationRule }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: 👶 5 Yoshli Bola Uchun (Story & C++ Under-the-hood Toggle) -->
+    <div v-else-if="activeTab === 'kid'" class="space-y-6 animate-in fade-in duration-200">
+      <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-amber-500/10 via-brand-500/10 to-surface-900 border border-amber-500/30 space-y-6 shadow-2xl">
+        <div class="flex items-center justify-between flex-wrap gap-2 border-b border-amber-500/20 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-2xl flex items-center justify-center">
+              👶
             </div>
-            <div class="p-3 rounded-xl bg-surface-950 border border-surface-800 flex items-center justify-between">
-              <span class="text-surface-300">MDN Web Docs Documentation Engine</span>
-              <span class="text-brand-400 font-bold">VERIFIED ✅</span>
+            <div>
+              <h3 class="text-lg font-bold text-white">{{ lesson?.kidAnalogy?.title }}</h3>
+              <p class="text-xs text-amber-400 font-mono">Sodda hayotiy analogiya orqali tushunish</p>
             </div>
+          </div>
+
+          <button
+            @click="showKidUnderTheHood = !showKidUnderTheHood"
+            class="px-3 py-1.5 rounded-xl bg-surface-900 hover:bg-surface-800 text-xs font-mono text-brand-400 border border-brand-500/30 transition-all cursor-pointer flex items-center gap-1.5"
+          >
+            <span>{{ showKidUnderTheHood ? 'Analogiyaga qaytish' : '🔬 Ostidagi Real Kodni Ko‘rish' }}</span>
+          </button>
+        </div>
+
+        <div v-if="!showKidUnderTheHood" class="space-y-4">
+          <p class="text-sm sm:text-base text-surface-200 leading-relaxed font-normal">
+            {{ lesson?.kidAnalogy?.story }}
+          </p>
+
+          <div class="p-4 rounded-2xl bg-surface-950/80 border border-amber-500/20 flex items-center gap-3 text-xs">
+            <span class="text-lg">🎯</span>
+            <span class="text-amber-300 font-medium"><strong>Xulosa:</strong> {{ lesson?.kidAnalogy?.keyTakeaway }}</span>
+          </div>
+        </div>
+
+        <!-- Under the Hood C++ Snippet -->
+        <div v-else class="space-y-3 animate-in fade-in duration-200">
+          <div class="flex items-center justify-between text-xs font-mono text-cyan-300">
+            <span>{{ lesson?.cppInternalCode?.filename }}</span>
+            <span class="text-surface-400">{{ courseTheme.engineName }} Core</span>
+          </div>
+          <pre class="p-4 rounded-2xl bg-surface-950 border border-surface-800 text-cyan-300 text-xs font-mono leading-relaxed overflow-x-auto shadow-inner"><code>{{ lesson?.cppInternalCode?.code }}</code></pre>
+          <p class="text-xs text-surface-400 leading-relaxed font-sans">
+            {{ lesson?.cppInternalCode?.explanation }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: 💻 Jonli Sandbox (Interactive IDE) -->
+    <div v-else-if="activeTab === 'sandbox'" class="space-y-4 animate-in fade-in duration-200">
+      <InteractiveCodePlayground />
+    </div>
+
+    <!-- TAB 7: 🎬 Video Simulyator -->
+    <div v-else-if="activeTab === 'video'" class="space-y-4 animate-in fade-in duration-200">
+      <InteractiveEngineVisualizer />
+    </div>
+
+    <!-- TAB 8: 🧩 Debugging Challenge & Quiz Arena -->
+    <div v-else-if="activeTab === 'quiz'" class="space-y-8 animate-in fade-in duration-200">
+      <!-- Debugging Challenge Card -->
+      <div v-if="lesson?.deepDive?.debuggingChallenge" class="p-6 sm:p-8 rounded-3xl bg-surface-900/90 border border-amber-500/30 space-y-5 shadow-xl">
+        <div class="flex items-center justify-between border-b border-surface-800 pb-3">
+          <div class="flex items-center gap-2.5">
+            <span class="text-xl">🛠️</span>
+            <h3 class="text-base font-bold text-white">{{ lesson.deepDive.debuggingChallenge.title }}</h3>
+          </div>
+          <span class="text-xs font-mono font-bold text-amber-400">+25 XP Challenge</span>
+        </div>
+
+        <p class="text-xs text-surface-300 leading-relaxed">
+          {{ lesson.deepDive.debuggingChallenge.bugDescription }}
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-xs">
+          <!-- Broken Code -->
+          <div class="space-y-1.5">
+            <div class="text-red-400 font-bold flex items-center gap-1">
+              <span>✗</span> Xato Kod:
+            </div>
+            <pre class="p-3.5 rounded-2xl bg-surface-950 border border-red-500/30 text-red-300 overflow-x-auto leading-relaxed"><code>{{ lesson.deepDive.debuggingChallenge.brokenCode }}</code></pre>
+          </div>
+
+          <!-- Fixed Code -->
+          <div class="space-y-1.5">
+            <div class="text-emerald-400 font-bold flex items-center gap-1">
+              <span>✓</span> To‘g‘rilangan Normativ Kod:
+            </div>
+            <pre class="p-3.5 rounded-2xl bg-surface-950 border border-emerald-500/30 text-emerald-300 overflow-x-auto leading-relaxed"><code>{{ lesson.deepDive.debuggingChallenge.fixedCode }}</code></pre>
           </div>
         </div>
       </div>
 
-      <!-- Next & Previous Lesson Navigation -->
-      <div class="pt-8 border-t border-surface-800 flex flex-wrap items-center justify-between gap-4">
-        <router-link
-          v-if="lesson.prevLesson"
-          :to="`/${courseSlug}/${lesson.prevLesson.slug.replace(`${courseSlug}-`, '')}`"
-          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-900 hover:bg-surface-800 text-surface-300 text-xs font-semibold border border-surface-700 transition-colors"
-        >
-          <span>← Oldingi: {{ lesson.prevLesson.title }}</span>
-        </router-link>
-        <div v-else></div>
+      <!-- Multiple Choice Quiz Card -->
+      <div class="p-6 sm:p-8 rounded-3xl bg-surface-900/80 border border-surface-800 space-y-6">
+        <div class="flex items-center justify-between border-b border-surface-800 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-brand-500/20 border border-brand-500/40 text-xl flex items-center justify-center">
+              🎯
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white">Tezkor Injiniring Savollari</h3>
+              <p class="text-xs text-surface-400 font-mono">To‘g‘ri javoblar orqali +XP to‘plang</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono text-brand-400 font-bold">{{ quizScore }} / {{ (lesson?.quiz || []).length }} Ball</span>
+        </div>
 
-        <router-link
-          v-if="lesson.nextLesson"
-          :to="`/${courseSlug}/${lesson.nextLesson.slug.replace(`${courseSlug}-`, '')}`"
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-surface-950 font-bold text-xs transition-colors shadow-lg shadow-brand-500/20"
-        >
-          <span>Keyingi Dars: {{ lesson.nextLesson.title }} →</span>
-        </router-link>
+        <div class="space-y-5">
+          <div
+            v-for="(q, qIdx) in (lesson?.quiz || [])"
+            :key="qIdx"
+            class="p-5 rounded-2xl bg-surface-950 border border-surface-800 space-y-3 text-left"
+          >
+            <h4 class="text-sm font-bold text-white">{{ qIdx + 1 }}. {{ q.question }}</h4>
+            <div class="space-y-2">
+              <button
+                v-for="(opt, oIdx) in q.options"
+                :key="oIdx"
+                @click="answerQuiz(qIdx, oIdx)"
+                :disabled="userAnswers[qIdx] !== undefined"
+                class="w-full p-3 rounded-xl text-xs font-mono text-left transition-all border cursor-pointer flex items-center justify-between"
+                :class="[
+                  userAnswers[qIdx] === undefined
+                    ? 'bg-surface-900 border-surface-800 hover:border-brand-500/50 text-surface-200'
+                    : oIdx === q.correct
+                    ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300 font-bold'
+                    : userAnswers[qIdx] === oIdx
+                    ? 'bg-red-500/20 border-red-500 text-red-300 font-bold'
+                    : 'bg-surface-900 border-surface-800/40 text-surface-500 opacity-50'
+                ]"
+              >
+                <span>{{ opt }}</span>
+                <span v-if="userAnswers[qIdx] !== undefined && oIdx === q.correct">✓</span>
+                <span v-else-if="userAnswers[qIdx] === oIdx && oIdx !== q.correct">✗</span>
+              </button>
+            </div>
+            <p v-if="userAnswers[qIdx] !== undefined" class="text-[11px] text-surface-400 pt-1">
+              💡 <strong>Izoh:</strong> {{ q.explanation }}
+            </p>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="pt-8 border-t border-surface-800 flex flex-col lg:flex-row items-center justify-between gap-4">
+      
+      <!-- Previous Lesson -->
+      <button
+        v-if="prevLesson"
+        @click="navigateToLesson(prevLesson.path)"
+        class="w-full lg:w-[30%] group flex items-center gap-3 p-3 rounded-xl bg-surface-900/70 hover:bg-surface-800/80 border border-surface-800 hover:border-surface-700 text-surface-300 hover:text-white transition-all text-xs cursor-pointer"
+      >
+        <div class="w-8 h-8 rounded-lg bg-surface-800 group-hover:bg-surface-700 flex items-center justify-center text-surface-400 group-hover:text-white transition-colors shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+        </div>
+        <div class="min-w-0 flex-1 text-left">
+          <div class="text-[10px] text-surface-500 font-medium uppercase tracking-wider">Oldingi dars</div>
+          <div class="truncate font-semibold text-surface-200 group-hover:text-white">{{ prevLesson.title }}</div>
+        </div>
+      </button>
+      <div v-else class="w-full lg:w-[30%] hidden lg:block"></div>
+
+      <!-- Mark Completed Button -->
+      <button
+        @click="completeLesson"
+        class="w-full lg:w-[35%] px-8 py-3.5 rounded-2xl font-bold text-sm transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
+        :class="[
+          isCompleted
+            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30'
+            : 'bg-brand-500 hover:bg-brand-400 text-surface-950 shadow-brand-500/25 hover:scale-105'
+        ]"
+      >
+        <span v-if="isCompleted">✓ Dars O‘zlashtirildi</span>
+        <span v-else>Darsni O‘zlashtirdim ✓ (+50 XP)</span>
+      </button>
+
+      <!-- Next Lesson (Prominent Green Card) -->
+      <button
+        v-if="nextLesson"
+        @click="navigateToLesson(nextLesson.path)"
+        class="w-full lg:w-[30%] group flex items-center gap-3 p-3 rounded-xl bg-brand-950/80 hover:bg-brand-900/90 border border-brand-500/30 hover:border-brand-500/60 text-surface-100 transition-all text-xs shadow-lg shadow-brand-950/40 cursor-pointer"
+      >
+        <div class="min-w-0 flex-1 text-right">
+          <div class="text-[10px] text-brand-400 font-semibold uppercase tracking-wider">Keyingi dars</div>
+          <div class="truncate font-bold text-white group-hover:text-brand-300">{{ nextLesson.title }}</div>
+        </div>
+        <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 group-hover:bg-brand-500 group-hover:text-surface-950 flex items-center justify-center transition-all shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </div>
+      </button>
+      <div v-else class="w-full lg:w-[30%] hidden lg:block"></div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { apiClient } from '../services/api';
+import { useRoute, useRouter } from 'vue-router';
+import { resolveCourseSlug } from '../data/topics';
+import { courseThemes, getLesson, getNeighbours } from '../data/lessonRegistry';
+import type { ComprehensiveLesson } from '../data/lessonTypes';
+import { useProgressStore } from '../stores/progress';
+import InteractiveEngineVisualizer from '../components/InteractiveEngineVisualizer.vue';
+import InteractiveCodePlayground from '../components/InteractiveCodePlayground.vue';
+import BrowserInternalsDeepDive from '../components/BrowserInternalsDeepDive.vue';
 
 const route = useRoute();
+const router = useRouter();
+const progressStore = useProgressStore();
 
-interface PracticeTask {
-  id: string;
-  title: string;
-  description: string;
-  starterCode?: string;
-  points: number;
-}
+const lesson = ref<ComprehensiveLesson | null>(null);
+const activeTab = ref('theory');
+const showKidUnderTheHood = ref(false);
+const isBookmarked = ref(false);
+const userAnswers = ref<Record<number, number>>({});
+const quizScore = ref(0);
 
-interface LessonData {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  content: string;
-  estimatedMinutes: number;
-  module?: {
-    title: string;
-    course?: {
-      title: string;
-      slug: string;
-    };
-  };
-  practiceTasks?: PracticeTask[];
-  prevLesson?: { slug: string; title: string } | null;
-  nextLesson?: { slug: string; title: string } | null;
-}
+/** Joriy kurs (html / css / javascript) URL yo'lidan aniqlanadi. */
+const courseSlug = computed(() => resolveCourseSlug(route.path));
 
-const lesson = ref<LessonData | null>(null);
-const loading = ref(true);
-const error = ref<string | null>(null);
-const activeTab = ref('dev');
+/** Kursga mos breadcrumb, tab nomlari va dvigatel nomi. */
+const courseTheme = computed(() => courseThemes[courseSlug.value]);
 
-const tabs = [
-  { id: 'kid', label: '5 Yoshli Bola', icon: '👶' },
-  { id: 'dev', label: 'Dasturchi Darsi', icon: '🚀' },
-  { id: 'internals', label: 'Brauzer Internals', icon: '🔬' },
-  { id: 'specs', label: 'Spetsifikatsiya', icon: '📚' },
-];
-
-const courseSlug = computed(() => {
-  return (route.params.courseSlug as string) || route.path.split('/')[1] || 'html';
-});
+/** Tab ro'yxati ham kursga qarab o'zgaradi (Blink / Style Engine / V8). */
+const tabs = computed(() => courseTheme.value.tabs);
 
 const lessonSlug = computed(() => {
-  const param = route.params.lessonSlug as string;
+  const param = route.params.lessonSlug as string | undefined;
   if (param) return param;
-  const parts = route.path.split('/');
-  return parts[parts.length - 1] || 'kirish';
+  const parts = route.path.split('/').filter(Boolean);
+  return parts[parts.length - 1] ?? '';
 });
 
-const fullSlug = computed(() => {
-  if (lessonSlug.value.startsWith(`${courseSlug.value}-`)) {
-    return lessonSlug.value;
-  }
-  return `${courseSlug.value}-${lessonSlug.value}`;
+const neighbours = computed(() => getNeighbours(courseSlug.value, lessonSlug.value));
+const prevLesson = computed(() => neighbours.value.prev);
+const nextLesson = computed(() => neighbours.value.next);
+
+const isCompleted = computed(() => {
+  return progressStore.isLessonCompleted(route.path);
 });
 
-async function fetchLesson() {
-  loading.value = true;
-  error.value = null;
+function fetchLesson() {
+  userAnswers.value = {};
+  quizScore.value = 0;
+  showKidUnderTheHood.value = false;
+  activeTab.value = 'theory';
 
-  try {
-    const res = await apiClient.get<{ success: boolean; data: LessonData }>(`/lessons/${fullSlug.value}`);
-    if (res.data?.success && res.data.data) {
-      lesson.value = res.data.data;
-    } else {
-      error.value = 'Dars topilmadi';
-    }
-  } catch (err: any) {
-    error.value = err?.response?.data?.error?.message || 'Serverdan darsni yuklashda xatolik';
-  } finally {
-    loading.value = false;
+  lesson.value = getLesson(courseSlug.value, lessonSlug.value);
+}
+
+function toggleBookmark() {
+  isBookmarked.value = !isBookmarked.value;
+}
+
+function answerQuiz(qIdx: number, oIdx: number) {
+  if (userAnswers.value[qIdx] !== undefined) return;
+  userAnswers.value[qIdx] = oIdx;
+  if (lesson.value?.quiz && lesson.value.quiz[qIdx]?.correct === oIdx) {
+    quizScore.value++;
+    progressStore.addXp(10);
   }
 }
 
-// Convert markdown to clean readable HTML
+function completeLesson() {
+  progressStore.toggleLessonComplete(route.path);
+}
+
+function navigateToLesson(path: string) {
+  router.push(path);
+}
+
 const renderedContent = computed(() => {
   if (!lesson.value?.content) return '';
   const text = lesson.value.content;
 
   return text
-    .replace(/^### (.*$)/gim, '<h3 class="text-lg font-bold text-white mt-6 mb-2">$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2 class="text-xl font-bold text-white mt-8 mb-3 pb-2 border-b border-surface-800">$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-extrabold text-white mt-4 mb-4">$1</h1>')
-    .replace(/```([a-z]*)\n([\s\S]*?)```/gim, '<pre class="p-4 rounded-xl bg-surface-950 border border-surface-800 font-mono text-xs text-cyan-300 overflow-x-auto my-4"><code>$2</code></pre>')
-    .replace(/`([^`]+)`/gim, '<code class="px-1.5 py-0.5 rounded bg-surface-900 border border-surface-800 font-mono text-xs text-brand-300">$1</code>')
-    .replace(/\n\n/gim, '<p class="my-3"></p>');
+    .replace(/^### (.*$)/gim, '<h3 class="text-base sm:text-lg font-bold text-white mt-6 mb-2 flex items-center gap-2"><span class="text-brand-400">#</span> $1</h3>')
+    .replace(/^## (.*$)/gim, '<h2 class="text-lg sm:text-xl font-bold text-white mt-8 mb-3 pb-2 border-b border-surface-800/80">$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1 class="text-xl sm:text-2xl font-extrabold text-white mt-4 mb-4">$1</h1>')
+    .replace(/```([a-z]*)\n([\s\S]*?)```/gim, '<pre class="p-4 rounded-2xl bg-surface-950 border border-surface-800 font-mono text-xs text-cyan-300 overflow-x-auto my-4 shadow-inner"><code>$2</code></pre>')
+    .replace(/`([^`]+)`/gim, '<code class="px-1.5 py-0.5 rounded-lg bg-surface-900 border border-surface-800 font-mono text-xs text-brand-300">$1</code>')
+    .replace(/\n\n/gim, '<p class="my-3 text-surface-300 text-xs sm:text-sm leading-relaxed"></p>');
 });
-
-function getKidAnalogy(l: LessonData): string {
-  if (courseSlug.value === 'html') {
-    return `Tasavvur qiling, siz Lego o‘yinchoq uychasini quryapsiz. ${l.title} — bu uychangizning eng mustahkam poydevori yoki chiroyli eshigidir!`;
-  } else if (courseSlug.value === 'css') {
-    return `Oq-qora rasmlar daftarini o‘zingiz yoqtirgan sevimli rangli qalamlar bilan chiroyli qilib bo‘yashni tasavvur qiling. ${l.title} — sizning sehrli bo‘yog‘ingizdir!`;
-  }
-  return `Robot o‘yinchog‘ingiz tugmasini bossangiz, u quvonch bilan qo‘llarini ko‘tarib sakraydi. ${l.title} — bu robotga xuddi shunday aql va harakat beruvchi mexanizmdir!`;
-}
-
-function getKidExample(l: LessonData): string {
-  return `Agar bu qoida bo‘lmaganida, sahifadagi hamma narsa bir-biriga chalkashib ketardi. ${l.title} orqali har bir narsa o‘zining aniq o‘rnini topadi!`;
-}
 
 onMounted(() => {
   fetchLesson();
 });
 
-watch([courseSlug, lessonSlug], () => {
+watch([lessonSlug, courseSlug], () => {
   fetchLesson();
 });
 </script>
