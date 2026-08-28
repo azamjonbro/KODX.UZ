@@ -484,6 +484,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { resolveCourseSlug } from '../data/topics';
 import { courseThemes, getLesson, getNeighbours } from '../data/lessonRegistry';
 import type { ComprehensiveLesson } from '../data/lessonTypes';
+import { renderMarkdown } from '../utils/markdown';
 import { useProgressStore } from '../stores/progress';
 import InteractiveEngineVisualizer from '../components/InteractiveEngineVisualizer.vue';
 import InteractiveCodePlayground from '../components/InteractiveCodePlayground.vue';
@@ -554,18 +555,7 @@ function navigateToLesson(path: string) {
   router.push(path);
 }
 
-const renderedContent = computed(() => {
-  if (!lesson.value?.content) return '';
-  const text = lesson.value.content;
-
-  return text
-    .replace(/^### (.*$)/gim, '<h3 class="text-base sm:text-lg font-bold text-white mt-6 mb-2 flex items-center gap-2"><span class="text-brand-400">#</span> $1</h3>')
-    .replace(/^## (.*$)/gim, '<h2 class="text-lg sm:text-xl font-bold text-white mt-8 mb-3 pb-2 border-b border-surface-800/80">$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1 class="text-xl sm:text-2xl font-extrabold text-white mt-4 mb-4">$1</h1>')
-    .replace(/```([a-z]*)\n([\s\S]*?)```/gim, '<pre class="p-4 rounded-2xl bg-surface-950 border border-surface-800 font-mono text-xs text-cyan-300 overflow-x-auto my-4 shadow-inner"><code>$2</code></pre>')
-    .replace(/`([^`]+)`/gim, '<code class="px-1.5 py-0.5 rounded-lg bg-surface-900 border border-surface-800 font-mono text-xs text-brand-300">$1</code>')
-    .replace(/\n\n/gim, '<p class="my-3 text-surface-300 text-xs sm:text-sm leading-relaxed"></p>');
-});
+const renderedContent = computed(() => renderMarkdown(lesson.value?.content ?? ''));
 
 onMounted(() => {
   fetchLesson();
