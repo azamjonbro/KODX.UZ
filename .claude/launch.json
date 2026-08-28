@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "kodx-web",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--no-install", "vite", "--port", "5183", "--strictPort"],
+      "port": 5183,
+      "cwd": "apps/web"
+    }
+  ]
+}
