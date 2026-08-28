@@ -6,16 +6,16 @@
  * memoizatsiya qilinadi — 749 ta darsni oldindan qurish shart emas.
  */
 
-import { coursesData, findLesson, getCourseLessons, resolveCourseSlug } from './topics';
-import { generateRichLessonData } from './htmlModulesData';
-import { generateCssLessonData } from './cssModulesData';
-import { generateJsLessonData } from './jsModulesData';
+import { coursesData, findLesson, getCourseLessons, resolveCourseSlug } from './topics.ts';
+import { generateRichLessonData } from './htmlModulesData.ts';
+import { generateCssLessonData } from './cssModulesData.ts';
+import { generateJsLessonData } from './jsModulesData.ts';
 import type {
   ComprehensiveLesson,
   CourseSlug,
   CourseTheme,
   SubthemeItem,
-} from './lessonTypes';
+} from './lessonTypes.ts';
 
 type Generator = (
   slug: string,

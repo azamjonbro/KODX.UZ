@@ -12,7 +12,7 @@ import type {
   DeepDiveEngineering,
   LessonAttribute,
   LessonQuizQuestion,
-} from './lessonTypes';
+} from './lessonTypes.ts';
 
 // Eski importlar buzilmasligi uchun qayta eksport.
 export type {

@@ -14,7 +14,7 @@ import {
   type CourseSlug,
   type SubthemeItem,
   type ThemeModuleItem,
-} from './lessonTypes';
+} from './lessonTypes.ts';
 
 // Qayta eksport — eski importlar buzilmasligi uchun.
 export type { CourseData, CourseSlug, SubthemeItem, ThemeModuleItem };
