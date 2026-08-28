@@ -1,5 +1,13 @@
+// createWebHistory import paytida `window` talab qiladi — minimal stub beramiz.
+(globalThis as any).window = {
+  location: { pathname: '/', search: '', hash: '', href: 'http://localhost/' },
+  history: { state: null, replaceState() {}, pushState() {} },
+  addEventListener() {}, removeEventListener() {},
+};
+(globalThis as any).document = { querySelector: () => null, baseURI: 'http://localhost/' };
+
 import { createRouter, createMemoryHistory } from 'vue-router';
-import routerConfig from './router/index';
+const routerConfig = (await import('./router/index')).default;
 import { coursesData, getCourseLessons } from './data/topics';
 import { COURSE_SLUGS } from './data/lessonTypes';
 
