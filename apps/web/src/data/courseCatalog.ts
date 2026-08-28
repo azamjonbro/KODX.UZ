@@ -7,7 +7,7 @@
  * bo'lmaydi va dars sonini qo'lda sanash shart emas.
  */
 
-import type { CourseSlug } from './lessonTypes.ts';
+import type { CourseSlug } from './lessonTypes';
 
 /** [slug, title, estimatedMinutes] */
 export type RawLesson = readonly [string, string, number];

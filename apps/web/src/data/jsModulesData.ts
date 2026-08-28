@@ -6,7 +6,7 @@
  * va inline cache tizimi, Orinoco GC hamda event loop.
  */
 
-import type { ComprehensiveLesson } from './lessonTypes.ts';
+import type { ComprehensiveLesson } from './lessonTypes';
 
 function clean(title: string): string {
   return title.replace(/^[\d.]+\s*/, '').trim();

@@ -6,7 +6,7 @@
  * ComputedStyle, LayoutNG va Paint/Composite bosqichlari haqida.
  */
 
-import type { ComprehensiveLesson } from './lessonTypes.ts';
+import type { ComprehensiveLesson } from './lessonTypes';
 
 /** Sarlavhadan "1.2." kabi raqamli prefiksni olib tashlaydi. */
 function clean(title: string): string {
