@@ -60,28 +60,57 @@ const routes: RouteRecordRaw[] = [
     name: 'knowledge-explorer',
     component: () => import('../pages/KnowledgeExplorer.vue'),
   },
+  /*
+   * Kurs marshrutlari.
+   *
+   * Har bir kurs uchun:
+   *  1) qo'lda yozilgan boy sahifalar — katalogdagi HAQIQIY slug ustida turadi,
+   *     shuning uchun ular sidebar va prev/next navigatsiyasidan ham topiladi;
+   *  2) eski URL'lar redirect orqali yangi slugga yo'naltiriladi (link buzilmaydi);
+   *  3) qolgan barcha darslar `:lessonSlug` orqali DynamicLessonView'ga tushadi.
+   */
   {
     path: '/html',
     component: HtmlLayout,
     children: [
-      { path: '', redirect: '/html/tim-berners-lee' },
-      { path: 'tim-berners-lee', name: 'html-tim-berners-lee', component: () => import('../pages/html/TimBernersLee.vue') },
-      { path: 'standartlar-whatwg', name: 'html-standartlar-whatwg', component: () => import('../pages/html/StandartlarWhatwg.vue') },
+      { path: '', redirect: '/html/web-sahifa-nima' },
+
+      // 01. WEB ASOSLARI
       { path: 'web-sahifa-nima', name: 'html-web-sahifa-nima', component: () => import('../pages/html/WebSahifaNima.vue') },
       { path: 'client-server', name: 'html-client-server', component: () => import('../pages/html/ClientServer.vue') },
       { path: 'browser-qanday-ishlaydi', name: 'html-browser-qanday-ishlaydi', component: () => import('../pages/html/BrowserIshlashi.vue') },
       { path: 'http-sorovlar', name: 'html-http-sorovlar', component: () => import('../pages/html/HttpSorovlar.vue') },
       { path: 'domain-hosting', name: 'html-domain-hosting', component: () => import('../pages/html/DomainHosting.vue') },
-      { path: 'kirish', name: 'html-kirish', component: () => import('../pages/html/Kirish.vue') },
-      { path: 'taglar', name: 'html-taglar', component: () => import('../pages/html/Taglar.vue') },
-      { path: 'attributlar', name: 'html-attributlar', component: () => import('../pages/html/Attributlar.vue') },
-      { path: 'head-meta', name: 'html-head-meta', component: () => import('../pages/html/HeadMeta.vue') },
+
+      // 02. TARIX VA STANDARTLAR
+      { path: 'tim-berners-lee', name: 'html-tim-berners-lee', component: () => import('../pages/html/TimBernersLee.vue') },
+      { path: 'whatwg-living-standard', name: 'html-whatwg-living-standard', component: () => import('../pages/html/StandartlarWhatwg.vue') },
+
+      // 03. HTML ASOSLARI
+      { path: 'html-nima', name: 'html-html-nima', component: () => import('../pages/html/Kirish.vue') },
+      { path: 'teg', name: 'html-teg', component: () => import('../pages/html/Taglar.vue') },
+      { path: 'atribut', name: 'html-atribut', component: () => import('../pages/html/Attributlar.vue') },
+
+      // 04 / 06 / 09 / 12 / 13 / 22
+      { path: 'head-tag', name: 'html-head-tag', component: () => import('../pages/html/HeadMeta.vue') },
       { path: 'semantika', name: 'html-semantika', component: () => import('../pages/html/Semantika.vue') },
-      { path: 'rasmlar', name: 'html-rasmlar', component: () => import('../pages/html/Rasmlar.vue') },
-      { path: 'formalar', name: 'html-formalar', component: () => import('../pages/html/Formalar.vue') },
-      { path: 'dialog', name: 'html-dialog', component: () => import('../pages/html/Dialog.vue') },
-      { path: 'seo', name: 'html-seo', component: () => import('../pages/html/SeoOptimizatsiya.vue') },
-      // Dynamic Database-driven route for any other HTML lesson
+      { path: 'img-tag', name: 'html-img-tag', component: () => import('../pages/html/Rasmlar.vue') },
+      { path: 'form-tag', name: 'html-form-tag', component: () => import('../pages/html/Formalar.vue') },
+      { path: 'dialog-tag', name: 'html-dialog-tag', component: () => import('../pages/html/Dialog.vue') },
+      { path: 'seo-asoslari', name: 'html-seo-asoslari', component: () => import('../pages/html/SeoOptimizatsiya.vue') },
+
+      // Eski URL'lar — yangi sluglarga yo'naltiriladi
+      { path: 'standartlar-whatwg', redirect: '/html/whatwg-living-standard' },
+      { path: 'kirish', redirect: '/html/html-nima' },
+      { path: 'taglar', redirect: '/html/teg' },
+      { path: 'attributlar', redirect: '/html/atribut' },
+      { path: 'head-meta', redirect: '/html/head-tag' },
+      { path: 'rasmlar', redirect: '/html/img-tag' },
+      { path: 'formalar', redirect: '/html/form-tag' },
+      { path: 'dialog', redirect: '/html/dialog-tag' },
+      { path: 'seo', redirect: '/html/seo-asoslari' },
+
+      // Katalogdagi qolgan barcha darslar
       { path: ':lessonSlug', component: () => import('../pages/DynamicLessonView.vue') },
     ],
   },
@@ -89,15 +118,25 @@ const routes: RouteRecordRaw[] = [
     path: '/css',
     component: CssLayout,
     children: [
-      { path: '', redirect: '/css/kirish' },
-      { path: 'kirish', name: 'css-kirish', component: () => import('../pages/css/Kirish.vue') },
-      { path: 'selectorlar', name: 'css-selectorlar', component: () => import('../pages/css/Selectorlar.vue') },
-      { path: 'box-model', name: 'css-box-model', component: () => import('../pages/css/BoxModel.vue') },
-      { path: 'display-position', name: 'css-display-position', component: () => import('../pages/css/DisplayPosition.vue') },
-      { path: 'flexbox', name: 'css-flexbox', component: () => import('../pages/css/Flexbox.vue') },
-      { path: 'grid', name: 'css-grid', component: () => import('../pages/css/Grid.vue') },
-      { path: 'modern', name: 'css-modern', component: () => import('../pages/css/ModernCss.vue') },
-      // Dynamic Database-driven route for any other CSS lesson
+      { path: '', redirect: '/css/css-tarixi' },
+
+      { path: 'css-nima', name: 'css-css-nima', component: () => import('../pages/css/Kirish.vue') },
+      { path: 'type-selector', name: 'css-type-selector', component: () => import('../pages/css/Selectorlar.vue') },
+      { path: 'box-model-asoslari', name: 'css-box-model-asoslari', component: () => import('../pages/css/BoxModel.vue') },
+      { path: 'display-outer-inner', name: 'css-display-outer-inner', component: () => import('../pages/css/DisplayPosition.vue') },
+      { path: 'flex-container', name: 'css-flex-container', component: () => import('../pages/css/Flexbox.vue') },
+      { path: 'grid-container', name: 'css-grid-container', component: () => import('../pages/css/Grid.vue') },
+      { path: 'custom-properties', name: 'css-custom-properties', component: () => import('../pages/css/ModernCss.vue') },
+
+      // Eski URL'lar
+      { path: 'kirish', redirect: '/css/css-nima' },
+      { path: 'selectorlar', redirect: '/css/type-selector' },
+      { path: 'box-model', redirect: '/css/box-model-asoslari' },
+      { path: 'display-position', redirect: '/css/display-outer-inner' },
+      { path: 'flexbox', redirect: '/css/flex-container' },
+      { path: 'grid', redirect: '/css/grid-container' },
+      { path: 'modern', redirect: '/css/custom-properties' },
+
       { path: ':lessonSlug', component: () => import('../pages/DynamicLessonView.vue') },
     ],
   },
@@ -105,14 +144,23 @@ const routes: RouteRecordRaw[] = [
     path: '/javascript',
     component: JsLayout,
     children: [
-      { path: '', redirect: '/javascript/kirish' },
-      { path: 'kirish', name: 'js-kirish', component: () => import('../pages/javascript/Kirish.vue') },
-      { path: 'ozgaruvchilar', name: 'js-ozgaruvchilar', component: () => import('../pages/javascript/Ozgaruvchilar.vue') },
-      { path: 'funksiyalar', name: 'js-funksiyalar', component: () => import('../pages/javascript/Funksiyalar.vue') },
-      { path: 'dom', name: 'js-dom', component: () => import('../pages/javascript/Dom.vue') },
-      { path: 'events', name: 'js-events', component: () => import('../pages/javascript/Events.vue') },
-      { path: 'async', name: 'js-async', component: () => import('../pages/javascript/AsyncJs.vue') },
-      // Dynamic Database-driven route for any other JS lesson
+      { path: '', redirect: '/javascript/js-tarixi' },
+
+      { path: 'js-vs-ecmascript', name: 'js-js-vs-ecmascript', component: () => import('../pages/javascript/Kirish.vue') },
+      { path: 'var-let-const', name: 'js-var-let-const', component: () => import('../pages/javascript/Ozgaruvchilar.vue') },
+      { path: 'function-declaration', name: 'js-function-declaration', component: () => import('../pages/javascript/Funksiyalar.vue') },
+      { path: 'dom-daraxti', name: 'js-dom-daraxti', component: () => import('../pages/javascript/Dom.vue') },
+      { path: 'addeventlistener', name: 'js-addeventlistener', component: () => import('../pages/javascript/Events.vue') },
+      { path: 'promise-asoslari', name: 'js-promise-asoslari', component: () => import('../pages/javascript/AsyncJs.vue') },
+
+      // Eski URL'lar
+      { path: 'kirish', redirect: '/javascript/js-vs-ecmascript' },
+      { path: 'ozgaruvchilar', redirect: '/javascript/var-let-const' },
+      { path: 'funksiyalar', redirect: '/javascript/function-declaration' },
+      { path: 'dom', redirect: '/javascript/dom-daraxti' },
+      { path: 'events', redirect: '/javascript/addeventlistener' },
+      { path: 'async', redirect: '/javascript/promise-asoslari' },
+
       { path: ':lessonSlug', component: () => import('../pages/DynamicLessonView.vue') },
     ],
   },

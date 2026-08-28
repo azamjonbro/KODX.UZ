@@ -3,8 +3,8 @@
     <!-- Top Breadcrumb & Quick Actions -->
     <div class="flex items-center justify-between flex-wrap gap-3 text-xs font-mono">
       <nav class="flex items-center flex-wrap gap-2 text-surface-400">
-        <router-link to="/html/html-tarixi" class="hover:text-surface-200 transition-colors flex items-center gap-1">
-          <span>🌐</span> HTML ASOSLARI
+        <router-link :to="courseTheme.rootPath" class="hover:text-surface-200 transition-colors flex items-center gap-1">
+          <span>{{ courseTheme.icon }}</span> {{ courseTheme.title }}
         </router-link>
         <span class="text-surface-600">&gt;</span>
         <span class="text-surface-400">{{ lesson?.moduleTitle }}</span>
@@ -160,12 +160,12 @@
       </div>
     </div>
 
-    <!-- TAB 2: 🔬 Chromium Blink & V8 Dvigateli (Deep C++ Architecture) -->
+    <!-- TAB 2: 🔬 Dvigatel ichki tuzilishi (Blink / Style Engine / V8) -->
     <div v-else-if="activeTab === 'internals'" class="space-y-6 animate-in fade-in duration-200">
       <!-- C++ Class Hierarchy Visualizer -->
       <div class="p-6 rounded-3xl bg-surface-900/80 border border-surface-800 space-y-4">
         <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
-          <span>🧬</span> Chromium Blink C++ Merosxo‘rlik Shajarasi (Inheritance Tree)
+          <span>🧬</span> {{ courseTheme.internalsHeading }}
         </h3>
 
         <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
@@ -195,7 +195,7 @@
         <div class="flex items-center justify-between border-b border-surface-800 pb-3">
           <div class="flex items-center gap-2">
             <span class="text-lg">⚙️</span>
-            <h4 class="text-sm font-bold text-white font-mono">Blink C++ Layout & Invalidation Handler</h4>
+            <h4 class="text-sm font-bold text-white font-mono">{{ courseTheme.engineName }} C++ Implementatsiyasi</h4>
           </div>
           <span class="text-[11px] font-mono text-brand-400">{{ lesson?.cppInternalCode?.filename }}</span>
         </div>
@@ -315,7 +315,7 @@
         <div v-else class="space-y-3 animate-in fade-in duration-200">
           <div class="flex items-center justify-between text-xs font-mono text-cyan-300">
             <span>{{ lesson?.cppInternalCode?.filename }}</span>
-            <span class="text-surface-400">Chromium Blink Core</span>
+            <span class="text-surface-400">{{ courseTheme.engineName }} Core</span>
           </div>
           <pre class="p-4 rounded-2xl bg-surface-950 border border-surface-800 text-cyan-300 text-xs font-mono leading-relaxed overflow-x-auto shadow-inner"><code>{{ lesson?.cppInternalCode?.code }}</code></pre>
           <p class="text-xs text-surface-400 leading-relaxed font-sans">
@@ -481,8 +481,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { coursesData, type SubthemeItem } from '../data/topics';
-import { html25ModulesData, generateRichLessonData, type ComprehensiveLesson } from '../data/htmlModulesData';
+import { getCourseLessons, resolveCourseSlug } from '../data/topics';
+import { courseThemes, getLesson, getNeighbours } from '../data/lessonRegistry';
+import type { ComprehensiveLesson } from '../data/lessonTypes';
 import { useProgressStore } from '../stores/progress';
 import InteractiveEngineVisualizer from '../components/InteractiveEngineVisualizer.vue';
 import InteractiveCodePlayground from '../components/InteractiveCodePlayground.vue';
@@ -499,46 +500,32 @@ const isBookmarked = ref(false);
 const userAnswers = ref<Record<number, number>>({});
 const quizScore = ref(0);
 
-const tabs = [
-  { id: 'theory', label: 'Standartlar & Nazariya', icon: '📘' },
-  { id: 'internals', label: 'Blink C++ Xotira', icon: '🔬' },
-  { id: 'a11y', label: 'Accessibility (AXTree)', icon: '♿' },
-  { id: 'security', label: 'Xavfsizlik & CWV', icon: '🛡️' },
-  { id: 'kid', label: '5 Yoshli Bola', icon: '👶' },
-  { id: 'sandbox', label: 'Sandbox IDE', icon: '💻' },
-  { id: 'video', label: 'Simulyator', icon: '🎬' },
-  { id: 'quiz', label: 'Debugging & Test', icon: '🧩', badge: 'Challenge' },
-];
+/** Joriy kurs (html / css / javascript) URL yo'lidan aniqlanadi. */
+const courseSlug = computed(() => resolveCourseSlug(route.path));
+
+/** Kursga mos breadcrumb, tab nomlari va dvigatel nomi. */
+const courseTheme = computed(() => courseThemes[courseSlug.value]);
+
+/** Tab ro'yxati ham kursga qarab o'zgaradi (Blink / Style Engine / V8). */
+const tabs = computed(() => courseTheme.value.tabs);
 
 const lessonSlug = computed(() => {
-  const param = route.params.lessonSlug as string;
+  const param = route.params.lessonSlug as string | undefined;
   if (param) return param;
-  const parts = route.path.split('/');
-  return parts[parts.length - 1] || 'html-tarixi';
+  const parts = route.path.split('/').filter(Boolean);
+  return parts[parts.length - 1] ?? '';
 });
 
-// All HTML lessons flattened for prev / next
-const allHtmlLessons = computed<SubthemeItem[]>(() => {
-  return (coursesData['html']?.modules || []).flatMap(m => m.lessons);
-});
+/** Joriy kursning barcha darslari — prev/next uchun. */
+const allLessons = computed(() => getCourseLessons(courseSlug.value));
 
-const currentLessonIndex = computed(() => {
-  return allHtmlLessons.value.findIndex(l => l.slug === lessonSlug.value || l.path.endsWith(lessonSlug.value));
-});
+const neighbours = computed(() => getNeighbours(courseSlug.value, lessonSlug.value));
+const prevLesson = computed(() => neighbours.value.prev);
+const nextLesson = computed(() => neighbours.value.next);
 
-const prevLesson = computed(() => {
-  if (currentLessonIndex.value > 0) {
-    return allHtmlLessons.value[currentLessonIndex.value - 1];
-  }
-  return null;
-});
-
-const nextLesson = computed(() => {
-  if (currentLessonIndex.value >= 0 && currentLessonIndex.value + 1 < allHtmlLessons.value.length) {
-    return allHtmlLessons.value[currentLessonIndex.value + 1];
-  }
-  return null;
-});
+const currentLessonIndex = computed(() =>
+  allLessons.value.findIndex(l => l.slug === lessonSlug.value),
+);
 
 const isCompleted = computed(() => {
   return progressStore.isLessonCompleted(route.path);
@@ -548,28 +535,9 @@ function fetchLesson() {
   userAnswers.value = {};
   quizScore.value = 0;
   showKidUnderTheHood.value = false;
+  activeTab.value = 'theory';
 
-  const found = html25ModulesData[lessonSlug.value];
-  if (found) {
-    lesson.value = found;
-  } else {
-    // Search coursesData for metadata
-    let foundTitle = lessonSlug.value.replace(/-/g, ' ');
-    let foundModuleTitle = '01. TARIX VA STANDARTLAR';
-    let foundOrder = 1;
-
-    for (const mod of coursesData['html']?.modules || []) {
-      const match = mod.lessons.find(l => l.slug === lessonSlug.value || l.path.endsWith(lessonSlug.value));
-      if (match) {
-        foundTitle = match.title;
-        foundModuleTitle = mod.title;
-        foundOrder = mod.order;
-        break;
-      }
-    }
-
-    lesson.value = generateRichLessonData(lessonSlug.value, foundTitle, foundModuleTitle, foundOrder);
-  }
+  lesson.value = getLesson(courseSlug.value, lessonSlug.value);
 }
 
 function toggleBookmark() {
@@ -610,7 +578,7 @@ onMounted(() => {
   fetchLesson();
 });
 
-watch(lessonSlug, () => {
+watch([lessonSlug, courseSlug], () => {
   fetchLesson();
 });
 </script>

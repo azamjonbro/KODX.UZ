@@ -1,94 +1,49 @@
-export interface LessonAttribute {
-  name: string;
-  type: string;
-  defaultVal: string;
-  description: string;
-  isGlobal?: boolean;
-}
+/**
+ * KODX.uz — HTML darslari uchun chuqur kontent generatori.
+ *
+ * Umumiy tiplar `lessonTypes.ts` da e'lon qilingan; bu fayl faqat HTML
+ * kursiga xos kontentni (WHATWG standarti, Blink C++ DOM sinflari, CRP)
+ * hosil qiladi.
+ */
 
-export interface LessonQuizQuestion {
-  question: string;
-  options: string[];
-  correct: number;
-  explanation: string;
-}
+import type {
+  ComprehensiveLesson,
+  DebuggingChallenge,
+  DeepDiveEngineering,
+  LessonAttribute,
+  LessonQuizQuestion,
+} from './lessonTypes';
 
-export interface DebuggingChallenge {
-  title: string;
-  brokenCode: string;
-  fixedCode: string;
-  bugDescription: string;
-  hints: string[];
-}
+// Eski importlar buzilmasligi uchun qayta eksport.
+export type {
+  ComprehensiveLesson,
+  DebuggingChallenge,
+  DeepDiveEngineering,
+  LessonAttribute,
+  LessonQuizQuestion,
+};
 
-export interface DeepDiveEngineering {
-  blinkClassHierarchy: string[];
-  memoryAllocation: string;
-  crpCost: {
-    reflow: 'High' | 'Medium' | 'Low' | 'None';
-    repaint: 'High' | 'Medium' | 'Low' | 'None';
-    compositeOnly: boolean;
-    explanation: string;
-  };
-  axTreeMapping: {
-    implicitRole: string;
-    accessibleName: string;
-    keyboardNav: string;
-  };
-  security: {
-    xssVector: string;
-    cspPolicy: string;
-    sanitizationTip: string;
-  };
-  coreWebVitals: {
-    metric: 'LCP' | 'INP' | 'CLS' | 'FCP';
-    impact: string;
-    optimizationRule: string;
-  };
-  debuggingChallenge: DebuggingChallenge;
-}
+// HTML kursining barcha mavzulari uchun chuqur injiniring generatori.
 
-export interface ComprehensiveLesson {
-  id: string;
-  slug: string;
-  title: string;
-  moduleTitle: string;
-  moduleOrder: number;
-  description: string;
-  estimatedMinutes: number;
-  spec: string;
-  kidAnalogy: {
-    title: string;
-    story: string;
-    keyTakeaway: string;
-  };
-  cppInternalCode: {
-    filename: string;
-    code: string;
-    explanation: string;
-  };
-  attributes?: LessonAttribute[];
-  proTips: string[];
-  gotchas: string[];
-  content: string;
-  codeExample: string;
-  quiz?: LessonQuizQuestion[];
-  deepDive: DeepDiveEngineering;
-}
-
-// Master Deep Injiniring Generator for all 180 topics
-export function generateRichLessonData(slug: string, title: string, moduleTitle: string, moduleOrder: number): ComprehensiveLesson {
+export function generateRichLessonData(
+  slug: string,
+  title: string,
+  moduleTitle: string,
+  moduleOrder: number,
+  estimatedMinutes = 8,
+): ComprehensiveLesson {
   const cleanTitle = title.replace(/^[\d.]+\s*/, '').trim();
   const safeName = cleanTitle.replace(/[^a-zA-Z0-9]/g, '');
 
   return {
     id: `${moduleOrder}.${slug}`,
+    course: 'html',
     slug,
     title,
     moduleTitle,
     moduleOrder,
     description: `WHATWG HTML Living Standard (§ ${cleanTitle}) va Chromium Blink C++ dvigateli bo‘yicha "${cleanTitle}" ning chuqur arxitektura, xotira va xavfsizlik tahlili.`,
-    estimatedMinutes: 8,
+    estimatedMinutes,
     spec: `WHATWG HTML Living Standard — ${cleanTitle}`,
     kidAnalogy: {
       title: `Sehrli Shaharcha Qoidasi: ${cleanTitle}`,
@@ -327,15 +282,3 @@ element.textContent = userComment; // 100% XAVFSIZ
     ],
   };
 }
-
-// Master Pre-populated Deep Lessons Catalog
-export const html25ModulesData: Record<string, ComprehensiveLesson> = {
-  'html-tarixi': generateRichLessonData('html-tarixi', 'HTML tarixi', '01. TARIX VA STANDARTLAR', 1),
-  'html-2-0': generateRichLessonData('html-2-0', 'HTML 2.0', '01. TARIX VA STANDARTLAR', 1),
-  'html-3-2': generateRichLessonData('html-3-2', 'HTML 3.2', '01. TARIX VA STANDARTLAR', 1),
-  'html-4-0': generateRichLessonData('html-4-0', 'HTML 4.0', '01. TARIX VA STANDARTLAR', 1),
-  'html-4-01': generateRichLessonData('html-4-01', 'HTML 4.01', '01. TARIX VA STANDARTLAR', 1),
-  'xhtml': generateRichLessonData('xhtml', 'XHTML', '01. TARIX VA STANDARTLAR', 1),
-  'html5': generateRichLessonData('html5', 'HTML5', '01. TARIX VA STANDARTLAR', 1),
-  'whatwg-living-standard': generateRichLessonData('whatwg-living-standard', 'WHATWG Living Standard', '01. TARIX VA STANDARTLAR', 1),
-};

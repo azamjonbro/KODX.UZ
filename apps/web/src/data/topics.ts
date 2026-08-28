@@ -1,659 +1,102 @@
-export interface SubthemeItem {
-  id: string;
-  slug: string;
-  title: string;
-  path: string;
-  estimatedMinutes?: number;
-  isCompleted?: boolean;
+/**
+ * KODX.uz — Kurs daraxti (sidebar, navigatsiya, progress).
+ *
+ * Bu yerda hech qanday qo'lda yozilgan `id`, `path` yoki `totalLessons` yo'q.
+ * Barchasi `courseCatalog.ts` dagi xom katalogdan hosil qilinadi, shu sababli
+ * ma'lumotlar hech qachon bir-biriga zid bo'lmaydi.
+ */
+
+import { rawCourses, type RawCourse, type RawModule } from './courseCatalog';
+import {
+  COURSE_SLUGS,
+  isCourseSlug,
+  type CourseData,
+  type CourseSlug,
+  type SubthemeItem,
+  type ThemeModuleItem,
+} from './lessonTypes';
+
+// Qayta eksport — eski importlar buzilmasligi uchun.
+export type { CourseData, CourseSlug, SubthemeItem, ThemeModuleItem };
+export { COURSE_SLUGS, isCourseSlug };
+
+function buildModule(
+  courseSlug: CourseSlug,
+  raw: RawModule,
+  order: number,
+  completed: Set<string>,
+): ThemeModuleItem {
+  const lessons: SubthemeItem[] = raw.lessons.map(([slug, title, estimatedMinutes], i) => ({
+    id: `${order}.${i + 1}`,
+    slug,
+    title,
+    path: `/${courseSlug}/${slug}`,
+    estimatedMinutes,
+    isCompleted: completed.has(slug),
+  }));
+
+  return {
+    id: `${courseSlug}-mod-${order}`,
+    title: raw.title,
+    order,
+    isCompleted: lessons.length > 0 && lessons.every(l => l.isCompleted),
+    lessons,
+  };
 }
 
-export interface ThemeModuleItem {
-  id: string;
-  title: string;
-  order: number;
-  isCompleted?: boolean;
-  lessons: SubthemeItem[];
+function buildCourse(slug: CourseSlug, raw: RawCourse): CourseData {
+  const completed = new Set(raw.seedCompleted);
+  const modules = raw.modules.map((mod, i) => buildModule(slug, mod, i + 1, completed));
+  const allLessons = modules.flatMap(m => m.lessons);
+
+  return {
+    title: raw.title,
+    slug,
+    totalLessons: allLessons.length,
+    completedLessons: allLessons.filter(l => l.isCompleted).length,
+    modules,
+  };
 }
 
-export interface CourseData {
-  title: string;
-  slug: string;
-  totalLessons: number;
-  completedLessons: number;
-  modules: ThemeModuleItem[];
-}
-
-export const coursesData: Record<string, CourseData> = {
-  html: {
-    title: 'HTML ASOSLARI',
-    slug: 'html',
-    totalLessons: 180,
-    completedLessons: 6,
-    modules: [
-      {
-        id: 'html-mod-1',
-        title: '01. TARIX VA STANDARTLAR',
-        order: 1,
-        isCompleted: true,
-        lessons: [
-          { id: '1.1', slug: 'html-tarixi', title: 'HTML tarixi', path: '/html/html-tarixi', estimatedMinutes: 5, isCompleted: true },
-          { id: '1.2', slug: 'html-2-0', title: 'HTML 2.0', path: '/html/html-2-0', estimatedMinutes: 6, isCompleted: true },
-          { id: '1.3', slug: 'html-3-2', title: 'HTML 3.2', path: '/html/html-3-2', estimatedMinutes: 6, isCompleted: true },
-          { id: '1.4', slug: 'html-4-0', title: 'HTML 4.0', path: '/html/html-4-0', estimatedMinutes: 6, isCompleted: true },
-          { id: '1.5', slug: 'html-4-01', title: 'HTML 4.01', path: '/html/html-4-01', estimatedMinutes: 7, isCompleted: true },
-          { id: '1.6', slug: 'xhtml', title: 'XHTML', path: '/html/xhtml', estimatedMinutes: 7, isCompleted: true },
-          { id: '1.7', slug: 'html5', title: 'HTML5', path: '/html/html5', estimatedMinutes: 8, isCompleted: false },
-          { id: '1.8', slug: 'whatwg-living-standard', title: 'WHATWG Living Standard', path: '/html/whatwg-living-standard', estimatedMinutes: 8, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-2',
-        title: '02. HTML ASOSLARI',
-        order: 2,
-        isCompleted: false,
-        lessons: [
-          { id: '2.1', slug: 'html-nima', title: 'HTML nima?', path: '/html/html-nima', estimatedMinutes: 5, isCompleted: false },
-          { id: '2.2', slug: 'markup-nima', title: 'Markup nima?', path: '/html/markup-nima', estimatedMinutes: 5, isCompleted: false },
-          { id: '2.3', slug: 'element', title: 'Element', path: '/html/element', estimatedMinutes: 5, isCompleted: false },
-          { id: '2.4', slug: 'teg', title: 'Teg', path: '/html/teg', estimatedMinutes: 5, isCompleted: false },
-          { id: '2.5', slug: 'atribut', title: 'Atribut', path: '/html/atribut', estimatedMinutes: 5, isCompleted: false },
-          { id: '2.6', slug: 'nesting', title: 'Nesting', path: '/html/nesting', estimatedMinutes: 6, isCompleted: false },
-          { id: '2.7', slug: 'parent-child', title: 'Parent / Child', path: '/html/parent-child', estimatedMinutes: 6, isCompleted: false },
-          { id: '2.8', slug: 'comments', title: 'Comments', path: '/html/comments', estimatedMinutes: 4, isCompleted: false },
-          { id: '2.9', slug: 'whitespace', title: 'Whitespace', path: '/html/whitespace', estimatedMinutes: 5, isCompleted: false },
-          { id: '2.10', slug: 'character-references', title: 'Character references', path: '/html/character-references', estimatedMinutes: 5, isCompleted: false },
-          { id: '2.11', slug: 'doctype', title: 'DOCTYPE', path: '/html/doctype', estimatedMinutes: 6, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-3',
-        title: '03. HUJJAT TUZILISHI',
-        order: 3,
-        isCompleted: false,
-        lessons: [
-          { id: '3.1', slug: 'doctype-html', title: '<!DOCTYPE html>', path: '/html/doctype-html', estimatedMinutes: 5, isCompleted: false },
-          { id: '3.2', slug: 'html-tag', title: '<html>', path: '/html/html-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '3.3', slug: 'head-tag', title: '<head>', path: '/html/head-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '3.4', slug: 'body-tag', title: '<body>', path: '/html/body-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '3.5', slug: 'title-tag', title: '<title>', path: '/html/title-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '3.6', slug: 'meta-tag', title: '<meta>', path: '/html/meta-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '3.7', slug: 'link-tag', title: '<link>', path: '/html/link-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '3.8', slug: 'style-tag', title: '<style>', path: '/html/style-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '3.9', slug: 'base-tag', title: '<base>', path: '/html/base-tag', estimatedMinutes: 5, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-4',
-        title: '04. MATN ELEMENTLARI',
-        order: 4,
-        isCompleted: false,
-        lessons: [
-          { id: '4.1', slug: 'h1-h6', title: '<h1> — <h6>', path: '/html/h1-h6', estimatedMinutes: 5, isCompleted: false },
-          { id: '4.2', slug: 'p-tag', title: '<p>', path: '/html/p-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '4.3', slug: 'strong-tag', title: '<strong>', path: '/html/strong-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '4.4', slug: 'em-tag', title: '<em>', path: '/html/em-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '4.5', slug: 'small-tag', title: '<small>', path: '/html/small-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '4.6', slug: 'mark-tag', title: '<mark>', path: '/html/mark-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '4.7', slug: 'del-tag', title: '<del>', path: '/html/del-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '4.8', slug: 'ins-tag', title: '<ins>', path: '/html/ins-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '4.9', slug: 'sub-tag', title: '<sub>', path: '/html/sub-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '4.10', slug: 'sup-tag', title: '<sup>', path: '/html/sup-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '4.11', slug: 'code-tag', title: '<code>', path: '/html/code-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '4.12', slug: 'pre-tag', title: '<pre>', path: '/html/pre-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '4.13', slug: 'kbd-tag', title: '<kbd>', path: '/html/kbd-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '4.14', slug: 'samp-tag', title: '<samp>', path: '/html/samp-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '4.15', slug: 'var-tag', title: '<var>', path: '/html/var-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '4.16', slug: 'abbr-tag', title: '<abbr>', path: '/html/abbr-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '4.17', slug: 'cite-tag', title: '<cite>', path: '/html/cite-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '4.18', slug: 'q-tag', title: '<q>', path: '/html/q-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '4.19', slug: 'blockquote-tag', title: '<blockquote>', path: '/html/blockquote-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '4.20', slug: 'time-tag', title: '<time>', path: '/html/time-tag', estimatedMinutes: 6, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-5',
-        title: '05. SEMANTIK',
-        order: 5,
-        isCompleted: false,
-        lessons: [
-          { id: '5.1', slug: 'header-tag', title: '<header>', path: '/html/header-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '5.2', slug: 'nav-tag', title: '<nav>', path: '/html/nav-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '5.3', slug: 'main-tag', title: '<main>', path: '/html/main-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '5.4', slug: 'section-tag', title: '<section>', path: '/html/section-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '5.5', slug: 'article-tag', title: '<article>', path: '/html/article-tag', estimatedMinutes: 7, isCompleted: false },
-          { id: '5.6', slug: 'aside-tag', title: '<aside>', path: '/html/aside-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '5.7', slug: 'footer-tag', title: '<footer>', path: '/html/footer-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '5.8', slug: 'address-tag', title: '<address>', path: '/html/address-tag', estimatedMinutes: 5, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-6',
-        title: '06. HAVOLALAR VA URL',
-        order: 6,
-        isCompleted: false,
-        lessons: [
-          { id: '6.1', slug: 'a-tag', title: '<a>', path: '/html/a-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '6.2', slug: 'href-attr', title: 'href', path: '/html/href-attr', estimatedMinutes: 6, isCompleted: false },
-          { id: '6.3', slug: 'target-attr', title: 'target', path: '/html/target-attr', estimatedMinutes: 6, isCompleted: false },
-          { id: '6.4', slug: 'rel-attr', title: 'rel', path: '/html/rel-attr', estimatedMinutes: 6, isCompleted: false },
-          { id: '6.5', slug: 'download-attr', title: 'download', path: '/html/download-attr', estimatedMinutes: 5, isCompleted: false },
-          { id: '6.6', slug: 'absolute-url', title: 'absolute URL', path: '/html/absolute-url', estimatedMinutes: 5, isCompleted: false },
-          { id: '6.7', slug: 'relative-url', title: 'relative URL', path: '/html/relative-url', estimatedMinutes: 5, isCompleted: false },
-          { id: '6.8', slug: 'fragment-url', title: 'fragment', path: '/html/fragment-url', estimatedMinutes: 6, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-7',
-        title: '07. RO‘YXATLAR',
-        order: 7,
-        isCompleted: false,
-        lessons: [
-          { id: '7.1', slug: 'ul-tag', title: '<ul>', path: '/html/ul-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '7.2', slug: 'ol-tag', title: '<ol>', path: '/html/ol-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '7.3', slug: 'li-tag', title: '<li>', path: '/html/li-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '7.4', slug: 'dl-tag', title: '<dl>', path: '/html/dl-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '7.5', slug: 'dt-tag', title: '<dt>', path: '/html/dt-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '7.6', slug: 'dd-tag', title: '<dd>', path: '/html/dd-tag', estimatedMinutes: 4, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-8',
-        title: '08. RASMLAR',
-        order: 8,
-        isCompleted: false,
-        lessons: [
-          { id: '8.1', slug: 'img-tag', title: '<img>', path: '/html/img-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '8.2', slug: 'src-attr', title: 'src', path: '/html/src-attr', estimatedMinutes: 5, isCompleted: false },
-          { id: '8.3', slug: 'alt-attr', title: 'alt', path: '/html/alt-attr', estimatedMinutes: 6, isCompleted: false },
-          { id: '8.4', slug: 'width-height-attr', title: 'width / height', path: '/html/width-height-attr', estimatedMinutes: 7, isCompleted: false },
-          { id: '8.5', slug: 'picture-tag', title: '<picture>', path: '/html/picture-tag', estimatedMinutes: 7, isCompleted: false },
-          { id: '8.6', slug: 'source-tag', title: '<source>', path: '/html/source-tag', estimatedMinutes: 7, isCompleted: false },
-          { id: '8.7', slug: 'srcset-attr', title: 'srcset', path: '/html/srcset-attr', estimatedMinutes: 7, isCompleted: false },
-          { id: '8.8', slug: 'sizes-attr', title: 'sizes', path: '/html/sizes-attr', estimatedMinutes: 7, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-9',
-        title: '09. AUDIO / VIDEO',
-        order: 9,
-        isCompleted: false,
-        lessons: [
-          { id: '9.1', slug: 'audio-tag', title: '<audio>', path: '/html/audio-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '9.2', slug: 'video-tag', title: '<video>', path: '/html/video-tag', estimatedMinutes: 7, isCompleted: false },
-          { id: '9.3', slug: 'media-source-tag', title: '<source>', path: '/html/media-source-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '9.4', slug: 'track-tag', title: '<track>', path: '/html/track-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '9.5', slug: 'subtitle', title: 'subtitle', path: '/html/subtitle', estimatedMinutes: 6, isCompleted: false },
-          { id: '9.6', slug: 'caption', title: 'caption', path: '/html/caption', estimatedMinutes: 6, isCompleted: false },
-          { id: '9.7', slug: 'media-attributes', title: 'media attributes', path: '/html/media-attributes', estimatedMinutes: 6, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-10',
-        title: '10. JADVALLAR',
-        order: 10,
-        isCompleted: false,
-        lessons: [
-          { id: '10.1', slug: 'table-tag', title: '<table>', path: '/html/table-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '10.2', slug: 'caption-tag', title: '<caption>', path: '/html/caption-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '10.3', slug: 'thead-tag', title: '<thead>', path: '/html/thead-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '10.4', slug: 'tbody-tag', title: '<tbody>', path: '/html/tbody-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '10.5', slug: 'tfoot-tag', title: '<tfoot>', path: '/html/tfoot-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '10.6', slug: 'tr-tag', title: '<tr>', path: '/html/tr-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '10.7', slug: 'th-tag', title: '<th>', path: '/html/th-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '10.8', slug: 'td-tag', title: '<td>', path: '/html/td-tag', estimatedMinutes: 4, isCompleted: false },
-          { id: '10.9', slug: 'colspan-attr', title: 'colspan', path: '/html/colspan-attr', estimatedMinutes: 6, isCompleted: false },
-          { id: '10.10', slug: 'rowspan-attr', title: 'rowspan', path: '/html/rowspan-attr', estimatedMinutes: 6, isCompleted: false },
-          { id: '10.11', slug: 'scope-attr', title: 'scope', path: '/html/scope-attr', estimatedMinutes: 5, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-11',
-        title: '11. FORMS',
-        order: 11,
-        isCompleted: false,
-        lessons: [
-          { id: '11.1', slug: 'form-tag', title: '<form>', path: '/html/form-tag', estimatedMinutes: 7, isCompleted: false },
-          { id: '11.2', slug: 'input-tag', title: '<input>', path: '/html/input-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '11.3', slug: 'input-text', title: 'text', path: '/html/input-text', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.4', slug: 'input-email', title: 'email', path: '/html/input-email', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.5', slug: 'input-password', title: 'password', path: '/html/input-password', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.6', slug: 'input-number', title: 'number', path: '/html/input-number', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.7', slug: 'input-date', title: 'date', path: '/html/input-date', estimatedMinutes: 6, isCompleted: false },
-          { id: '11.8', slug: 'input-time', title: 'time', path: '/html/input-time', estimatedMinutes: 6, isCompleted: false },
-          { id: '11.9', slug: 'input-url', title: 'url', path: '/html/input-url', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.10', slug: 'input-tel', title: 'tel', path: '/html/input-tel', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.11', slug: 'input-search', title: 'search', path: '/html/input-search', estimatedMinutes: 4, isCompleted: false },
-          { id: '11.12', slug: 'input-checkbox', title: 'checkbox', path: '/html/input-checkbox', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.13', slug: 'input-radio', title: 'radio', path: '/html/input-radio', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.14', slug: 'input-file', title: 'file', path: '/html/input-file', estimatedMinutes: 6, isCompleted: false },
-          { id: '11.15', slug: 'input-range', title: 'range', path: '/html/input-range', estimatedMinutes: 6, isCompleted: false },
-          { id: '11.16', slug: 'input-color', title: 'color', path: '/html/input-color', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.17', slug: 'input-hidden', title: 'hidden', path: '/html/input-hidden', estimatedMinutes: 4, isCompleted: false },
-          { id: '11.18', slug: 'textarea-tag', title: '<textarea>', path: '/html/textarea-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.19', slug: 'select-tag', title: '<select>', path: '/html/select-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '11.20', slug: 'option-tag', title: '<option>', path: '/html/option-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.21', slug: 'optgroup-tag', title: '<optgroup>', path: '/html/optgroup-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.22', slug: 'button-tag', title: '<button>', path: '/html/button-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.23', slug: 'label-tag', title: '<label>', path: '/html/label-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.24', slug: 'fieldset-tag', title: '<fieldset>', path: '/html/fieldset-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.25', slug: 'legend-tag', title: '<legend>', path: '/html/legend-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.26', slug: 'datalist-tag', title: '<datalist>', path: '/html/datalist-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.27', slug: 'output-tag', title: '<output>', path: '/html/output-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.28', slug: 'progress-tag', title: '<progress>', path: '/html/progress-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.29', slug: 'meter-tag', title: '<meter>', path: '/html/meter-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '11.30', slug: 'validation', title: 'validation', path: '/html/validation', estimatedMinutes: 7, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-12',
-        title: '12. INTERACTIVE ELEMENTLAR',
-        order: 12,
-        isCompleted: false,
-        lessons: [
-          { id: '12.1', slug: 'details-tag', title: '<details>', path: '/html/details-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '12.2', slug: 'summary-tag', title: '<summary>', path: '/html/summary-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '12.3', slug: 'dialog-tag', title: '<dialog>', path: '/html/dialog-tag', estimatedMinutes: 8, isCompleted: false },
-          { id: '12.4', slug: 'popover-attr', title: 'popover', path: '/html/popover-attr', estimatedMinutes: 7, isCompleted: false },
-          { id: '12.5', slug: 'interaction', title: 'interaction', path: '/html/interaction', estimatedMinutes: 6, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-13',
-        title: '13. EMBEDDED CONTENT',
-        order: 13,
-        isCompleted: false,
-        lessons: [
-          { id: '13.1', slug: 'iframe-tag', title: '<iframe>', path: '/html/iframe-tag', estimatedMinutes: 7, isCompleted: false },
-          { id: '13.2', slug: 'embed-tag', title: '<embed>', path: '/html/embed-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '13.3', slug: 'object-tag', title: '<object>', path: '/html/object-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '13.4', slug: 'canvas-tag', title: '<canvas>', path: '/html/canvas-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '13.5', slug: 'svg-intro', title: 'SVG', path: '/html/svg-intro', estimatedMinutes: 6, isCompleted: false },
-          { id: '13.6', slug: 'mathml-tag', title: 'MathML', path: '/html/mathml-tag', estimatedMinutes: 6, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-14',
-        title: '14. CANVAS',
-        order: 14,
-        isCompleted: false,
-        lessons: [
-          { id: '14.1', slug: 'canvas-core', title: '<canvas>', path: '/html/canvas-core', estimatedMinutes: 7, isCompleted: false },
-          { id: '14.2', slug: 'canvas-2d-context', title: '2D Context', path: '/html/canvas-2d-context', estimatedMinutes: 8, isCompleted: false },
-          { id: '14.3', slug: 'canvas-paths', title: 'paths', path: '/html/canvas-paths', estimatedMinutes: 7, isCompleted: false },
-          { id: '14.4', slug: 'canvas-shapes', title: 'shapes', path: '/html/canvas-shapes', estimatedMinutes: 7, isCompleted: false },
-          { id: '14.5', slug: 'canvas-text', title: 'text', path: '/html/canvas-text', estimatedMinutes: 6, isCompleted: false },
-          { id: '14.6', slug: 'canvas-images', title: 'images', path: '/html/canvas-images', estimatedMinutes: 7, isCompleted: false },
-          { id: '14.7', slug: 'canvas-transformations', title: 'transformations', path: '/html/canvas-transformations', estimatedMinutes: 8, isCompleted: false },
-          { id: '14.8', slug: 'canvas-gradients', title: 'gradients', path: '/html/canvas-gradients', estimatedMinutes: 7, isCompleted: false },
-          { id: '14.9', slug: 'canvas-patterns', title: 'patterns', path: '/html/canvas-patterns', estimatedMinutes: 7, isCompleted: false },
-          { id: '14.10', slug: 'canvas-pixels', title: 'pixels', path: '/html/canvas-pixels', estimatedMinutes: 8, isCompleted: false },
-          { id: '14.11', slug: 'canvas-animation', title: 'animation', path: '/html/canvas-animation', estimatedMinutes: 9, isCompleted: false },
-          { id: '14.12', slug: 'canvas-webgl', title: 'WebGL', path: '/html/canvas-webgl', estimatedMinutes: 9, isCompleted: false },
-          { id: '14.13', slug: 'canvas-webgl2', title: 'WebGL2', path: '/html/canvas-webgl2', estimatedMinutes: 9, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-15',
-        title: '15. SVG',
-        order: 15,
-        isCompleted: false,
-        lessons: [
-          { id: '15.1', slug: 'svg-core', title: '<svg>', path: '/html/svg-core', estimatedMinutes: 7, isCompleted: false },
-          { id: '15.2', slug: 'svg-rect', title: '<rect>', path: '/html/svg-rect', estimatedMinutes: 5, isCompleted: false },
-          { id: '15.3', slug: 'svg-circle', title: '<circle>', path: '/html/svg-circle', estimatedMinutes: 5, isCompleted: false },
-          { id: '15.4', slug: 'svg-ellipse', title: '<ellipse>', path: '/html/svg-ellipse', estimatedMinutes: 5, isCompleted: false },
-          { id: '15.5', slug: 'svg-line', title: '<line>', path: '/html/svg-line', estimatedMinutes: 4, isCompleted: false },
-          { id: '15.6', slug: 'svg-polyline', title: '<polyline>', path: '/html/svg-polyline', estimatedMinutes: 5, isCompleted: false },
-          { id: '15.7', slug: 'svg-polygon', title: '<polygon>', path: '/html/svg-polygon', estimatedMinutes: 5, isCompleted: false },
-          { id: '15.8', slug: 'svg-path', title: '<path>', path: '/html/svg-path', estimatedMinutes: 8, isCompleted: false },
-          { id: '15.9', slug: 'svg-g', title: '<g>', path: '/html/svg-g', estimatedMinutes: 5, isCompleted: false },
-          { id: '15.10', slug: 'svg-defs', title: '<defs>', path: '/html/svg-defs', estimatedMinutes: 5, isCompleted: false },
-          { id: '15.11', slug: 'svg-use', title: '<use>', path: '/html/svg-use', estimatedMinutes: 5, isCompleted: false },
-          { id: '15.12', slug: 'svg-symbol', title: '<symbol>', path: '/html/svg-symbol', estimatedMinutes: 6, isCompleted: false },
-          { id: '15.13', slug: 'svg-gradients', title: 'gradients', path: '/html/svg-gradients', estimatedMinutes: 6, isCompleted: false },
-          { id: '15.14', slug: 'svg-patterns', title: 'patterns', path: '/html/svg-patterns', estimatedMinutes: 6, isCompleted: false },
-          { id: '15.15', slug: 'svg-filters', title: 'filters', path: '/html/svg-filters', estimatedMinutes: 7, isCompleted: false },
-          { id: '15.16', slug: 'svg-masks', title: 'masks', path: '/html/svg-masks', estimatedMinutes: 7, isCompleted: false },
-          { id: '15.17', slug: 'svg-clippath', title: 'clipPath', path: '/html/svg-clippath', estimatedMinutes: 7, isCompleted: false },
-          { id: '15.18', slug: 'svg-animation', title: 'animation', path: '/html/svg-animation', estimatedMinutes: 8, isCompleted: false },
-          { id: '15.19', slug: 'svg-css-js', title: 'SVG + CSS + JS', path: '/html/svg-css-js', estimatedMinutes: 8, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-16',
-        title: '16. GLOBAL ATTRIBUTLAR',
-        order: 16,
-        isCompleted: false,
-        lessons: [
-          { id: '16.1', slug: 'attr-id', title: 'id', path: '/html/attr-id', estimatedMinutes: 5, isCompleted: false },
-          { id: '16.2', slug: 'attr-class', title: 'class', path: '/html/attr-class', estimatedMinutes: 5, isCompleted: false },
-          { id: '16.3', slug: 'attr-style', title: 'style', path: '/html/attr-style', estimatedMinutes: 5, isCompleted: false },
-          { id: '16.4', slug: 'attr-title', title: 'title', path: '/html/attr-title', estimatedMinutes: 4, isCompleted: false },
-          { id: '16.5', slug: 'attr-lang', title: 'lang', path: '/html/attr-lang', estimatedMinutes: 5, isCompleted: false },
-          { id: '16.6', slug: 'attr-dir', title: 'dir', path: '/html/attr-dir', estimatedMinutes: 5, isCompleted: false },
-          { id: '16.7', slug: 'attr-hidden', title: 'hidden', path: '/html/attr-hidden', estimatedMinutes: 5, isCompleted: false },
-          { id: '16.8', slug: 'attr-tabindex', title: 'tabindex', path: '/html/attr-tabindex', estimatedMinutes: 6, isCompleted: false },
-          { id: '16.9', slug: 'attr-contenteditable', title: 'contenteditable', path: '/html/attr-contenteditable', estimatedMinutes: 6, isCompleted: false },
-          { id: '16.10', slug: 'attr-draggable', title: 'draggable', path: '/html/attr-draggable', estimatedMinutes: 7, isCompleted: false },
-          { id: '16.11', slug: 'attr-spellcheck', title: 'spellcheck', path: '/html/attr-spellcheck', estimatedMinutes: 4, isCompleted: false },
-          { id: '16.12', slug: 'attr-translate', title: 'translate', path: '/html/attr-translate', estimatedMinutes: 4, isCompleted: false },
-          { id: '16.13', slug: 'attr-data-star', title: 'data-*', path: '/html/attr-data-star', estimatedMinutes: 7, isCompleted: false },
-          { id: '16.14', slug: 'attr-aria-star', title: 'aria-*', path: '/html/attr-aria-star', estimatedMinutes: 7, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-17',
-        title: '17. SCRIPTING',
-        order: 17,
-        isCompleted: false,
-        lessons: [
-          { id: '17.1', slug: 'script-tag', title: '<script>', path: '/html/script-tag', estimatedMinutes: 6, isCompleted: false },
-          { id: '17.2', slug: 'script-async', title: 'async', path: '/html/script-async', estimatedMinutes: 6, isCompleted: false },
-          { id: '17.3', slug: 'script-defer', title: 'defer', path: '/html/script-defer', estimatedMinutes: 6, isCompleted: false },
-          { id: '17.4', slug: 'script-module', title: 'module', path: '/html/script-module', estimatedMinutes: 7, isCompleted: false },
-          { id: '17.5', slug: 'script-nomodule', title: 'nomodule', path: '/html/script-nomodule', estimatedMinutes: 5, isCompleted: false },
-          { id: '17.6', slug: 'noscript-tag', title: '<noscript>', path: '/html/noscript-tag', estimatedMinutes: 5, isCompleted: false },
-          { id: '17.7', slug: 'template-tag', title: 'template', path: '/html/template-tag', estimatedMinutes: 7, isCompleted: false },
-          { id: '17.8', slug: 'slot-tag', title: 'slot', path: '/html/slot-tag', estimatedMinutes: 7, isCompleted: false },
-          { id: '17.9', slug: 'custom-elements-intro', title: 'custom elements', path: '/html/custom-elements-intro', estimatedMinutes: 7, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-18',
-        title: '18. WEB COMPONENTS',
-        order: 18,
-        isCompleted: false,
-        lessons: [
-          { id: '18.1', slug: 'wc-custom-elements', title: 'Custom Elements', path: '/html/wc-custom-elements', estimatedMinutes: 9, isCompleted: false },
-          { id: '18.2', slug: 'wc-shadow-dom', title: 'Shadow DOM', path: '/html/wc-shadow-dom', estimatedMinutes: 9, isCompleted: false },
-          { id: '18.3', slug: 'wc-template', title: '<template>', path: '/html/wc-template', estimatedMinutes: 8, isCompleted: false },
-          { id: '18.4', slug: 'wc-slot', title: '<slot>', path: '/html/wc-slot', estimatedMinutes: 8, isCompleted: false },
-          { id: '18.5', slug: 'wc-lifecycle', title: 'lifecycle', path: '/html/wc-lifecycle', estimatedMinutes: 8, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-19',
-        title: '19. HTML PARSER',
-        order: 19,
-        isCompleted: false,
-        lessons: [
-          { id: '19.1', slug: 'parser-tokenizer', title: 'tokenizer', path: '/html/parser-tokenizer', estimatedMinutes: 9, isCompleted: false },
-          { id: '19.2', slug: 'parser-tokens', title: 'tokens', path: '/html/parser-tokens', estimatedMinutes: 8, isCompleted: false },
-          { id: '19.3', slug: 'parser-tree-construction', title: 'tree construction', path: '/html/parser-tree-construction', estimatedMinutes: 9, isCompleted: false },
-          { id: '19.4', slug: 'parser-insertion-modes', title: 'insertion modes', path: '/html/parser-insertion-modes', estimatedMinutes: 8, isCompleted: false },
-          { id: '19.5', slug: 'parser-error-recovery', title: 'error recovery', path: '/html/parser-error-recovery', estimatedMinutes: 8, isCompleted: false },
-          { id: '19.6', slug: 'parser-malformed-html', title: 'malformed HTML', path: '/html/parser-malformed-html', estimatedMinutes: 8, isCompleted: false },
-          { id: '19.7', slug: 'parser-dom', title: 'DOM', path: '/html/parser-dom', estimatedMinutes: 8, isCompleted: false },
-          { id: '19.8', slug: 'parser-html-vs-xml', title: 'HTML parser vs XML parser', path: '/html/parser-html-vs-xml', estimatedMinutes: 7, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-20',
-        title: '20. ACCESSIBILITY',
-        order: 20,
-        isCompleted: false,
-        lessons: [
-          { id: '20.1', slug: 'a11y-semantic-html', title: 'semantic HTML', path: '/html/a11y-semantic-html', estimatedMinutes: 7, isCompleted: false },
-          { id: '20.2', slug: 'a11y-alt', title: 'alt', path: '/html/a11y-alt', estimatedMinutes: 6, isCompleted: false },
-          { id: '20.3', slug: 'a11y-labels', title: 'labels', path: '/html/a11y-labels', estimatedMinutes: 6, isCompleted: false },
-          { id: '20.4', slug: 'a11y-headings', title: 'headings', path: '/html/a11y-headings', estimatedMinutes: 6, isCompleted: false },
-          { id: '20.5', slug: 'a11y-landmarks', title: 'landmarks', path: '/html/a11y-landmarks', estimatedMinutes: 7, isCompleted: false },
-          { id: '20.6', slug: 'a11y-keyboard', title: 'keyboard', path: '/html/a11y-keyboard', estimatedMinutes: 7, isCompleted: false },
-          { id: '20.7', slug: 'a11y-focus', title: 'focus', path: '/html/a11y-focus', estimatedMinutes: 7, isCompleted: false },
-          { id: '20.8', slug: 'a11y-aria', title: 'ARIA', path: '/html/a11y-aria', estimatedMinutes: 8, isCompleted: false },
-          { id: '20.9', slug: 'a11y-accessible-forms', title: 'accessible forms', path: '/html/a11y-accessible-forms', estimatedMinutes: 8, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-21',
-        title: '21. SEO',
-        order: 21,
-        isCompleted: false,
-        lessons: [
-          { id: '21.1', slug: 'seo-title', title: 'title', path: '/html/seo-title', estimatedMinutes: 7, isCompleted: false },
-          { id: '21.2', slug: 'seo-description', title: 'description', path: '/html/seo-description', estimatedMinutes: 7, isCompleted: false },
-          { id: '21.3', slug: 'seo-canonical', title: 'canonical', path: '/html/seo-canonical', estimatedMinutes: 7, isCompleted: false },
-          { id: '21.4', slug: 'seo-robots', title: 'robots', path: '/html/seo-robots', estimatedMinutes: 7, isCompleted: false },
-          { id: '21.5', slug: 'seo-semantic-html', title: 'semantic HTML', path: '/html/seo-semantic-html', estimatedMinutes: 8, isCompleted: false },
-          { id: '21.6', slug: 'seo-open-graph', title: 'Open Graph', path: '/html/seo-open-graph', estimatedMinutes: 7, isCompleted: false },
-          { id: '21.7', slug: 'seo-structured-data', title: 'structured data', path: '/html/seo-structured-data', estimatedMinutes: 8, isCompleted: false },
-          { id: '21.8', slug: 'seo-indexing', title: 'indexing', path: '/html/seo-indexing', estimatedMinutes: 7, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-22',
-        title: '22. SECURITY',
-        order: 22,
-        isCompleted: false,
-        lessons: [
-          { id: '22.1', slug: 'security-xss', title: 'XSS', path: '/html/security-xss', estimatedMinutes: 8, isCompleted: false },
-          { id: '22.2', slug: 'security-iframe-sandbox', title: 'iframe sandbox', path: '/html/security-iframe-sandbox', estimatedMinutes: 7, isCompleted: false },
-          { id: '22.3', slug: 'security-target-blank', title: 'target="_blank"', path: '/html/security-target-blank', estimatedMinutes: 6, isCompleted: false },
-          { id: '22.4', slug: 'security-csp', title: 'CSP', path: '/html/security-csp', estimatedMinutes: 8, isCompleted: false },
-          { id: '22.5', slug: 'security-unsafe-html', title: 'unsafe HTML', path: '/html/security-unsafe-html', estimatedMinutes: 7, isCompleted: false },
-          { id: '22.6', slug: 'security-url-injection', title: 'URL injection', path: '/html/security-url-injection', estimatedMinutes: 7, isCompleted: false },
-          { id: '22.7', slug: 'security-form-security', title: 'form security', path: '/html/security-form-security', estimatedMinutes: 8, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-23',
-        title: '23. BROWSER BILAN ISHLASH',
-        order: 23,
-        isCompleted: false,
-        lessons: [
-          { id: '23.1', slug: 'browser-html-parser', title: 'HTML → Parser', path: '/html/browser-html-parser', estimatedMinutes: 8, isCompleted: false },
-          { id: '23.2', slug: 'browser-dom', title: 'DOM', path: '/html/browser-dom', estimatedMinutes: 8, isCompleted: false },
-          { id: '23.3', slug: 'browser-cssom', title: 'CSSOM', path: '/html/browser-cssom', estimatedMinutes: 8, isCompleted: false },
-          { id: '23.4', slug: 'browser-render-tree', title: 'Render Tree', path: '/html/browser-render-tree', estimatedMinutes: 8, isCompleted: false },
-          { id: '23.5', slug: 'browser-layout', title: 'Layout', path: '/html/browser-layout', estimatedMinutes: 9, isCompleted: false },
-          { id: '23.6', slug: 'browser-paint', title: 'Paint', path: '/html/browser-paint', estimatedMinutes: 8, isCompleted: false },
-          { id: '23.7', slug: 'browser-composite', title: 'Composite', path: '/html/browser-composite', estimatedMinutes: 9, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-24',
-        title: '24. DEPRECATED / OBSOLETE',
-        order: 24,
-        isCompleted: false,
-        lessons: [
-          { id: '24.1', slug: 'dep-font', title: '<font>', path: '/html/dep-font', estimatedMinutes: 5, isCompleted: false },
-          { id: '24.2', slug: 'dep-center', title: '<center>', path: '/html/dep-center', estimatedMinutes: 5, isCompleted: false },
-          { id: '24.3', slug: 'dep-big', title: '<big>', path: '/html/dep-big', estimatedMinutes: 5, isCompleted: false },
-          { id: '24.4', slug: 'dep-strike', title: '<strike>', path: '/html/dep-strike', estimatedMinutes: 5, isCompleted: false },
-          { id: '24.5', slug: 'dep-tt', title: '<tt>', path: '/html/dep-tt', estimatedMinutes: 4, isCompleted: false },
-          { id: '24.6', slug: 'dep-applet', title: '<applet>', path: '/html/dep-applet', estimatedMinutes: 5, isCompleted: false },
-        ],
-      },
-      {
-        id: 'html-mod-25',
-        title: '25. REFERENCE',
-        order: 25,
-        isCompleted: false,
-        lessons: [
-          { id: '25.1', slug: 'ref-elements', title: 'Elements', path: '/html/ref-elements', estimatedMinutes: 10, isCompleted: false },
-          { id: '25.2', slug: 'ref-attributes', title: 'Attributes', path: '/html/ref-attributes', estimatedMinutes: 9, isCompleted: false },
-          { id: '25.3', slug: 'ref-apis', title: 'APIs', path: '/html/ref-apis', estimatedMinutes: 8, isCompleted: false },
-          { id: '25.4', slug: 'ref-specifications', title: 'Specifications', path: '/html/ref-specifications', estimatedMinutes: 8, isCompleted: false },
-          { id: '25.5', slug: 'ref-browser-compatibility', title: 'Browser compatibility', path: '/html/ref-browser-compatibility', estimatedMinutes: 8, isCompleted: false },
-          { id: '25.6', slug: 'ref-examples', title: 'Examples', path: '/html/ref-examples', estimatedMinutes: 9, isCompleted: false },
-          { id: '25.7', slug: 'ref-related-topics', title: 'Related topics', path: '/html/ref-related-topics', estimatedMinutes: 8, isCompleted: false },
-        ],
-      },
-    ],
-  },
-  css: {
-    title: 'CSS ASOSLARI',
-    slug: 'css',
-    totalLessons: 12,
-    completedLessons: 1,
-    modules: [
-      {
-        id: 'css-mod-1',
-        title: '1. CSS Kirish va Asosiy Qoidalar',
-        order: 1,
-        isCompleted: true,
-        lessons: [
-          {
-            id: '1.1',
-            slug: 'kirish',
-            title: '1.1. CSS Sintaksisi va Ulash',
-            path: '/css/kirish',
-            estimatedMinutes: 5,
-            isCompleted: true,
-          },
-          {
-            id: '1.2',
-            slug: 'selectorlar',
-            title: '1.2. CSS Selectorlar va Vorislik',
-            path: '/css/selectorlar',
-            estimatedMinutes: 7,
-            isCompleted: false,
-          },
-        ],
-      },
-      {
-        id: 'css-mod-2',
-        title: '2. Box Model va Joylashuv',
-        order: 2,
-        isCompleted: false,
-        lessons: [
-          {
-            id: '2.1',
-            slug: 'box-model',
-            title: '2.1. Margin, Padding va Border',
-            path: '/css/box-model',
-            estimatedMinutes: 6,
-            isCompleted: false,
-          },
-          {
-            id: '2.2',
-            slug: 'display-position',
-            title: '2.2. Display va Position turlari',
-            path: '/css/display-position',
-            estimatedMinutes: 8,
-            isCompleted: false,
-          },
-        ],
-      },
-      {
-        id: 'css-mod-3',
-        title: '3. Flexbox & Grid Tizimlari',
-        order: 3,
-        isCompleted: false,
-        lessons: [
-          {
-            id: '3.1',
-            slug: 'flexbox',
-            title: '3.1. Flexbox Asoslari',
-            path: '/css/flexbox',
-            estimatedMinutes: 10,
-            isCompleted: false,
-          },
-          {
-            id: '3.2',
-            slug: 'grid',
-            title: '3.2. CSS Grid Layout',
-            path: '/css/grid',
-            estimatedMinutes: 10,
-            isCompleted: false,
-          },
-          {
-            id: '3.3',
-            slug: 'modern',
-            title: '3.3. Zamonaviy CSS Xususiyatlari',
-            path: '/css/modern',
-            estimatedMinutes: 8,
-            isCompleted: false,
-          },
-        ],
-      },
-    ],
-  },
-  javascript: {
-    title: 'JAVASCRIPT ASOSLARI',
-    slug: 'javascript',
-    totalLessons: 14,
-    completedLessons: 1,
-    modules: [
-      {
-        id: 'js-mod-1',
-        title: '1. JS Kirish va O\'zgaruvchilar',
-        order: 1,
-        isCompleted: true,
-        lessons: [
-          {
-            id: '1.1',
-            slug: 'kirish',
-            title: '1.1. JS Nima va Qanday Ishlaydi',
-            path: '/javascript/kirish',
-            estimatedMinutes: 5,
-            isCompleted: true,
-          },
-          {
-            id: '1.2',
-            slug: 'ozgaruvchilar',
-            title: '1.2. let, const va Ma\'lumot turlari',
-            path: '/javascript/ozgaruvchilar',
-            estimatedMinutes: 6,
-            isCompleted: false,
-          },
-        ],
-      },
-      {
-        id: 'js-mod-2',
-        title: '2. Funksiyalar va DOM',
-        order: 2,
-        isCompleted: false,
-        lessons: [
-          {
-            id: '2.1',
-            slug: 'funksiyalar',
-            title: '2.1. Funksiyalar va Arrow Functions',
-            path: '/javascript/funksiyalar',
-            estimatedMinutes: 8,
-            isCompleted: false,
-          },
-          {
-            id: '2.2',
-            slug: 'dom',
-            title: '2.2. DOM Bilan Ishlash',
-            path: '/javascript/dom',
-            estimatedMinutes: 9,
-            isCompleted: false,
-          },
-          {
-            id: '2.3',
-            slug: 'events',
-            title: '2.3. Hodisalar (Events) Tinglash',
-            path: '/javascript/events',
-            estimatedMinutes: 7,
-            isCompleted: false,
-          },
-        ],
-      },
-      {
-        id: 'js-mod-3',
-        title: '3. Asinxron JS va Event Loop',
-        order: 3,
-        isCompleted: false,
-        lessons: [
-          {
-            id: '3.1',
-            slug: 'async',
-            title: '3.1. Promises & Async/Await',
-            path: '/javascript/async',
-            estimatedMinutes: 10,
-            isCompleted: false,
-          },
-        ],
-      },
-    ],
-  },
+export const coursesData: Record<CourseSlug, CourseData> = {
+  html: buildCourse('html', rawCourses.html),
+  css: buildCourse('css', rawCourses.css),
+  javascript: buildCourse('javascript', rawCourses.javascript),
 };
 
-// Flattened fallback list for quick access
-export const topics: Record<string, { title: string; path: string }[]> = {
-  html: (coursesData['html']?.modules || []).flatMap(m => m.lessons.map(l => ({ title: l.title, path: l.path }))),
-  css: (coursesData['css']?.modules || []).flatMap(m => m.lessons.map(l => ({ title: l.title, path: l.path }))),
-  javascript: (coursesData['javascript']?.modules || []).flatMap(m => m.lessons.map(l => ({ title: l.title, path: l.path }))),
+/** Kurs ikonkasi (breadcrumb va sidebar uchun). */
+export const courseIcons: Record<CourseSlug, string> = {
+  html: rawCourses.html.icon,
+  css: rawCourses.css.icon,
+  javascript: rawCourses.javascript.icon,
+};
+
+/** URL yo'lidan kurs slugini aniqlaydi. Topilmasa `html` qaytaradi. */
+export function resolveCourseSlug(path: string): CourseSlug {
+  const segment = path.split('/').filter(Boolean)[0] ?? '';
+  return isCourseSlug(segment) ? segment : 'html';
+}
+
+/** Kursning barcha darslarini tekis ro'yxat sifatida qaytaradi. */
+export function getCourseLessons(courseSlug: CourseSlug): SubthemeItem[] {
+  return coursesData[courseSlug].modules.flatMap(m => m.lessons);
+}
+
+/** Dars va uning modulini slug bo'yicha topadi. */
+export function findLesson(
+  courseSlug: CourseSlug,
+  lessonSlug: string,
+): { lesson: SubthemeItem; module: ThemeModuleItem } | null {
+  for (const mod of coursesData[courseSlug].modules) {
+    const lesson = mod.lessons.find(l => l.slug === lessonSlug);
+    if (lesson) return { lesson, module: mod };
+  }
+  return null;
+}
+
+/** Tez murojaat uchun tekislangan ro'yxat. */
+export const topics: Record<CourseSlug, { title: string; path: string }[]> = {
+  html: getCourseLessons('html').map(l => ({ title: l.title, path: l.path })),
+  css: getCourseLessons('css').map(l => ({ title: l.title, path: l.path })),
+  javascript: getCourseLessons('javascript').map(l => ({ title: l.title, path: l.path })),
 };
