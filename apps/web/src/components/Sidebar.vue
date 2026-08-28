@@ -244,7 +244,7 @@
 <script setup lang="ts">
 import { ref, computed, h, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { coursesData, CourseData, ThemeModuleItem, SubthemeItem } from '../data/topics';
+import { coursesData, resolveCourseSlug, CourseData, ThemeModuleItem, SubthemeItem } from '../data/topics';
 import { useProgressStore } from '../stores/progress';
 import ProfileMenu from './ProfileMenu.vue';
 import CommandPalette from './CommandPalette.vue';
@@ -296,15 +296,9 @@ const mainNavLinks = [
   { label: 'Yangiliklar', path: '/news', icon: NewspaperIcon },
 ];
 
-const currentCourseSlug = computed(() => {
-  return route.path.split('/')[1] || 'html';
-});
+const currentCourseSlug = computed(() => resolveCourseSlug(route.path));
 
-const currentCourse = computed<CourseData>(() => {
-  const found = coursesData[currentCourseSlug.value];
-  if (found) return found;
-  return coursesData['html'] as CourseData;
-});
+const currentCourse = computed<CourseData>(() => coursesData[currentCourseSlug.value]);
 
 const courseStats = computed(() => {
   return progressStore.getCourseStats(currentCourseSlug.value);

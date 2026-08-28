@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue';
-import { coursesData, CourseData } from '../data/topics';
+import { coursesData, resolveCourseSlug, CourseData } from '../data/topics';
 
 // Central Reactive Progress & Gamification Store
 const STORAGE_KEY = 'kodx_user_progress_v2';
@@ -78,7 +78,7 @@ export function useProgressStore() {
   }
 
   function getCourseStats(courseSlug: string = 'html') {
-    const course: CourseData = coursesData[courseSlug] || coursesData['html']!;
+    const course: CourseData = coursesData[resolveCourseSlug(`/${courseSlug}`)];
     const allLessons = course.modules.flatMap(m => m.lessons);
     const total = allLessons.length;
     const completedCount = allLessons.filter(l => isLessonCompleted(l.path)).length;

@@ -481,7 +481,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getCourseLessons, resolveCourseSlug } from '../data/topics';
+import { resolveCourseSlug } from '../data/topics';
 import { courseThemes, getLesson, getNeighbours } from '../data/lessonRegistry';
 import type { ComprehensiveLesson } from '../data/lessonTypes';
 import { useProgressStore } from '../stores/progress';
@@ -516,16 +516,9 @@ const lessonSlug = computed(() => {
   return parts[parts.length - 1] ?? '';
 });
 
-/** Joriy kursning barcha darslari — prev/next uchun. */
-const allLessons = computed(() => getCourseLessons(courseSlug.value));
-
 const neighbours = computed(() => getNeighbours(courseSlug.value, lessonSlug.value));
 const prevLesson = computed(() => neighbours.value.prev);
 const nextLesson = computed(() => neighbours.value.next);
-
-const currentLessonIndex = computed(() =>
-  allLessons.value.findIndex(l => l.slug === lessonSlug.value),
-);
 
 const isCompleted = computed(() => {
   return progressStore.isLessonCompleted(route.path);
