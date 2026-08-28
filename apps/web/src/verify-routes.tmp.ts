@@ -4,7 +4,13 @@
   history: { state: null, replaceState() {}, pushState() {} },
   addEventListener() {}, removeEventListener() {},
 };
-(globalThis as any).document = { querySelector: () => null, baseURI: 'http://localhost/' };
+(globalThis as any).document = {
+  querySelector: () => null, baseURI: 'http://localhost/',
+  addEventListener() {}, removeEventListener() {},
+};
+(globalThis as any).location = (globalThis as any).window.location;
+(globalThis as any).history = (globalThis as any).window.history;
+(globalThis as any).addEventListener = () => {};
 
 import { createRouter, createMemoryHistory } from 'vue-router';
 const routerConfig = (await import('./router/index')).default;
